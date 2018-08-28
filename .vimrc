@@ -1,25 +1,12 @@
-runtime! config/srl.vim
+if filereadable(expand("~/.vim/config/srl.vim"))
+ runtime! config/srl.vim
+endif
+
+"runtime! config/srl.vim
 
 "global variables{{{
-let g:php_html_load=1
-let g:php_html_in_heredoc=1
-let g:php_html_in_nowdoc=1
-let g:php_var_selector_is_identifier=1
-let g:php_baselib = 1
-let g:php_parent_error_close = 1
-let g:php_parent_error_open = 1
-let g:php_sql_query = 1
-let g:sql_type_default = 'mysql'
 "auto highlight same words - 1:disable, 0:enable
 let g:toggleHighlight = 1
-let g:pdv_cfg_Type = "mixed"
-let g:pdv_cfg_Package = ""
-let g:pdv_cfg_Version = "$id$"
-let g:pdv_cfg_Author = ""
-let g:pdv_cfg_Copyright = ""
-let g:pdv_cfg_License = ""
-let g:pdv_cfg_Access = ""
-let g:ctrlp_cmd = 'CtrlPBuffer'
 "}}}
 
 "mappings{{{
@@ -88,6 +75,7 @@ nnoremap <leader>dc :call PhpDocSingle()<CR>
 vnoremap p !sed 's/^/\//'<CR>
 "change word by register0 word
 nnoremap <leader>cr cw<c-r>0
+nnoremap <C-n> :NERDTreeToggle<CR>
 "}}}
 
 "abbrevations{{{
@@ -139,6 +127,7 @@ set title
 set titlestring=%{expand('%:p')}
 set hlsearch
 set nowrap
+set smartcase
 set termguicolors
 colorscheme skeletor
 autocmd ColorScheme * highlight User1 ctermfg=209 ctermbg=235
@@ -224,6 +213,9 @@ Plug 'alvan/vim-php-manual'
 Plug 'vim-scripts/PDV--phpDocumentor-for-Vim'
 Plug 'kana/vim-arpeggio'
 Plug 'tpope/vim-commentary'
+Plug 'will133/vim-dirdiff'
+Plug 'scrooloose/nerdtree'
+Plug 'jreybert/vimagit'
 call plug#end()
 "}}}
 
@@ -246,10 +238,6 @@ xmap ga <Plug>(EasyAlign)
 " Start interactive EasyAlign for a motion/text object (e.g. gaip)
 nmap ga <Plug>(EasyAlign)
 "----------------------------------------
-" Vim-Table-Mode
-"----------------------------------------
-let g:table_mode_corner_corner='+'
-"----------------------------------------
 " CtrlP
 "----------------------------------------
 let g:ctrlp_use_caching = 1
@@ -261,6 +249,7 @@ let g:ctrlp_clear_cache_on_exit = 0
 let g:ctrlp_lazy_update = 1
 let g:ctrlp_working_path_mode = 0
 let g:ctrlp_match_current_file = 1
+let g:ctrlp_cmd = 'CtrlPBuffer'
 "----------------------------------------
 " PlantUML
 "----------------------------------------
@@ -294,6 +283,38 @@ let g:syntastic_check_on_wq = 1
 let g:syntastic_php_phpcs_exec='C:/xampp/php/phpcs'
 let g:syntastic_php_checkers = ['php']
 let g:syntastic_php_phpcs_args = "--standard=psr2"
+"----------------------------------------
+" pdv
+"----------------------------------------
+let g:pdv_cfg_Type = "mixed"
+let g:pdv_cfg_Package = ""
+let g:pdv_cfg_Version = "$id$"
+let g:pdv_cfg_Author = ""
+let g:pdv_cfg_Copyright = ""
+let g:pdv_cfg_License = ""
+let g:pdv_cfg_Access = ""
+"----------------------------------------
+" php.vim
+"----------------------------------------
+let g:php_html_load=1
+let g:php_html_in_heredoc=1
+let g:php_html_in_nowdoc=1
+let g:php_var_selector_is_identifier=1
+let g:php_baselib = 1
+let g:php_parent_error_close = 1
+let g:php_parent_error_open = 1
+let g:php_sql_query = 1
+"----------------------------------------
+" commentary
+"----------------------------------------
+autocmd FileType php setlocal commentstring=//\ %s
+"----------------------------------------
+" arpeggio
+"----------------------------------------
+"jk or kj to escape
+call arpeggio#load()
+call arpeggio#map('i', '', 0, 'jk', '<Esc>')
+call arpeggio#map('i', '', 0, 'kj', '<Esc>')
 "}}}
 
 " functions{{{
@@ -400,24 +421,17 @@ autocmd CursorMoved * call ToggleHighlight()
 function! MySearch(myVar)
     let @/=a:myVar
 endfunction
-"}}}
 
-"よくわからん php.vimについてたのでvery bottomにいれとく
 function! PhpSyntaxOverride()
   " Put snippet overrides in this function.
   hi! link phpDocTags phpDefine
   hi! link phpDocParam phpType
 endfunction
+"}}}
 
+"auto command group {{{
 augroup phpSyntaxOverride
   autocmd!
   autocmd FileType php call PhpSyntaxOverride()
 augroup END
-
-"jk or kj to escape
-call arpeggio#load()
-call arpeggio#map('i', '', 0, 'jk', '<Esc>')
-call arpeggio#map('i', '', 0, 'kj', '<Esc>')
-
-autocmd FileType php setlocal commentstring=//\ %s:
-
+"}}}
