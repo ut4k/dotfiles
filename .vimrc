@@ -1,9 +1,6 @@
 if filereadable(expand("~/.vim/config/srl.vim"))
  runtime! config/srl.vim
 endif
-
-"runtime! config/srl.vim
-
 "global variables{{{
 "auto highlight same words - 1:disable, 0:enable
 let g:toggleHighlight = 1
@@ -47,7 +44,7 @@ nnoremap gs :vertical wincmd f<CR>
 "php-cs-fixer コーディング規則にそって整形
 nnoremap <leader>pcf :!php-cs-fixer fix % --rules=@PSR2<CR>
 "generate ctags
-nnoremap <leader>gct :!ctags -R --exclude=.svn --exclude=node_modules --exclude=_test --exclude=smarty --exclude="*.min.*" --exclude=.git --langmap=php:.php.inc --PHP-kinds=+cf-v<CR>
+"nnoremap <leader>gct :!ctags -R --exclude=.svn --exclude=node_modules --exclude=_test --exclude=smarty --exclude="*.min.*" --exclude=.git --langmap=php:.php.inc --PHP-kinds=+cf-v<CR>
 "list up buffer
 nnoremap <leader>, :CtrlPBuffer<CR>
 "vertical +50
@@ -75,7 +72,14 @@ nnoremap <leader>dc :call PhpDocSingle()<CR>
 vnoremap p !sed 's/^/\//'<CR>
 "change word by register0 word
 nnoremap <leader>cr cw<c-r>0
+"toggle nerdtree
 nnoremap <C-n> :NERDTreeToggle<CR>
+"go to abs path file
+nnoremap gaf :<C-u>call GotoFileFromDocRoot()<CR>
+"php variable echo string into regester
+nnoremap pvr :call PreVar()<CR>
+"php variable var_dump strin into regester
+nnoremap dvr :call VdVar()<CR>
 "}}}
 
 "abbrevations{{{
@@ -132,6 +136,7 @@ set termguicolors
 colorscheme skeletor
 autocmd ColorScheme * highlight User1 ctermfg=209 ctermbg=235
 autocmd ColorScheme * highlight User2 ctermfg=209 ctermbg=235
+highlight MyGroup ctermfg=red ctermbg=blue
 augroup Misc
     autocmd!
     autocmd VimResized * exe "normal! \<c-w>="
@@ -216,6 +221,7 @@ Plug 'tpope/vim-commentary'
 Plug 'will133/vim-dirdiff'
 Plug 'scrooloose/nerdtree'
 Plug 'jreybert/vimagit'
+"Plug 'rayburgemeestre/phpfolding.vim'
 call plug#end()
 "}}}
 
@@ -427,6 +433,27 @@ function! PhpSyntaxOverride()
   hi! link phpDocTags phpDefine
   hi! link phpDocParam phpType
 endfunction
+
+"docrootからのパスで開く
+function! GotoFileFromDocRoot()
+    let filename = getline('.')
+    let filepath = g:root_dir . filename
+    if filereadable(filepath)
+        execute 'edit ' . filepath
+    else
+        echohl ErrorMsg
+        echo 'ファイルが見つかりませんでした! ' . filename
+        echohl None
+    endif
+endfunction
+
+function! PreVar()
+  let @* = "echo \"" . expand('<cword>') . ":\"; pre($" . expand('<cword>') . "); //########## debug kimura ".strftime("%Y/%m/%d")." ##########"
+endfunction
+
+function! VdVar()
+  let @* = "echo \"" . expand('<cword>') . ":\"; var_dump($" . expand('<cword>') . "); //########## debug kimura ".strftime("%Y/%m/%d")." ##########"
+endfunction
 "}}}
 
 "auto command group {{{
@@ -435,3 +462,5 @@ augroup phpSyntaxOverride
   autocmd FileType php call PhpSyntaxOverride()
 augroup END
 "}}}
+"
+nnoremap <leader>gct :!ctags -R --exclude=.svn --exclude=node_modules --exclude=_test --exclude=smarty --exclude="*.min.*" --exclude=.git --langmap=php:.php.inc --PHP-kinds=+cf-v --exclude=target_lib_temp<CR>
