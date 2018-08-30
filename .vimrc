@@ -1,5 +1,5 @@
 if filereadable(expand("~/.vim/config/srl.vim"))
- runtime! config/srl.vim
+ source ~/.vim/config/srl.vim
 endif
 "global variables{{{
 "auto highlight same words - 1:disable, 0:enable
@@ -14,8 +14,7 @@ nnoremap <silent> ]b :bnext<CR>
 "[b : 前のバッファ
 nnoremap <silent> [b :bprevious<CR>
 "F2 : QuickFixリスト
-nnoremap <F2> :cclose<CR>:copen<CR>:wincmd=<CR><CR>
-nnoremap <F4> :cclose<CR>:vert :copen<CR>:wincmd=<CR><CR>
+nnoremap <F2> :call QFixToggle()<CR>:wincmd=<CR><CR>
 "F3 : no higlight
 nnoremap <F3> :noh<CR><CR>
 ",ev : _vimrcを縦スプリットで開く
@@ -77,9 +76,28 @@ nnoremap <C-n> :NERDTreeToggle<CR>
 "go to abs path file
 nnoremap gaf :<C-u>call GotoFileFromDocRoot()<CR>
 "php variable echo string into regester
-nnoremap pvr :call PreVar()<CR>
+nnoremap vr :call PreVar()<CR>
 "php variable var_dump strin into regester
 nnoremap dvr :call VdVar()<CR>
+"phpactor
+" Include use statement
+" nmap <Leader>u :call phpactor#UseAdd()<CR>
+" " Invoke the context menu
+" nmap <Leader>mm :call phpactor#ContextMenu()<CR>
+" " Invoke the navigation menu
+" nmap <Leader>nn :call phpactor#Navigate()<CR>
+" " Goto definition of class or class member under the cursor
+" nmap <Leader>o :call phpactor#GotoDefinition()<CR>
+" " Transform the classes in the current file
+" nmap <Leader>tt :call phpactor#Transform()<CR>
+" " Generate a new class (replacing the current file)
+" nmap <Leader>cc :call phpactor#ClassNew()<CR>
+" " Extract expression (normal mode)
+" nmap <silent><Leader>ee :call phpactor#ExtractExpression(v:false)<CR>
+" " Extract expression from selection
+" vmap <silent><Leader>ee :<C-U>call phpactor#ExtractExpression(v:true)<CR>
+" " Extract method from selection
+" vmap <silent><Leader>em :<C-U>call phpactor#ExtractMethod()<CR>
 "}}}
 
 "abbrevations{{{
@@ -102,16 +120,15 @@ set t_Co=256
 autocmd ColorScheme * highlight User1 ctermfg=209 ctermbg=235
 autocmd ColorScheme * highlight User2 ctermfg=209 ctermbg=235
 set mouse=a
+set hidden
 
 "Leave insert mode quickly
-if ! has('gui_running')
-	set ttimeoutlen=10
-	augroup FastEscape
-		autocmd!
-		au InsertEnter * set timeoutlen=0
-		au InsertLeave * set timeoutlen=1000
-	augroup END
-endif
+set ttimeoutlen=10
+augroup FastEscape
+	autocmd!
+	au InsertEnter * set timeoutlen=0
+	au InsertLeave * set timeoutlen=1000
+augroup END
 "for cygwin
 let &t_ti.="\e[1 q"
 let &t_SI.="\e[5 q"
@@ -125,7 +142,11 @@ set backspace=indent,eol,start
 "grep設定
 command! -nargs=+ Grep execute 'silent !sh ~/myscript/greplogo.sh' | execute 'silent grep! <args>'| execute 'silent !clear' |:redraw!
 autocmd QuickFixCmdPost *grep* cwindow
-set grepprg=grep\ -rn\ --color=never\ --exclude-dir=smarty\ --exclude-dir=templates_c\ --exclude-dir=cache\ --exclude-dir=.svn\ --exclude-dir=.git\ --exclude=tags\ --exclude=.htaccess
+"set grepprg=grep\ -rn\ --color=never\ --exclude-dir=smarty\ --exclude-dir=templates_c\ --exclude-dir=cache\ --exclude-dir=.svn\ --exclude-dir=.git\ --exclude=tags\ --exclude=.htaccess
+if executable("rg")
+  set grepprg=rg\ --vimgrep\ --no-heading\ --glob\ '!tags'
+  set grepformat=%f:%l:%c:%m,%f:%l:%m
+endif
 set clipboard=unnamed,autoselect
 set title
 set titlestring=%{expand('%:p')}
@@ -211,7 +232,6 @@ Plug 'xolox/vim-colorscheme-switcher'
 Plug 'xolox/vim-misc'
 Plug 'tpope/vim-unimpaired'
 Plug 'kshenoy/vim-signature'
-"for php
 Plug 'nrocco/vim-phplint'
 Plug 'StanAngeloff/php.vim'
 Plug 'alvan/vim-php-manual'
@@ -220,8 +240,9 @@ Plug 'kana/vim-arpeggio'
 Plug 'tpope/vim-commentary'
 Plug 'will133/vim-dirdiff'
 Plug 'scrooloose/nerdtree'
-Plug 'jreybert/vimagit'
-"Plug 'rayburgemeestre/phpfolding.vim'
+Plug 'ap/vim-buftabline'
+"projectにcomposer入れないと使えないっぽい
+"Plug 'phpactor/phpactor', {'for': 'php', 'do': 'composer install'}
 call plug#end()
 "}}}
 
@@ -448,11 +469,19 @@ function! GotoFileFromDocRoot()
 endfunction
 
 function! PreVar()
-  let @* = "echo \"" . expand('<cword>') . ":\"; pre($" . expand('<cword>') . "); //########## debug kimura ".strftime("%Y/%m/%d")." ##########"
+  let @* = "echo \"<small>\\$" . expand('<cword>') . ":</small>\"; pre($" . expand('<cword>') . "); //########## debug kimura ".strftime("%Y/%m/%d")." ##########"
 endfunction
 
 function! VdVar()
-  let @* = "echo \"" . expand('<cword>') . ":\"; var_dump($" . expand('<cword>') . "); //########## debug kimura ".strftime("%Y/%m/%d")." ##########"
+  let @* = "echo \"<small>\\$" . expand('<cword>') . ":</small>\"; var_dump($" . expand('<cword>') . "); //########## debug kimura ".strftime("%Y/%m/%d")." ##########"
+endfunction
+
+function! QFixToggle()
+  let _ = winnr('$')
+  cclose
+  if _ == winnr('$')
+    cwindow
+  endif
 endfunction
 "}}}
 
@@ -461,6 +490,5 @@ augroup phpSyntaxOverride
   autocmd!
   autocmd FileType php call PhpSyntaxOverride()
 augroup END
+
 "}}}
-"
-nnoremap <leader>gct :!ctags -R --exclude=.svn --exclude=node_modules --exclude=_test --exclude=smarty --exclude="*.min.*" --exclude=.git --langmap=php:.php.inc --PHP-kinds=+cf-v --exclude=target_lib_temp<CR>
