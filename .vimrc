@@ -1,11 +1,96 @@
-if filereadable(expand("~/.vim/config/srl.vim"))
- source ~/.vim/config/srl.vim
-endif
+
+"this needs to be on top ???{{{
+autocmd ColorScheme * highlight User1 ctermbg=black ctermfg=121 cterm=bold
+"}}}
+
 "global variables{{{
 "auto highlight same words - 1:disable, 0:enable
 let g:toggleHighlight = 1
 "}}}
 
+"basic{{{
+language en_US.utf8
+scriptencoding utf-8
+set encoding=utf-8
+
+set termguicolors
+set background=dark
+set t_Co=256
+colorscheme skeletor
+set ttyfast
+set updatetime=250
+
+set ignorecase
+set list
+set listchars=tab:»\ ,precedes:«,extends:»,eol:↲
+set ambiwidth=single
+"set ambiwidth=double
+
+set mouse=a
+set hidden
+set ttimeoutlen=10
+set backspace=indent,eol,start
+set clipboard=unnamed,autoselect
+
+set autoread
+set cursorline
+set foldmethod=marker
+set hidden
+set hlsearch
+set laststatus=2
+set lazyredraw
+set nobackup
+set noruler
+set noswapfile
+set noundofile
+set nowrap
+set number
+set regexpengine=1 "正規表現エンジン 0か1
+set shiftwidth=2
+set showcmd
+set showmatch
+set showmode
+set smartcase
+set splitright
+set tabstop=2
+set title
+set titlestring=%{expand('%:p')}
+
+"ワイルドカードで検索除外
+set wildignore+=*\\.git\\*,*\\.hg\\*,*\\.svn\\*
+set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*.jpg,*.png,*.gif,*.jpeg,*.swf
+
+if has("win32unix")
+	"for cygwin
+	let &t_ti.="\e[1 q"
+	let &t_SI.="\e[5 q"
+	let &t_EI.="\e[1 q"
+	let &t_te.="\e[0 q"
+endif
+"}}}
+
+"status line{{{
+"left
+set statusline=
+set statusline+=%t
+set statusline+=%r%w
+set statusline+=%1*
+set statusline+=%m
+set statusline+=%0*
+"right
+set statusline+=%=
+set statusline+=%0*
+set statusline+=%1*
+set statusline+=%{tagbar#currenttag('%s\(\)\ ','')}
+set statusline+=%0*
+set statusline+=[%{&fileencoding}]
+set statusline+=[%{&ff=='mac'?'CR':&ff=='unix'?'LF':'CRLF'}]
+set statusline+=%1*
+set statusline+=\ [%{current_project}]
+set statusline+=%0*
+set statusline+=%5.l/%L
+"}}}
+"
 "mappings{{{
 let mapleader = ','
 nnoremap gR :Grep "\<<cword>\>" *<CR>
@@ -20,10 +105,10 @@ nnoremap <F3> :noh<CR><CR>
 ",ev : _vimrcを縦スプリットで開く
 "nnoremap <Leader>ev :vsplit $MYVIMRC<CR><CR>
 nnoremap <Leader>ev :e $MYVIMRC<CR><CR>
-"F12 : MY(G)VIMRCを再読み込みする
-nnoremap <F12> :<C-u>source $MYVIMRC<CR>
-"Tagbarトグル
-nnoremap <Leader>tb :TagbarToggle<CR>
+"F12 : MYVIMRCを再読み込みする
+nnoremap <F12> :source $MYVIMRC<CR>
+"Tagbarトグル tagbar pop
+nnoremap tp :TagbarToggle<CR>
 "Colorizerのトグル
 nnoremap <Leader>tcr :ColorToggle<CR>
 "currenttagコピー
@@ -45,7 +130,7 @@ nnoremap <leader>pcf :!php-cs-fixer fix % --rules=@PSR2<CR>
 "generate ctags
 "nnoremap <leader>gct :!ctags -R --exclude=.svn --exclude=node_modules --exclude=_test --exclude=smarty --exclude="*.min.*" --exclude=.git --langmap=php:.php.inc --PHP-kinds=+cf-v<CR>
 "list up buffer
-nnoremap <leader>, :CtrlPBuffer<CR>
+nnoremap fo :CtrlPBuffer<CR>
 "vertical +50
 nnoremap <leader>+ :vertical resize +50<CR>
 "vertical -50
@@ -79,6 +164,8 @@ nnoremap gaf :<C-u>call GotoFileFromDocRoot()<CR>
 nnoremap vr :call PreVar()<CR>
 "php variable var_dump strin into regester
 nnoremap dvr :call VdVar()<CR>
+"rainbow
+nnoremap <F10> :RainbowToggle<CR>
 "phpactor
 " Include use statement
 " nmap <Leader>u :call phpactor#UseAdd()<CR>
@@ -112,110 +199,6 @@ ia hms <c-r>=strftime("%Y/%m/%d %H:%M")<CR>
 ia jsfor <c-r>="for(var i = 0; i < elm.length; i++){"<CR>
 "abbrevations}}}
 
-"basic{{{
-language en_US.utf8
-scriptencoding utf-8
-set encoding=utf-8
-set t_Co=256
-autocmd ColorScheme * highlight User1 ctermfg=209 ctermbg=235
-autocmd ColorScheme * highlight User2 ctermfg=209 ctermbg=235
-set mouse=a
-set hidden
-
-"Leave insert mode quickly
-set ttimeoutlen=10
-augroup FastEscape
-	autocmd!
-	au InsertEnter * set timeoutlen=0
-	au InsertLeave * set timeoutlen=1000
-augroup END
-"for cygwin
-let &t_ti.="\e[1 q"
-let &t_SI.="\e[5 q"
-let &t_EI.="\e[1 q"
-let &t_te.="\e[0 q"
-
-set background=dark
-set t_Co=256
-set backspace=indent,eol,start
-
-"grep設定
-command! -nargs=+ Grep execute 'silent !sh ~/myscript/greplogo.sh' | execute 'silent grep! <args>'| execute 'silent !clear' |:redraw!
-autocmd QuickFixCmdPost *grep* cwindow
-"set grepprg=grep\ -rn\ --color=never\ --exclude-dir=smarty\ --exclude-dir=templates_c\ --exclude-dir=cache\ --exclude-dir=.svn\ --exclude-dir=.git\ --exclude=tags\ --exclude=.htaccess
-if executable("rg")
-  set grepprg=rg\ --vimgrep\ --no-heading\ --glob\ '!tags'
-  set grepformat=%f:%l:%c:%m,%f:%l:%m
-endif
-set clipboard=unnamed,autoselect
-set title
-set titlestring=%{expand('%:p')}
-set hlsearch
-set nowrap
-set smartcase
-set termguicolors
-colorscheme skeletor
-autocmd ColorScheme * highlight User1 ctermfg=209 ctermbg=235
-autocmd ColorScheme * highlight User2 ctermfg=209 ctermbg=235
-highlight MyGroup ctermfg=red ctermbg=blue
-augroup Misc
-    autocmd!
-    autocmd VimResized * exe "normal! \<c-w>="
-augroup END
-set ignorecase
-set list
-set listchars=tab:»\ ,precedes:«,extends:»,eol:↲
-set ambiwidth=single
-"set ambiwidth=double
-set tabstop=2
-set shiftwidth=2
-set noundofile
-set showmode
-set number
-set noruler
-set nobackup
-set noswapfile
-set autoread
-set hidden
-set showcmd
-set showmatch
-set laststatus=2
-set foldmethod=marker
-set lazyredraw
-set cursorline
-set regexpengine=1 "正規表現エンジン 0か1
-set splitright
-source $VIMRUNTIME/macros/matchit.vim
-"ワイルドカードで検索除外
-set wildignore+=*\\.git\\*,*\\.hg\\*,*\\.svn\\*
-set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*.jpg,*.png,*.gif,*.jpeg,*.swf
-" インサートモードから抜けたらIMEを英語にセット
-augroup reset_ime
-	au!
-	au InsertLeave * set iminsert=0
-augroup END
-"status line{{{
-"left
-set statusline=
-set statusline+=%t
-set statusline+=%r%w
-set statusline+=%1*
-set statusline+=%m
-set statusline+=%0*
-"right
-set statusline+=%=
-set statusline+=%0*
-set statusline+=%2*
-set statusline+=%{tagbar#currenttag('%s\(\)\ ','')}
-set statusline+=%0*
-set statusline+=[%{&fileencoding}]
-set statusline+=[%{&ff=='mac'?'CR':&ff=='unix'?'LF':'CRLF'}]
-set statusline+=%0*
-set statusline+=\ [%{current_project}]
-set statusline+=%5.l/%L
-"}}}
-"}}}
-
 "vim-plug{{{
 call plug#begin('~/.vim/plugged')
 Plug 'aklt/plantuml-syntax'
@@ -241,6 +224,10 @@ Plug 'tpope/vim-commentary'
 Plug 'will133/vim-dirdiff'
 Plug 'scrooloose/nerdtree'
 Plug 'ap/vim-buftabline'
+Plug 'xolox/vim-notes'
+Plug 'luochen1990/rainbow'
+Plug 'jiangmiao/auto-pairs'
+Plug 'shawncplus/phpcomplete.vim'
 "projectにcomposer入れないと使えないっぽい
 "Plug 'phpactor/phpactor', {'for': 'php', 'do': 'composer install'}
 call plug#end()
@@ -280,12 +267,16 @@ let g:ctrlp_cmd = 'CtrlPBuffer'
 "----------------------------------------
 " PlantUML
 "----------------------------------------
-let g:plantuml_executable_script='C:/cygwin64/home/Kimura/plantuml/plantuml.sh'
+let g:plantuml_executable_script='$HOME/plantuml/plantuml.sh'
 "----------------------------------------
 " Tagbar
 "----------------------------------------
 let g:tagbar_autofocus = 0
-"let g:tagbar_show_linenumbers = 1
+let g:tagbar_compact = 1
+let g:tagbar_singleclick = 1
+let g:tagbar_sort = 0
+let g:tagbar_indent = 1
+let g:tagbar_autopreview = 0
  let g:tagbar_type_php  = {
     \ 'ctagstype' : 'php',
     \ 'kinds'     : [
@@ -342,6 +333,12 @@ autocmd FileType php setlocal commentstring=//\ %s
 call arpeggio#load()
 call arpeggio#map('i', '', 0, 'jk', '<Esc>')
 call arpeggio#map('i', '', 0, 'kj', '<Esc>')
+"----------------------------------------
+" rainbow
+"----------------------------------------
+"to toggle, :RainbowToggle
+let g:rainbow_active = 0
+"
 "}}}
 
 " functions{{{
@@ -451,6 +448,11 @@ endfunction
 
 function! PhpSyntaxOverride()
   " Put snippet overrides in this function.
+  hi! def link phpDocTags  phpDefine
+  hi! def link phpDocParam phpType
+  hi! phpFunctions ctermfg=121 ctermbg=NONE cterm=NONE
+  hi! phpVarSelector ctermfg=229 ctermbg=NONE cterm=NONE
+  hi! phpMemberSelector ctermfg=121 ctermbg=NONE cterm=NONE
   hi! link phpDocTags phpDefine
   hi! link phpDocParam phpType
 endfunction
@@ -485,10 +487,53 @@ function! QFixToggle()
 endfunction
 "}}}
 
-"auto command group {{{
+"my ex command {{{
+"grep設定
+command! -nargs=+ Grep execute 'silent !sh ~/myscript/greplogo.sh' | execute 'silent grep! <args>'| execute 'silent !clear' |:redraw!
+autocmd QuickFixCmdPost *grep* cwindow
+"set grepprg=grep\ -rn\ --color=never\ --exclude-dir=smarty\ --exclude-dir=templates_c\ --exclude-dir=cache\ --exclude-dir=.svn\ --exclude-dir=.git\ --exclude=tags\ --exclude=.htaccess
+if executable("rg")
+  set grepprg=rg\ --vimgrep\ --no-heading\ --glob\ '!tags'
+  set grepformat=%f:%l:%c:%m,%f:%l:%m
+endif
+"}}}
+
+"auto command {{{
+
+"phpシンタックス上書き
 augroup phpSyntaxOverride
   autocmd!
   autocmd FileType php call PhpSyntaxOverride()
 augroup END
 
+if has("win32unix")
+	"cygwin用 モード切替のラグを減らす
+	augroup FastEscape
+		autocmd!
+		au InsertEnter * set timeoutlen=0
+		au InsertLeave * set timeoutlen=1000
+	augroup END
+endif
+
+" インサートモードから抜けたらIMEを英語にセット
+augroup reset_ime
+	au!
+	au InsertLeave * set iminsert=0
+augroup END
+
+"リサイズ時に画面幅をそろえる
+augroup Misc
+    autocmd!
+    autocmd VimResized * exe "normal! \<c-w>="
+augroup END
+
 "}}}
+
+"read external files {{{
+if filereadable(expand("$HOME/.vim/config/srl.vim"))
+ source $HOME/.vim/config/srl.vim
+endif
+
+source $VIMRUNTIME/macros/matchit.vim
+"}}}
+
