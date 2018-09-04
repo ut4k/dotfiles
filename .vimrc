@@ -86,7 +86,9 @@ set statusline+=%0*
 set statusline+=[%{&fileencoding}]
 set statusline+=[%{&ff=='mac'?'CR':&ff=='unix'?'LF':'CRLF'}]
 set statusline+=%1*
-set statusline+=\ [%{current_project}]
+if exists('current_project')
+  set statusline+=\ [%{current_project}]
+endif
 set statusline+=%0*
 set statusline+=%5.l/%L
 "}}}
