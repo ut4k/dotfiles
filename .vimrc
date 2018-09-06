@@ -187,6 +187,9 @@ nnoremap <F10> :RainbowToggle<CR>
 " vmap <silent><Leader>ee :<C-U>call phpactor#ExtractExpression(v:true)<CR>
 " " Extract method from selection
 " vmap <silent><Leader>em :<C-U>call phpactor#ExtractMethod()<CR>
+" disable built-in help
+nmap <F1> :echo<CR>
+imap <F1> <C-o>:echo<CR>
 "}}}
 
 "abbrevations{{{
