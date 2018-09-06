@@ -1,6 +1,11 @@
 /*
 !/.vimrc
+!/.vim
+/.vim/plugged/*
+/.vim/config/*
+/.vim/.netrwhist 
 !/.zshrc
 tags
 !/.gitconfig
 !/.gitignore
+!.gitkeep
