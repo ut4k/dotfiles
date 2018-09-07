@@ -97,8 +97,13 @@ source $ZSH/oh-my-zsh.sh
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 export PATH="/usr/local/bin:$PATH"
-if [ "$(uname 2> /dev/null)" == "Linux" ]; then
+
+case ${OSTYPE} in
+	darwin*)
+		;;
+	linux*)
     screenfetch
-fi
+		;;
+esac
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
