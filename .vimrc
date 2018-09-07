@@ -235,6 +235,9 @@ Plug 'jiangmiao/auto-pairs'
 Plug 'shawncplus/phpcomplete.vim'
 "projectにcomposer入れないと使えないっぽい
 "Plug 'phpactor/phpactor', {'for': 'php', 'do': 'composer install'}
+if has('unix') && !has('win32') && !has('win64')
+	Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+endif
 call plug#end()
 "}}}
 
