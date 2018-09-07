@@ -107,5 +107,5 @@ case ${OSTYPE} in
 esac
 
 #src myconfig
-[ -f ~/.zsh/myconfig.zsh ] && source ~/.fzf.zsh
+[ -f ~/.zsh/myconfig.zsh ] && source ~/.zsh/myconfig.zsh
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
