@@ -97,6 +97,8 @@ source $ZSH/oh-my-zsh.sh
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 export PATH="/usr/local/bin:$PATH"
-screenfetch
+if [ "$(uname 2> /dev/null)" == "Linux" ]; then
+    screenfetch
+fi
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
