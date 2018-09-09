@@ -13,7 +13,7 @@ language en_US.utf8
 scriptencoding utf-8
 set encoding=utf-8
 
-set termguicolors
+"set termguicolors
 set background=dark
 set t_Co=256
 colorscheme skeletor
@@ -238,6 +238,13 @@ Plug 'shawncplus/phpcomplete.vim'
 if has('unix') && !has('win32') && !has('win64')
 	Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 endif
+Plug 'chrisbra/NrrwRgn'
+Plug 'henrik/vim-indexed-search'
+Plug 'vim-scripts/vawa.vim'
+Plug 'robmiller/vim-movar'
+Plug 'shawncplus/phpcomplete.vim'
+Plug 'SirVer/ultisnips'
+Plug 'MarcWeber/vim-addon-manager'
 call plug#end()
 "}}}
 
@@ -306,9 +313,8 @@ let g:VimuxRunnerType = "window"
 let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_wq = 1
-let g:syntastic_php_phpcs_exec='C:/xampp/php/phpcs'
-let g:syntastic_php_checkers = ['php']
-let g:syntastic_php_phpcs_args = "--standard=psr2"
+"let g:syntastic_php_checkers = ['php', 'phpmd']
+let g:syntastic_php_checkers = ['phpmd']
 "----------------------------------------
 " pdv
 "----------------------------------------
@@ -346,7 +352,16 @@ call arpeggio#map('i', '', 0, 'kj', '<Esc>')
 "----------------------------------------
 "to toggle, :RainbowToggle
 let g:rainbow_active = 0
-"
+"----------------------------------------
+" vawa
+"----------------------------------------
+"custom highlight color of matching php $variable
+let g:vawahl="ctermbg=black ctermfg=red guifg=#ff0000 guibg=#000000 gui=bold"
+"----------------------------------------
+" vim-addon-manager
+"----------------------------------------
+set runtimepath+=$HOME/.vim/plugged/vim-addon-manager
+call vam#ActivateAddons(['vim-snippets'])
 "}}}
 
 " functions{{{

@@ -97,6 +97,7 @@ source $ZSH/oh-my-zsh.sh
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 export PATH="/usr/local/bin:$PATH"
+export PATH="$PATH:$HOME/.config/composer/vendor/bin"
 
 case ${OSTYPE} in
 	darwin*)
