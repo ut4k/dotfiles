@@ -13,7 +13,7 @@ language en_US.utf8
 scriptencoding utf-8
 set encoding=utf-8
 
-"set termguicolors
+set termguicolors
 set background=dark
 set t_Co=256
 colorscheme skeletor
@@ -59,6 +59,7 @@ set titlestring=%{expand('%:p')}
 "ワイルドカードで検索除外
 set wildignore+=*\\.git\\*,*\\.hg\\*,*\\.svn\\*
 set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*.jpg,*.png,*.gif,*.jpeg,*.swf
+set wildignore+=*/.git/*,*/tmp/*,*.swp
 
 if has("win32unix")
 	"for cygwin
@@ -95,7 +96,7 @@ set statusline+=%5.l/%L
 "
 "mappings{{{
 let mapleader = ','
-nnoremap gR :Grep "\<<cword>\>" *<CR>
+nnoremap gR :Grep "<cword>"<CR>
 "]b : 次のバッファ
 nnoremap <silent> ]b :bnext<CR>
 "[b : 前のバッファ
@@ -132,7 +133,7 @@ nnoremap <leader>pcf :!php-cs-fixer fix % --rules=@PSR2<CR>
 "generate ctags
 "nnoremap <leader>gct :!ctags -R --exclude=.svn --exclude=node_modules --exclude=_test --exclude=smarty --exclude="*.min.*" --exclude=.git --langmap=php:.php.inc --PHP-kinds=+cf-v<CR>
 "list up buffer
-nnoremap fo :CtrlPBuffer<CR>
+"nnoremap fo :CtrlPBuffer<CR>
 "vertical +50
 nnoremap <leader>+ :vertical resize +50<CR>
 "vertical -50
@@ -166,8 +167,6 @@ nnoremap gaf :<C-u>call GotoFileFromDocRoot()<CR>
 nnoremap vr :call PreVar()<CR>
 "php variable var_dump strin into regester
 nnoremap dvr :call VdVar()<CR>
-"rainbow
-nnoremap <F10> :RainbowToggle<CR>
 "phpactor
 " Include use statement
 " nmap <Leader>u :call phpactor#UseAdd()<CR>
@@ -190,6 +189,7 @@ nnoremap <F10> :RainbowToggle<CR>
 " disable built-in help
 nmap <F1> :echo<CR>
 imap <F1> <C-o>:echo<CR>
+nnoremap <c-]> :CtrlPtjump<CR>
 "}}}
 
 "abbrevations{{{
@@ -229,22 +229,21 @@ Plug 'tpope/vim-commentary'
 Plug 'will133/vim-dirdiff'
 Plug 'scrooloose/nerdtree'
 Plug 'ap/vim-buftabline'
-Plug 'xolox/vim-notes'
-Plug 'luochen1990/rainbow'
 Plug 'jiangmiao/auto-pairs'
-Plug 'shawncplus/phpcomplete.vim'
 "projectにcomposer入れないと使えないっぽい
 "Plug 'phpactor/phpactor', {'for': 'php', 'do': 'composer install'}
 if has('unix') && !has('win32') && !has('win64')
 	Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+	Plug 'junegunn/fzf.vim'
 endif
-Plug 'chrisbra/NrrwRgn'
 Plug 'henrik/vim-indexed-search'
-Plug 'vim-scripts/vawa.vim'
+"Plug 'vim-scripts/vawa.vim'
 Plug 'robmiller/vim-movar'
-Plug 'shawncplus/phpcomplete.vim'
+"Plug 'shawncplus/phpcomplete.vim'
 Plug 'SirVer/ultisnips'
 Plug 'MarcWeber/vim-addon-manager'
+Plug 'srstevenson/vim-picker'
+Plug 'ivalkeen/vim-ctrlp-tjump'
 call plug#end()
 "}}}
 
@@ -279,6 +278,10 @@ let g:ctrlp_lazy_update = 1
 let g:ctrlp_working_path_mode = 0
 let g:ctrlp_match_current_file = 1
 let g:ctrlp_cmd = 'CtrlPBuffer'
+
+" if executable('rg')
+"   let g:ctrlp_user_command = 'rg %s --files --color=never --glob ""'
+" endif
 "----------------------------------------
 " PlantUML
 "----------------------------------------
@@ -313,8 +316,9 @@ let g:VimuxRunnerType = "window"
 let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_wq = 1
+"let g:syntastic_php_phpmd_post_args = '/home/Kimura/.config/composer/vendor/phpmd/phpmd/src/main/resources/rulesets/unusedcode.xml'
 "let g:syntastic_php_checkers = ['php', 'phpmd']
-let g:syntastic_php_checkers = ['phpmd']
+let g:syntastic_php_checkers = ['php']
 "----------------------------------------
 " pdv
 "----------------------------------------
@@ -356,7 +360,7 @@ let g:rainbow_active = 0
 " vawa
 "----------------------------------------
 "custom highlight color of matching php $variable
-let g:vawahl="ctermbg=black ctermfg=red guifg=#ff0000 guibg=#000000 gui=bold"
+let g:vawahl="ctermbg=black ctermfg=white guifg=white guibg=black gui=bold"
 "----------------------------------------
 " vim-addon-manager
 "----------------------------------------
@@ -364,7 +368,7 @@ set runtimepath+=$HOME/.vim/plugged/vim-addon-manager
 call vam#ActivateAddons(['vim-snippets'])
 "}}}
 
-" functions{{{
+"} functions{{{
 "ctrlpbuffer時にctrl+@でカーソル下のバッファを閉じる
 let g:ctrlp_buffer_func = { 'enter': 'CtrlPMappings' }
 function! CtrlPMappings()
@@ -560,3 +564,14 @@ endif
 source $VIMRUNTIME/macros/matchit.vim
 "}}}
 
+"experimental----------------------------------
+"fuzzy search
+nnoremap fo :PickerEdit<CR>
+nnoremap fb :PickerBuffer<CR>
+let g:picker_height = 10
+
+let g:picker_find_executable = 'rg'
+let g:picker_find_flags = '--color never --files'
+
+let g:picker_selector_executable = 'fzy'
+let g:picker_selector_flags = ''
