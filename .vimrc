@@ -17,6 +17,7 @@ set termguicolors
 set background=dark
 set t_Co=256
 colorscheme skeletor
+set redrawtime=20000
 set ttyfast
 set updatetime=250
 
@@ -244,6 +245,7 @@ Plug 'SirVer/ultisnips'
 Plug 'MarcWeber/vim-addon-manager'
 Plug 'srstevenson/vim-picker'
 Plug 'ivalkeen/vim-ctrlp-tjump'
+Plug 'treycucco/vim-monotonic'
 call plug#end()
 "}}}
 
