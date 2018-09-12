@@ -28,7 +28,6 @@ set ambiwidth=single
 "set ambiwidth=double
 
 set mouse=a
-set hidden
 set ttimeoutlen=10
 set backspace=indent,eol,start
 set clipboard=unnamed,autoselect
@@ -36,7 +35,6 @@ set clipboard=unnamed,autoselect
 set autoread
 set cursorline
 set foldmethod=marker
-set hidden
 set hlsearch
 set laststatus=2
 set lazyredraw
@@ -83,7 +81,7 @@ set statusline+=%0*
 set statusline+=%=
 set statusline+=%0*
 set statusline+=%1*
-set statusline+=%{tagbar#currenttag('%s\(\)\ ','')}
+set statusline+=%{tagbar#currenttag('%s','')}
 set statusline+=%0*
 set statusline+=[%{&fileencoding}]
 set statusline+=[%{&ff=='mac'?'CR':&ff=='unix'?'LF':'CRLF'}]
@@ -97,6 +95,7 @@ set statusline+=%5.l/%L
 "
 "mappings{{{
 let mapleader = ','
+:nmap cp :let @" = expand("%")<cr>
 nnoremap gR :Grep "<cword>"<CR>
 "]b : 次のバッファ
 nnoremap <silent> ]b :bnext<CR>
@@ -116,7 +115,8 @@ nnoremap tp :TagbarToggle<CR>
 "Colorizerのトグル
 nnoremap <Leader>tcr :ColorToggle<CR>
 "currenttagコピー
-nnoremap <Leader>ct :let @+=expand(tagbar#currenttag('%s\(\)',''))<CR>
+"nnoremap <Leader>ct :let @+=expand(tagbar#currenttag('%s\(\)',''))<CR>
+nnoremap <Leader>ct :let @+=expand(tagbar#currenttag('%s',''))<CR>
 "currenttagのファンクション名でgrep look-functionとか?...
 nnoremap <Leader>lf :call GrepCurrentFunc()<CR>
 "ファンクションリスト
@@ -153,7 +153,7 @@ nnoremap <leader>bl ?\(while\\|foreach\\|for\)<CR>
 nnoremap <F11> :call ToggleHighlight(1)<CR>
 "open tagjump in new tab
 "nnoremap <C-]> :tab tjump <C-r><C-w><CR>
-nnoremap <C-]> :tjump <C-r><C-w><CR>
+"nnoremap <C-]> :tjump <C-r><C-w><CR>
 "add only debug!! text to end of the line
 "nnoremap <leader>n
 nnoremap <leader>dc :call PhpDocSingle()<CR>
@@ -229,7 +229,6 @@ Plug 'kana/vim-arpeggio'
 Plug 'tpope/vim-commentary'
 Plug 'will133/vim-dirdiff'
 Plug 'scrooloose/nerdtree'
-Plug 'ap/vim-buftabline'
 Plug 'jiangmiao/auto-pairs'
 "projectにcomposer入れないと使えないっぽい
 "Plug 'phpactor/phpactor', {'for': 'php', 'do': 'composer install'}
@@ -240,12 +239,13 @@ endif
 Plug 'henrik/vim-indexed-search'
 "Plug 'vim-scripts/vawa.vim'
 Plug 'robmiller/vim-movar'
-"Plug 'shawncplus/phpcomplete.vim'
+Plug 'shawncplus/phpcomplete.vim'
 Plug 'SirVer/ultisnips'
 Plug 'MarcWeber/vim-addon-manager'
 Plug 'srstevenson/vim-picker'
 Plug 'ivalkeen/vim-ctrlp-tjump'
 Plug 'treycucco/vim-monotonic'
+"Plug 'lvht/phpcd.vim', { 'for': 'php', 'do': 'composer install' }
 call plug#end()
 "}}}
 
@@ -387,7 +387,7 @@ endfunction
 "今いるファンクション名でgrep
 function! GrepCurrentFunc()
 	let l:func_name=expand(tagbar#currenttag('%s',''))
-	execute 'silent grep! '.l:func_name.' |:redraw!'
+	execute 'silent rg! '.l:func_name.' |:redraw!'
 endfunction
 
 "全角スペースをハイライト表示
@@ -522,7 +522,7 @@ command! -nargs=+ Grep execute 'silent !sh ~/myscript/greplogo.sh' | execute 'si
 autocmd QuickFixCmdPost *grep* cwindow
 "set grepprg=grep\ -rn\ --color=never\ --exclude-dir=smarty\ --exclude-dir=templates_c\ --exclude-dir=cache\ --exclude-dir=.svn\ --exclude-dir=.git\ --exclude=tags\ --exclude=.htaccess
 if executable("rg")
-  set grepprg=rg\ --vimgrep\ --no-heading\ --glob\ '!tags'
+  set grepprg=rg\ --vimgrep\ --no-heading\ --sort-files\ --no-column\ --line-number\ --path-separator\ '/'\ --glob\ '!tags'
   set grepformat=%f:%l:%c:%m,%f:%l:%m
 endif
 "}}}
