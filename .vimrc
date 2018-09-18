@@ -1,3 +1,4 @@
+iab zz = "他案件アップに伴い一旦コメント化"
 
 "this needs to be on top ???{{{
 autocmd ColorScheme * highlight User1 ctermbg=black ctermfg=121 cterm=bold
@@ -101,6 +102,10 @@ nnoremap gR :Grep "<cword>"<CR>
 nnoremap <silent> ]b :bnext<CR>
 "[b : 前のバッファ
 nnoremap <silent> [b :bprevious<CR>
+"]t : 次のタブ
+nnoremap <silent> ]t :tabnext<CR>
+"[t : 前のタブ
+nnoremap <silent> [t :tabprevious<CR>
 "F2 : QuickFixリスト
 nnoremap <F2> :call QFixToggle()<CR>:wincmd=<CR><CR>
 "F3 : no higlight
@@ -168,6 +173,7 @@ nnoremap gaf :<C-u>call GotoFileFromDocRoot()<CR>
 nnoremap vr :call PreVar()<CR>
 "php variable var_dump strin into regester
 nnoremap dvr :call VdVar()<CR>
+nnoremap cvr :call ClogVar()<CR>
 "phpactor
 " Include use statement
 " nmap <Leader>u :call phpactor#UseAdd()<CR>
@@ -208,7 +214,6 @@ ia jsfor <c-r>="for(var i = 0; i < elm.length; i++){"<CR>
 "vim-plug{{{
 call plug#begin('~/.vim/plugged')
 Plug 'aklt/plantuml-syntax'
-Plug 'chrisbra/Colorizer'
 Plug 'ctrlpvim/ctrlp.vim'
 Plug 'junegunn/vim-easy-align'
 Plug 'majutsushi/tagbar'
@@ -221,7 +226,6 @@ Plug 'xolox/vim-colorscheme-switcher'
 Plug 'xolox/vim-misc'
 Plug 'tpope/vim-unimpaired'
 Plug 'kshenoy/vim-signature'
-Plug 'nrocco/vim-phplint'
 Plug 'StanAngeloff/php.vim'
 Plug 'alvan/vim-php-manual'
 Plug 'vim-scripts/PDV--phpDocumentor-for-Vim'
@@ -230,22 +234,16 @@ Plug 'tpope/vim-commentary'
 Plug 'will133/vim-dirdiff'
 Plug 'scrooloose/nerdtree'
 Plug 'jiangmiao/auto-pairs'
-"projectにcomposer入れないと使えないっぽい
-"Plug 'phpactor/phpactor', {'for': 'php', 'do': 'composer install'}
 if has('unix') && !has('win32') && !has('win64')
 	Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 	Plug 'junegunn/fzf.vim'
 endif
-Plug 'henrik/vim-indexed-search'
 "Plug 'vim-scripts/vawa.vim'
 Plug 'robmiller/vim-movar'
-Plug 'shawncplus/phpcomplete.vim'
-Plug 'SirVer/ultisnips'
 Plug 'MarcWeber/vim-addon-manager'
 Plug 'srstevenson/vim-picker'
 Plug 'ivalkeen/vim-ctrlp-tjump'
-Plug 'treycucco/vim-monotonic'
-"Plug 'lvht/phpcd.vim', { 'for': 'php', 'do': 'composer install' }
+Plug 'heavenshell/vim-jsdoc'
 call plug#end()
 "}}}
 
@@ -505,6 +503,10 @@ endfunction
 
 function! VdVar()
   let @* = "echo \"<small>\\$" . expand('<cword>') . ":</small>\"; var_dump($" . expand('<cword>') . "); //########## debug kimura ".strftime("%Y/%m/%d")." ##########"
+endfunction
+
+function! ClogVar()
+  let @* = "console.log(" . expand('<cword>') . "); //########## debug kimura ".strftime("%Y/%m/%d")." ##########"
 endfunction
 
 function! QFixToggle()
