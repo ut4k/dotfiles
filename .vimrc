@@ -1,5 +1,3 @@
-iab zz = "他案件アップに伴い一旦コメント化"
-
 "this needs to be on top ???{{{
 autocmd ColorScheme * highlight User1 ctermbg=black ctermfg=121 cterm=bold
 "}}}
@@ -68,6 +66,8 @@ if has("win32unix")
 	let &t_EI.="\e[1 q"
 	let &t_te.="\e[0 q"
 endif
+
+let g:sql_type_default = 'mysql'
 "}}}
 
 "status line{{{
@@ -107,7 +107,7 @@ nnoremap <silent> ]t :tabnext<CR>
 "[t : 前のタブ
 nnoremap <silent> [t :tabprevious<CR>
 "F2 : QuickFixリスト
-nnoremap <F2> :call QFixToggle()<CR>:wincmd=<CR><CR>
+nnoremap ;er :call QFixToggle()<CR>:wincmd=<CR><CR>
 "F3 : no higlight
 nnoremap <F3> :noh<CR><CR>
 ",ev : _vimrcを縦スプリットで開く
@@ -135,11 +135,7 @@ nnoremap <leader>cn :let @+ = expand('%')<CR>
 "gs : gf縦分割バージョン
 nnoremap gs :vertical wincmd f<CR>
 "php-cs-fixer コーディング規則にそって整形
-nnoremap <leader>pcf :!php-cs-fixer fix % --rules=@PSR2<CR>
-"generate ctags
-"nnoremap <leader>gct :!ctags -R --exclude=.svn --exclude=node_modules --exclude=_test --exclude=smarty --exclude="*.min.*" --exclude=.git --langmap=php:.php.inc --PHP-kinds=+cf-v<CR>
-"list up buffer
-"nnoremap fo :CtrlPBuffer<CR>
+nnoremap <leader>pcs :!php-cs-fixer fix % --rules=@PSR2<CR>
 "vertical +50
 nnoremap <leader>+ :vertical resize +50<CR>
 "vertical -50
@@ -156,17 +152,10 @@ nnoremap <leader>x :SignatureToggle<CR>
 nnoremap <leader>bl ?\(while\\|foreach\\|for\)<CR>
 "自動単語ハイライトONOFF
 nnoremap <F11> :call ToggleHighlight(1)<CR>
-"open tagjump in new tab
-"nnoremap <C-]> :tab tjump <C-r><C-w><CR>
-"nnoremap <C-]> :tjump <C-r><C-w><CR>
-"add only debug!! text to end of the line
-"nnoremap <leader>n
 nnoremap <leader>dc :call PhpDocSingle()<CR>
 vnoremap p !sed 's/^/\//'<CR>
 "change word by register0 word
 nnoremap <leader>cr cw<c-r>0
-"toggle nerdtree
-nnoremap <C-n> :NERDTreeToggle<CR>
 "go to abs path file
 nnoremap gaf :<C-u>call GotoFileFromDocRoot()<CR>
 "php variable echo string into regester
@@ -174,29 +163,15 @@ nnoremap vr :call PreVar()<CR>
 "php variable var_dump strin into regester
 nnoremap dvr :call VdVar()<CR>
 nnoremap cvr :call ClogVar()<CR>
-"phpactor
-" Include use statement
-" nmap <Leader>u :call phpactor#UseAdd()<CR>
-" " Invoke the context menu
-" nmap <Leader>mm :call phpactor#ContextMenu()<CR>
-" " Invoke the navigation menu
-" nmap <Leader>nn :call phpactor#Navigate()<CR>
-" " Goto definition of class or class member under the cursor
-" nmap <Leader>o :call phpactor#GotoDefinition()<CR>
-" " Transform the classes in the current file
-" nmap <Leader>tt :call phpactor#Transform()<CR>
-" " Generate a new class (replacing the current file)
-" nmap <Leader>cc :call phpactor#ClassNew()<CR>
-" " Extract expression (normal mode)
-" nmap <silent><Leader>ee :call phpactor#ExtractExpression(v:false)<CR>
-" " Extract expression from selection
-" vmap <silent><Leader>ee :<C-U>call phpactor#ExtractExpression(v:true)<CR>
-" " Extract method from selection
-" vmap <silent><Leader>em :<C-U>call phpactor#ExtractMethod()<CR>
-" disable built-in help
+nnoremap <c-]> :CtrlPtjump<CR>
+"save
+nnoremap ;w :w<CR>
+"-- HACK disable built-in help
 nmap <F1> :echo<CR>
 imap <F1> <C-o>:echo<CR>
-nnoremap <c-]> :CtrlPtjump<CR>
+
+nmap <silent> <C-k> <Plug>(ale_previous_wrap)
+nmap <silent> <C-j> <Plug>(ale_next_wrap)
 "}}}
 
 "abbrevations{{{
@@ -220,9 +195,9 @@ Plug 'majutsushi/tagbar'
 Plug 'mattn/emmet-vim'
 Plug 'qpkorr/vim-bufkill'
 Plug 'tpope/vim-surround'
-Plug 'vim-syntastic/syntastic'
-"colorscheme-switcherとmiscはセットで使用
-Plug 'xolox/vim-colorscheme-switcher'
+"Plug 'vim-syntastic/syntastic' "aleにのりかえ
+Plug 'w0rp/ale'
+Plug 'xolox/vim-colorscheme-switcher' "colorscheme-switcherとmiscはセットで使用
 Plug 'xolox/vim-misc'
 Plug 'tpope/vim-unimpaired'
 Plug 'kshenoy/vim-signature'
@@ -232,18 +207,15 @@ Plug 'vim-scripts/PDV--phpDocumentor-for-Vim'
 Plug 'kana/vim-arpeggio'
 Plug 'tpope/vim-commentary'
 Plug 'will133/vim-dirdiff'
-Plug 'scrooloose/nerdtree'
-Plug 'jiangmiao/auto-pairs'
-if has('unix') && !has('win32') && !has('win64')
-	Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
-	Plug 'junegunn/fzf.vim'
-endif
-"Plug 'vim-scripts/vawa.vim'
 Plug 'robmiller/vim-movar'
-Plug 'MarcWeber/vim-addon-manager'
 Plug 'srstevenson/vim-picker'
 Plug 'ivalkeen/vim-ctrlp-tjump'
 Plug 'heavenshell/vim-jsdoc'
+if has('unix') && !has('win32') && !has('win64')
+ Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+ Plug 'junegunn/fzf.vim'
+endif
+Plug 'pangloss/vim-javascript'
 call plug#end()
 "}}}
 
@@ -306,19 +278,14 @@ let g:tagbar_autopreview = 0
     \ ]
   \ }
 "----------------------------------------
-" Vimux
-"----------------------------------------
-let g:VimuxUseNearest = 0
-let g:VimuxRunnerType = "window"
-"----------------------------------------
 " Syntastic
 "----------------------------------------
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 1
-let g:syntastic_check_on_wq = 1
+" let g:syntastic_always_populate_loc_list = 1
+" let g:syntastic_auto_loc_list = 1
+" let g:syntastic_check_on_wq = 1
 "let g:syntastic_php_phpmd_post_args = '/home/Kimura/.config/composer/vendor/phpmd/phpmd/src/main/resources/rulesets/unusedcode.xml'
 "let g:syntastic_php_checkers = ['php', 'phpmd']
-let g:syntastic_php_checkers = ['php']
+" let g:syntastic_php_checkers = ['php']
 "----------------------------------------
 " pdv
 "----------------------------------------
@@ -351,24 +318,16 @@ autocmd FileType php setlocal commentstring=//\ %s
 call arpeggio#load()
 call arpeggio#map('i', '', 0, 'jk', '<Esc>')
 call arpeggio#map('i', '', 0, 'kj', '<Esc>')
-"----------------------------------------
-" rainbow
-"----------------------------------------
-"to toggle, :RainbowToggle
-let g:rainbow_active = 0
-"----------------------------------------
-" vawa
-"----------------------------------------
-"custom highlight color of matching php $variable
-let g:vawahl="ctermbg=black ctermfg=white guifg=white guibg=black gui=bold"
-"----------------------------------------
-" vim-addon-manager
-"----------------------------------------
-set runtimepath+=$HOME/.vim/plugged/vim-addon-manager
-call vam#ActivateAddons(['vim-snippets'])
+
+let g:ale_linters = {'php': ['phpmd','php'], 'javascript': ['jshint'] }
+let g:ale_php_phpmd_use_global = 1
+let g:ale_php_phpmd_ruleset = 'unusedcode'
+
+let g:ale_php_phan_use_global = 1
+let g:ale_sign_column_always = 1
 "}}}
 
-"} functions{{{
+"functions{{{
 "ctrlpbuffer時にctrl+@でカーソル下のバッファを閉じる
 let g:ctrlp_buffer_func = { 'enter': 'CtrlPMappings' }
 function! CtrlPMappings()
@@ -388,10 +347,14 @@ function! GrepCurrentFunc()
 	execute 'silent rg! '.l:func_name.' |:redraw!'
 endfunction
 
+"今ひらいているファイル名でgrep
+function! GrepCurrentFile()
+	let l:file_name=expand('%:t')
+	echo l:file_name
+endfunction
+
 "全角スペースをハイライト表示
-"undercurlはGVIMでしか使えない!!
 function! ZenkakuSpace()
-    "highlight ZenkakuSpace cterm=underline ctermfg=121 ctermbg=233
     highlight ZenkakuSpace ctermbg=red
 endfunction
 
