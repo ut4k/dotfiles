@@ -110,3 +110,7 @@ esac
 #src myconfig
 [ -f ~/.zsh/myconfig.zsh ] && source ~/.zsh/myconfig.zsh
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+pandoc_embed_html () {
+ pandoc -s --self-contained -t html5 -c d:/pandoc_style/github.css $@
+}

@@ -96,6 +96,8 @@ set statusline+=%5.l/%L
 "
 "mappings{{{
 let mapleader = ','
+"xで削除したらブラッホールにぶちこむ
+nnoremap x "_x
 :nmap cp :let @" = expand("%")<cr>
 nnoremap gR :Grep "<cword>"<CR>
 "]b : 次のバッファ
@@ -216,6 +218,10 @@ if has('unix') && !has('win32') && !has('win64')
  Plug 'junegunn/fzf.vim'
 endif
 Plug 'pangloss/vim-javascript'
+Plug 'vim-scripts/httplog'
+Plug 'yous/vim-open-color'
+Plug 'yuttie/comfortable-motion.vim'
+"ファイルタイプ setf httplogでハイライト
 call plug#end()
 "}}}
 
