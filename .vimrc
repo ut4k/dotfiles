@@ -548,3 +548,6 @@ let g:picker_find_flags = '--color never --files'
 
 let g:picker_selector_executable = 'fzy'
 let g:picker_selector_flags = ''
+
+" push quickfix window always to the bottom
+autocmd FileType qf wincmd J
