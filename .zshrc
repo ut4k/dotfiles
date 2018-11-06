@@ -99,13 +99,13 @@ source $ZSH/oh-my-zsh.sh
 export PATH="/usr/local/bin:$PATH"
 export PATH="$PATH:$HOME/.config/composer/vendor/bin"
 
-case ${OSTYPE} in
-	darwin*)
-		;;
-	linux*)
-    screenfetch
-		;;
-esac
+# case ${OSTYPE} in
+# 	darwin*)
+# 		;;
+# 	linux*)
+#     screenfetch
+# 		;;
+# esac
 
 #src myconfig
 [ -f ~/.zsh/myconfig.zsh ] && source ~/.zsh/myconfig.zsh

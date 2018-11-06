@@ -222,6 +222,8 @@ Plug 'vim-scripts/httplog'
 Plug 'yous/vim-open-color'
 Plug 'yuttie/comfortable-motion.vim'
 "ファイルタイプ setf httplogでハイライト
+Plug 'dag/vim2hs'
+Plug 'itchyny/vim-haskell-indent'
 call plug#end()
 "}}}
 
@@ -551,3 +553,4 @@ let g:picker_selector_flags = ''
 
 " push quickfix window always to the bottom
 autocmd FileType qf wincmd J
+autocmd FileType haskell set tabstop=4|set shiftwidth=4|set expandtab
