@@ -112,5 +112,9 @@ esac
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 pandoc_embed_html () {
+ pandoc -s --self-contained -t html5 -c d:/pandoc_style/markdown6.css $@
+}
+
+pandoc_embed_html2 () {
  pandoc -s --self-contained -t html5 -c d:/pandoc_style/github.css $@
 }
