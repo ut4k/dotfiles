@@ -4,7 +4,7 @@ autocmd ColorScheme * highlight User1 ctermbg=black ctermfg=121 cterm=bold
 
 "global variables{{{
 "auto highlight same words - 1:disable, 0:enable
-let g:toggleHighlight = 1
+" let g:toggleHighlight = 1
 "}}}
 
 "basic{{{
@@ -34,6 +34,7 @@ set clipboard=unnamed,autoselect
 set autoread
 set cursorline
 set foldmethod=marker
+set foldlevel=99
 set hlsearch
 set laststatus=2
 set lazyredraw
@@ -153,7 +154,7 @@ nnoremap <leader>x :SignatureToggle<CR>
 "backward loop whileかforeachかforを前方検索で探す
 nnoremap <leader>bl ?\(while\\|foreach\\|for\)<CR>
 "自動単語ハイライトONOFF
-nnoremap <F11> :call ToggleHighlight(1)<CR>
+" nnoremap <F11> :call ToggleHighlight(1)<CR>
 nnoremap <leader>dc :call PhpDocSingle()<CR>
 vnoremap p !sed 's/^/\//'<CR>
 "change word by register0 word
@@ -280,7 +281,6 @@ let g:tagbar_autopreview = 0
     \ 'kinds'     : [
         \ 'i:interfaces',
         \ 'c:classes',
-        \ 'd:constant definitions',
         \ 'f:functions',
         \ 'j:javascript functions:1'
     \ ]
@@ -433,12 +433,13 @@ function! ToggleHighlight(...)
 
   if g:toggleHighlight == 0 "normal action, do the hi
     silent! exe printf('match IncSearch /\V\<%s\>/', escape(expand('<cword>'), '/\'))
+    " silent! exe printf('match IncSearch //', escape(expand('<cword>'), '/\'))
   else
     call clearmatches()
   endif
 endfunction
 
-autocmd CursorMoved * call ToggleHighlight()
+" autocmd CursorMoved * call ToggleHighlight()
 
 function! MySearch(myVar)
     let @/=a:myVar
