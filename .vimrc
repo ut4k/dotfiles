@@ -8,7 +8,7 @@ let g:toggleHighlight = 1
 "}}}
 
 "basic{{{
-language en_US.utf8
+" language en_US.UTF-8
 scriptencoding utf-8
 set encoding=utf-8
 

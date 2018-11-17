@@ -118,3 +118,5 @@ pandoc_embed_html () {
 pandoc_embed_html2 () {
  pandoc -s --self-contained -t html5 -c d:/pandoc_style/github.css $@
 }
+
+alias vim="LC_ALL=en_US.utf-8 vim"
