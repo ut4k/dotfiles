@@ -1,6 +1,8 @@
 /*
 !/.vimrc
 !/.vim
+!/.xinitrc
+!/.xprofile
 /.vim/plugged/*
 /.vim/config/*
 /.vim/.netrwhist 
