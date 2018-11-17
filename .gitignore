@@ -3,6 +3,7 @@
 !/.vim
 !/.xinitrc
 !/.xprofile
+!/.xbindkeysrc
 /.vim/plugged/*
 /.vim/config/*
 /.vim/.netrwhist 
