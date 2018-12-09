@@ -119,5 +119,5 @@ pandoc_embed_html2 () {
  pandoc -s --self-contained -t html5 -c d:/pandoc_style/github.css $@
 }
 
-alias vim="LC_ALL=en_US.utf-8 vim"
+# alias vim="LC_ALL=en_US.utf-8 vim"
 alias chromium="/usr/bin/chromium-browser --start-fullscreen --disable-session-crashed-bubble --disable-infobars"

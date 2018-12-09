@@ -24,5 +24,11 @@ done &
 #set wallpaper with feh
 feh --bg-scale ~/images/wall.jpg
 
+#enable fn key bind
+xbindkeys
+
+#enable compton
+compton -b --config ~/.config/compton/compton.conf
+
 #launch dwm
 exec dwm
