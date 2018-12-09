@@ -8,7 +8,11 @@ autocmd ColorScheme * highlight User1 ctermbg=black ctermfg=121 cterm=bold
 "}}}
 
 "basic{{{
-" language en_US.UTF-8
+"winのときだけ言語enにする
+if has("win32unix")
+	language en_US.UTF-8
+endif
+
 scriptencoding utf-8
 set encoding=utf-8
 
