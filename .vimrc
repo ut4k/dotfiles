@@ -191,7 +191,7 @@ ia cdt <c-r>=strftime("%Y/%m/%d")<CR>
 "current hms 
 ia hms <c-r>=strftime("%Y/%m/%d %H:%M")<CR>
 ia jsfor <c-r>="for(var i = 0; i < elm.length; i++){"<CR>
-ia cmain <c-r>="#include <stdio.h>\n\nint main(int argv, char *argv[]){\n}"<CR>
+ia cmain <c-r>="#include <stdio.h>\n\nint main(int argc, char *argv[]){\n}"<CR>
 "abbrevations}}}
 
 "vim-plug{{{
