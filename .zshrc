@@ -121,3 +121,4 @@ pandoc_embed_html2 () {
 
 # alias vim="LC_ALL=en_US.utf-8 vim"
 alias chromium="/usr/bin/chromium-browser --start-fullscreen --disable-session-crashed-bubble --disable-infobars"
+alias wifi="sudo wifi-menu"
