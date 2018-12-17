@@ -179,6 +179,8 @@ imap <F1> <C-o>:echo<CR>
 
 nmap <silent> <C-k> <Plug>(ale_previous_wrap)
 nmap <silent> <C-j> <Plug>(ale_next_wrap)
+
+nnoremap <leader>D :Commentary<Esc>^$A dlsr
 "}}}
 
 "abbrevations{{{
@@ -230,6 +232,7 @@ Plug 'yuttie/comfortable-motion.vim'
 "ファイルタイプ setf httplogでハイライト
 Plug 'dag/vim2hs'
 Plug 'itchyny/vim-haskell-indent'
+Plug 'juneedahamed/svnj.vim'
 call plug#end()
 "}}}
 
@@ -560,3 +563,11 @@ let g:picker_selector_flags = ''
 " push quickfix window always to the bottom
 autocmd FileType qf wincmd J
 autocmd FileType haskell set tabstop=4|set shiftwidth=4|set expandtab
+
+if &diff                             " only for diff mode/vimdiff
+  set diffopt=filler,context:1000000 " filler is default and inserts empty lines for sync
+endif
+
+let g:html_number_lines = 0
+let g:html_ignore_folding = 1
+let g:html_font = "Consolas"
