@@ -179,6 +179,8 @@ imap <F1> <C-o>:echo<CR>
 
 nmap <silent> <C-k> <Plug>(ale_previous_wrap)
 nmap <silent> <C-j> <Plug>(ale_next_wrap)
+"compile c and run the bin
+nnoremap <F9> :call RunC()<CR>
 "}}}
 
 "abbrevations{{{
@@ -491,6 +493,14 @@ function! QFixToggle()
   cclose
   if _ == winnr('$')
     cwindow
+  endif
+endfunction
+
+function! RunC()
+  if (&filetype == "c")
+   execute '!gcc '.expand('%').' && ./a.out'
+  else
+   echohl WarningMsg | echo 'cannot run. not a c file.'
   endif
 endfunction
 "}}}
