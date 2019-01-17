@@ -517,18 +517,7 @@ autocmd QuickFixCmdPost *grep* cwindow
 "set grepprg=grep\ -rn\ --color=never\ --exclude-dir=smarty\ --exclude-dir=templates_c\ --exclude-dir=cache\ --exclude-dir=.svn\ --exclude-dir=.git\ --exclude=tags\ --exclude=.htaccess
 " > Globs are interpreted in exactly the same way as .gitignore patterns. That is, later globs will override earlier globs.
 if executable("rg")
-  "set grepprg=rg\ --vimgrep\ --no-heading\ --sort-files\ --no-column\ --line-number\ --path-separator\ '/'\ --glob\ '!tags'\ --glob\ '!.svn'\ --glob\ '!*.min.css'\ --glob\ '!*.min.js'\ --glob\ '!jquery.js'\ --glob\ '!www/material/flash/*'
-  set grepprg=rg\ --vimgrep\ --no-heading\ --sort-files\ --no-column\ --line-number\ --path-separator\ '/'\ --glob\ '!tags'
-  set grepformat=%f:%l:%c:%m,%f:%l:%m
-endif
-
-"JSだけgrep
-command! -nargs=+ GrepJs execute 'silent !sh ~/myscript/greplogo.sh' | execute 'silent grep! <args>'| execute 'silent !clear' |:redraw!
-autocmd QuickFixCmdPost *grep* cwindow
-"set grepprg=grep\ -rn\ --color=never\ --exclude-dir=smarty\ --exclude-dir=templates_c\ --exclude-dir=cache\ --exclude-dir=.svn\ --exclude-dir=.git\ --exclude=tags\ --exclude=.htaccess
-" > Globs are interpreted in exactly the same way as .gitignore patterns. That is, later globs will override earlier globs.
-if executable("rg")
-  set grepprg=rg\ --vimgrep\ --no-heading\ --sort-files\ --no-column\ --line-number\ --path-separator\ '/'\ --glob\ '!tags'\ --glob\ '!.svn'\ --glob\ '!*.min.css'\ --glob\ '!*.min.js'\ --glob\ '!jquery.js'\ --glob\ '!www/material/flash/*'\ --glob\ '*.js'
+  set grepprg=rg\ --vimgrep\ --no-heading\ --sort-files\ --no-column\ --line-number\ --path-separator\ '/'\ --glob\ '!tags'\ --glob\ '!.svn'\ --glob\ '!*.min.css'\ --glob\ '!*.min.js'\ --glob\ '!jquery.js'\ --glob\ '!www/material/flash/*'
   set grepformat=%f:%l:%c:%m,%f:%l:%m
 endif
 "}}}
