@@ -181,6 +181,11 @@ nmap <silent> <C-j> <Plug>(ale_next_wrap)
 "compile c and run the bin
 nnoremap <F9> :call RunC()<CR>
 nnoremap <leader>D :Commentary<Esc>^$A dlsr
+"prepare grep command
+nnoremap ff :Grep ""<Left>
+nnoremap <leader>we :call OpenWinExplorer()<Esc>
+nnoremap <S-h> :vert resize +15<CR>
+nnoremap <S-l> :vert resize -15<CR>
 "}}}
 
 "abbrevations{{{
@@ -233,6 +238,8 @@ Plug 'yuttie/comfortable-motion.vim'
 Plug 'dag/vim2hs'
 Plug 'itchyny/vim-haskell-indent'
 Plug 'juneedahamed/svnj.vim'
+Plug 'shawncplus/phpcomplete.vim'
+" Plug 'lvht/phpcd.vim', { 'for': 'php', 'do': 'composer install' }
 call plug#end()
 "}}}
 
@@ -504,15 +511,23 @@ function! RunC()
    echohl WarningMsg | echo 'cannot run. not a c file.'
   endif
 endfunction
+
+function! OpenWinExplorer()
+	if has("win32unix")
+		echo "opened " . expand('%:h')
+		call system('cygstart ' . expand('%:h'))
+	endif
+endfunction
 "}}}
 
 "my ex command {{{
 "grep設定
-command! -nargs=+ Grep execute 'silent !sh ~/myscript/greplogo.sh' | execute 'silent grep! <args>'| execute 'silent !clear' |:redraw!
+command! -nargs=+ Grep execute 'silent !sh ~/myscript/greplogo.sh' | execute 'silent grep! <args>'| execute 'silent !clear' |:redraw! |:cfirst
 autocmd QuickFixCmdPost *grep* cwindow
 "set grepprg=grep\ -rn\ --color=never\ --exclude-dir=smarty\ --exclude-dir=templates_c\ --exclude-dir=cache\ --exclude-dir=.svn\ --exclude-dir=.git\ --exclude=tags\ --exclude=.htaccess
+" > Globs are interpreted in exactly the same way as .gitignore patterns. That is, later globs will override earlier globs.
 if executable("rg")
-  set grepprg=rg\ --vimgrep\ --no-heading\ --sort-files\ --no-column\ --line-number\ --path-separator\ '/'\ --glob\ '!tags'
+  set grepprg=rg\ --vimgrep\ --no-heading\ --sort-files\ --no-column\ --line-number\ --path-separator\ '/'\ --glob\ '!tags'\ --glob\ '!.svn'\ --glob\ '!*.min.css'\ --glob\ '!*.min.js'\ --glob\ '!jquery.js'\ --glob\ '!www/material/flash/*'
   set grepformat=%f:%l:%c:%m,%f:%l:%m
 endif
 "}}}
@@ -579,3 +594,4 @@ endif
 let g:html_number_lines = 0
 let g:html_ignore_folding = 1
 let g:html_font = "Consolas"
+
