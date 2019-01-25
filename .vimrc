@@ -518,11 +518,18 @@ function! OpenWinExplorer()
 		call system('cygstart ' . expand('%:h'))
 	endif
 endfunction
+
+function! CopyIntoOrgDir(newName)
+	let l:cmd = 'cp ' . expand('%') . ' ' . expand('%:h') . '/'. a:newName
+	echo l:cmd
+	call system(l:cmd)
+	execute 'edit ' . expand('%:h') . '/'. a:newName
+endfunction
 "}}}
 
 "my ex command {{{
 "grep設定
-command! -nargs=+ Grep execute 'silent !sh ~/myscript/greplogo.sh' | execute 'silent grep! <args>'| execute 'silent !clear' |:redraw! |:cfirst
+command! -nargs=+ Grep execute 'silent !sh ~/myscript/greplogo.sh' | execute 'silent grep! <args>'| execute 'silent !clear' |:redraw! |:cfirst |:wincmd j
 autocmd QuickFixCmdPost *grep* cwindow
 "set grepprg=grep\ -rn\ --color=never\ --exclude-dir=smarty\ --exclude-dir=templates_c\ --exclude-dir=cache\ --exclude-dir=.svn\ --exclude-dir=.git\ --exclude=tags\ --exclude=.htaccess
 " > Globs are interpreted in exactly the same way as .gitignore patterns. That is, later globs will override earlier globs.
