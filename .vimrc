@@ -22,7 +22,7 @@ set t_Co=256
 colorscheme skeletor
 set redrawtime=20000
 set ttyfast
-set updatetime=250
+set updatetime=200
 
 set ignorecase
 set list
@@ -171,6 +171,8 @@ nnoremap vr :call PreVar()<CR>
 nnoremap dvr :call VdVar()<CR>
 nnoremap cvr :call ClogVar()<CR>
 nnoremap <c-]> :CtrlPtjump<CR>
+
+nnoremap gb :call BackSearchPhpVar()<CR>
 "save
 nnoremap ;w :w<CR>
 "-- HACK disable built-in help
@@ -199,6 +201,7 @@ ia cdt <c-r>=strftime("%Y/%m/%d")<CR>
 ia hms <c-r>=strftime("%Y/%m/%d %H:%M")<CR>
 ia jsfor <c-r>="for(var i = 0; i < elm.length; i++){"<CR>
 ia cmain <c-r>="#include <stdio.h>\n\nint main(int argc, char *argv[]){\n}"<CR>
+ia hlw <c-r>="hello,world!"<CR>
 "abbrevations}}}
 
 "vim-plug{{{
@@ -240,6 +243,7 @@ Plug 'itchyny/vim-haskell-indent'
 Plug 'juneedahamed/svnj.vim'
 Plug 'shawncplus/phpcomplete.vim'
 " Plug 'lvht/phpcd.vim', { 'for': 'php', 'do': 'composer install' }
+Plug 'vim-scripts/tagbar-phpctags'
 call plug#end()
 "}}}
 
@@ -289,15 +293,17 @@ let g:tagbar_autofocus = 0
 let g:tagbar_compact = 1
 let g:tagbar_singleclick = 1
 let g:tagbar_sort = 0
-let g:tagbar_indent = 1
+let g:tagbar_indent = 2
 let g:tagbar_autopreview = 0
- let g:tagbar_type_php  = {
-    \ 'ctagstype' : 'php',
+let g:tagbar_iconchars = ['+', '-']
+let g:tagbar_silent = 1
+let g:tagbar_type_php  = {
     \ 'kinds'     : [
         \ 'i:interfaces',
         \ 'c:classes',
         \ 'f:functions',
-        \ 'j:javascript functions:1'
+        \ 'm:members:0:0',
+        \ 'v:variables:0:0'
     \ ]
   \ }
 "----------------------------------------
@@ -490,6 +496,12 @@ endfunction
 
 function! VdVar()
   let @* = "echo \"<small>\\$" . expand('<cword>') . ":</small>\"; var_dump($" . expand('<cword>') . "); //########## debug kimura ".strftime("%Y/%m/%d")." ##########"
+endfunction
+
+function! BackSearchPhpVar()
+	let l:w = "\$" . expand('<cword>')
+	let @/=l:w
+	" execute '/' . l:w
 endfunction
 
 function! ClogVar()

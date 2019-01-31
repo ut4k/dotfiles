@@ -124,3 +124,4 @@ alias chromium="/usr/bin/chromium-browser --start-fullscreen --disable-session-c
 alias wifi="sudo wifi-menu"
 alias e="emacs -nw"
 alias emacs="emacs -nw"
+alias v="vim"
