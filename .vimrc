@@ -20,6 +20,7 @@ set termguicolors
 set background=dark
 set t_Co=256
 colorscheme skeletor
+"colorscheme allomancer
 set redrawtime=20000
 set ttyfast
 set updatetime=200
@@ -244,6 +245,7 @@ Plug 'juneedahamed/svnj.vim'
 Plug 'shawncplus/phpcomplete.vim'
 " Plug 'lvht/phpcd.vim', { 'for': 'php', 'do': 'composer install' }
 Plug 'vim-scripts/tagbar-phpctags'
+Plug 'Nequo/vim-allomancer'
 call plug#end()
 "}}}
 
