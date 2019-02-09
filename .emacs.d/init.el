@@ -19,19 +19,27 @@ There are two things you can do about this warning:
 
 
 (menu-bar-mode 0)
+<<<<<<< HEAD
 (tool-bar-mode 0)(menu-bar-mode -1)
+=======
+>>>>>>> c4d4475dfe18c8c164096bc567ceb7df138cf4d5
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+<<<<<<< HEAD
  '(package-selected-packages (quote (slime helm))))
+=======
+ '(package-selected-packages (quote (htmlize helm))))
+>>>>>>> c4d4475dfe18c8c164096bc567ceb7df138cf4d5
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
+<<<<<<< HEAD
 
 (setq make-backup-files nil) ; stop creating backup~ files
 (setq auto-save-default nil) ; stop creating #autosave# files
@@ -47,3 +55,5 @@ There are two things you can do about this warning:
 (slime-setup '(slime-repl slime-fancy slime-banner)) 
 
 (global-linum-mode 1) ; always show line numbers
+=======
+>>>>>>> c4d4475dfe18c8c164096bc567ceb7df138cf4d5

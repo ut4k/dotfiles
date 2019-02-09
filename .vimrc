@@ -2,10 +2,6 @@
 autocmd ColorScheme * highlight User1 ctermbg=black ctermfg=121 cterm=bold
 "}}}
 
-"global variables{{{
-"auto highlight same words - 1:disable, 0:enable
-" let g:toggleHighlight = 1
-"}}}
 
 "basic{{{
 "winのときだけ言語enにする
@@ -22,7 +18,7 @@ set t_Co=256
 colorscheme skeletor
 set redrawtime=20000
 set ttyfast
-set updatetime=250
+set updatetime=200
 
 set ignorecase
 set list
@@ -73,6 +69,17 @@ if has("win32unix")
 endif
 
 let g:sql_type_default = 'mysql'
+
+"html output
+let g:html_number_lines = 0
+let g:html_ignore_folding = 1
+let g:html_font = "Consolas"
+
+
+"diff setting
+if &diff                             " only for diff mode/vimdiff
+  set diffopt=filler,context:1000000 " filler is default and inserts empty lines for sync
+endif
 "}}}
 
 "status line{{{
@@ -92,47 +99,41 @@ set statusline+=%0*
 set statusline+=[%{&fileencoding}]
 set statusline+=[%{&ff=='mac'?'CR':&ff=='unix'?'LF':'CRLF'}]
 set statusline+=%1*
-if exists('current_project')
-  set statusline+=\ [%{current_project}]
-endif
+" if exists('current_project')
+"   set statusline+=\ [%{current_project}]
+" endif
 set statusline+=%0*
 set statusline+=%5.l/%L
 "}}}
 "
 "mappings{{{
-let mapleader = ','
+let mapleader = ';' "Leader
+
 "xで削除したらブラッホールにぶちこむ
 nnoremap x "_x
-:nmap cp :let @" = expand("%")<cr>
 nnoremap gR :Grep "<cword>"<CR>
-"]b : 次のバッファ
+"次のバッファ
 nnoremap <silent> ]b :bnext<CR>
-"[b : 前のバッファ
+"前のバッファ
 nnoremap <silent> [b :bprevious<CR>
-"]t : 次のタブ
+"次のタブ
 nnoremap <silent> ]t :tabnext<CR>
-"[t : 前のタブ
+"前のタブ
 nnoremap <silent> [t :tabprevious<CR>
-"F2 : QuickFixリスト
-nnoremap ;er :call QFixToggle()<CR>:wincmd=<CR><CR>
-"F3 : no higlight
+"Quickfixlist
+nnoremap ;ee :call QFixToggle()<CR>:wincmd=<CR><CR>
+"no higlight
 nnoremap <F3> :noh<CR><CR>
-",ev : _vimrcを縦スプリットで開く
-"nnoremap <Leader>ev :vsplit $MYVIMRC<CR><CR>
+"vimrcを縦スプリットで開く
 nnoremap <Leader>ev :e $MYVIMRC<CR><CR>
-"F12 : MYVIMRCを再読み込みする
+"vimrcを再読み込みする
 nnoremap <F12> :source $MYVIMRC<CR>
 "Tagbarトグル tagbar pop
 nnoremap tp :TagbarToggle<CR>
-"Colorizerのトグル
-nnoremap <Leader>tcr :ColorToggle<CR>
 "currenttagコピー
-"nnoremap <Leader>ct :let @+=expand(tagbar#currenttag('%s\(\)',''))<CR>
 nnoremap <Leader>ct :let @+=expand(tagbar#currenttag('%s',''))<CR>
 "currenttagのファンクション名でgrep look-functionとか?...
 nnoremap <Leader>lf :call GrepCurrentFunc()<CR>
-"ファンクションリスト
-nnoremap <leader>ff :call FunctionsList()<CR>
 "上のファンクションの宣言にジャンプ
 nnoremap <buffer> <up> :call FunctionJumpUp()<CR>
 "下のファンクションの宣言にジャンプ
@@ -141,12 +142,6 @@ nnoremap <buffer> <down> :call FunctionJumpDown()<CR>
 nnoremap <leader>cn :let @+ = expand('%')<CR>
 "gs : gf縦分割バージョン
 nnoremap gs :vertical wincmd f<CR>
-"php-cs-fixer コーディング規則にそって整形
-nnoremap <leader>pcs :!php-cs-fixer fix % --rules=@PSR2<CR>
-"vertical +50
-nnoremap <leader>+ :vertical resize +50<CR>
-"vertical -50
-nnoremap <leader>- :vertical resize -50<CR>
 "sort u
 vnoremap <leader>s :sort u<CR>
 "run script
@@ -157,20 +152,22 @@ vnoremap ad :!column -t -o " " \| sed 's/^/ /'<CR><CR>
 nnoremap <leader>x :SignatureToggle<CR>
 "backward loop whileかforeachかforを前方検索で探す
 nnoremap <leader>bl ?\(while\\|foreach\\|for\)<CR>
-"自動単語ハイライトONOFF
-" nnoremap <F11> :call ToggleHighlight(1)<CR>
+"phpdoc
 nnoremap <leader>dc :call PhpDocSingle()<CR>
+"add / on top of line on VisualMode
 vnoremap p !sed 's/^/\//'<CR>
 "change word by register0 word
-nnoremap <leader>cr cw<c-r>0
+nnoremap <leader>cw cw<c-r>0
 "go to abs path file
 nnoremap gaf :<C-u>call GotoFileFromDocRoot()<CR>
-"php variable echo string into regester
-nnoremap vr :call PreVar()<CR>
 "php variable var_dump strin into regester
-nnoremap dvr :call VdVar()<CR>
+nnoremap vr :call VdVar()<CR>
+"console log js variable
 nnoremap cvr :call ClogVar()<CR>
+"tagjump
 nnoremap <c-]> :CtrlPtjump<CR>
+"serch php variable back
+nnoremap vb :call BackSearchPhpVar()<CR>
 "save
 nnoremap ;w :w<CR>
 "-- HACK disable built-in help
@@ -183,8 +180,11 @@ nnoremap <F9> :call RunC()<CR>
 nnoremap <leader>D :Commentary<Esc>^$A dlsr
 "prepare grep command
 nnoremap ff :Grep ""<Left>
+"open file dir in windows explorer
 nnoremap <leader>we :call OpenWinExplorer()<Esc>
+"+ buffer size vertically
 nnoremap <S-h> :vert resize +15<CR>
+"- buffer vertically
 nnoremap <S-l> :vert resize -15<CR>
 "}}}
 
@@ -195,22 +195,19 @@ ia hsc <c-r>="htmlspecialchars("<CR>
 ia vd <c-r>="var_dump("<CR>
 "current date
 ia cdt <c-r>=strftime("%Y/%m/%d")<CR>
-"current hms 
-ia hms <c-r>=strftime("%Y/%m/%d %H:%M")<CR>
-ia jsfor <c-r>="for(var i = 0; i < elm.length; i++){"<CR>
-ia cmain <c-r>="#include <stdio.h>\n\nint main(int argc, char *argv[]){\n}"<CR>
+"c basic header files
+ia chdr <c-r>="#include <stdio.h>\n\nint main(int argc, char *argv[]){\n}"<CR>
+ia hlw <c-r>="hello,world!"<CR>
 "abbrevations}}}
 
 "vim-plug{{{
 call plug#begin('~/.vim/plugged')
-Plug 'aklt/plantuml-syntax'
 Plug 'ctrlpvim/ctrlp.vim'
 Plug 'junegunn/vim-easy-align'
 Plug 'majutsushi/tagbar'
 Plug 'mattn/emmet-vim'
 Plug 'qpkorr/vim-bufkill'
 Plug 'tpope/vim-surround'
-"Plug 'vim-syntastic/syntastic' "aleにのりかえ
 Plug 'w0rp/ale'
 Plug 'xolox/vim-colorscheme-switcher' "colorscheme-switcherとmiscはセットで使用
 Plug 'xolox/vim-misc'
@@ -223,23 +220,17 @@ Plug 'kana/vim-arpeggio'
 Plug 'tpope/vim-commentary'
 Plug 'will133/vim-dirdiff'
 Plug 'robmiller/vim-movar'
-Plug 'srstevenson/vim-picker'
 Plug 'ivalkeen/vim-ctrlp-tjump'
 Plug 'heavenshell/vim-jsdoc'
-if has('unix') && !has('win32') && !has('win64')
- Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
- Plug 'junegunn/fzf.vim'
-endif
 Plug 'pangloss/vim-javascript'
-Plug 'vim-scripts/httplog'
+Plug 'vim-scripts/httplog' "setf httplog
 Plug 'yous/vim-open-color'
 Plug 'yuttie/comfortable-motion.vim'
-"ファイルタイプ setf httplogでハイライト
 Plug 'dag/vim2hs'
 Plug 'itchyny/vim-haskell-indent'
-Plug 'juneedahamed/svnj.vim'
 Plug 'shawncplus/phpcomplete.vim'
-" Plug 'lvht/phpcd.vim', { 'for': 'php', 'do': 'composer install' }
+Plug 'vim-scripts/tagbar-phpctags'
+Plug 'Nequo/vim-allomancer'
 call plug#end()
 "}}}
 
@@ -274,14 +265,6 @@ let g:ctrlp_lazy_update = 1
 let g:ctrlp_working_path_mode = 0
 let g:ctrlp_match_current_file = 1
 let g:ctrlp_cmd = 'CtrlPBuffer'
-
-" if executable('rg')
-"   let g:ctrlp_user_command = 'rg %s --files --color=never --glob ""'
-" endif
-"----------------------------------------
-" PlantUML
-"----------------------------------------
-let g:plantuml_executable_script='$HOME/plantuml/plantuml.sh'
 "----------------------------------------
 " Tagbar
 "----------------------------------------
@@ -289,26 +272,19 @@ let g:tagbar_autofocus = 0
 let g:tagbar_compact = 1
 let g:tagbar_singleclick = 1
 let g:tagbar_sort = 0
-let g:tagbar_indent = 1
+let g:tagbar_indent = 2
 let g:tagbar_autopreview = 0
- let g:tagbar_type_php  = {
-    \ 'ctagstype' : 'php',
+let g:tagbar_iconchars = ['+', '-']
+let g:tagbar_silent = 1
+let g:tagbar_type_php  = {
     \ 'kinds'     : [
         \ 'i:interfaces',
         \ 'c:classes',
         \ 'f:functions',
-        \ 'j:javascript functions:1'
+        \ 'm:members:0:0',
+        \ 'v:variables:0:0'
     \ ]
   \ }
-"----------------------------------------
-" Syntastic
-"----------------------------------------
-" let g:syntastic_always_populate_loc_list = 1
-" let g:syntastic_auto_loc_list = 1
-" let g:syntastic_check_on_wq = 1
-"let g:syntastic_php_phpmd_post_args = '/home/Kimura/.config/composer/vendor/phpmd/phpmd/src/main/resources/rulesets/unusedcode.xml'
-"let g:syntastic_php_checkers = ['php', 'phpmd']
-" let g:syntastic_php_checkers = ['php']
 "----------------------------------------
 " pdv
 "----------------------------------------
@@ -341,11 +317,12 @@ autocmd FileType php setlocal commentstring=//\ %s
 call arpeggio#load()
 call arpeggio#map('i', '', 0, 'jk', '<Esc>')
 call arpeggio#map('i', '', 0, 'kj', '<Esc>')
-
+"----------------------------------------
+" ALE
+"----------------------------------------
 let g:ale_linters = {'php': ['phpmd','php'], 'javascript': ['jshint'] , 'haskell' : []}
 let g:ale_php_phpmd_use_global = 1
 let g:ale_php_phpmd_ruleset = 'unusedcode'
-
 let g:ale_php_phan_use_global = 1
 let g:ale_sign_column_always = 1
 "}}}
@@ -454,12 +431,6 @@ function! ToggleHighlight(...)
   endif
 endfunction
 
-" autocmd CursorMoved * call ToggleHighlight()
-
-function! MySearch(myVar)
-    let @/=a:myVar
-endfunction
-
 function! PhpSyntaxOverride()
   " Put snippet overrides in this function.
   hi! def link phpDocTags  phpDefine
@@ -485,11 +456,16 @@ function! GotoFileFromDocRoot()
 endfunction
 
 function! PreVar()
-  let @* = "echo \"<small>\\$" . expand('<cword>') . ":</small>\"; pre($" . expand('<cword>') . "); //########## debug kimura ".strftime("%Y/%m/%d")." ##########"
+  let @* = "echo \"<small style=color:magenta>\\$" . expand('<cword>') . ":</small>\"; pre($" . expand('<cword>') . "); //########## debug kimura ".strftime("%Y/%m/%d")." ##########"
 endfunction
 
 function! VdVar()
   let @* = "echo \"<small>\\$" . expand('<cword>') . ":</small>\"; var_dump($" . expand('<cword>') . "); //########## debug kimura ".strftime("%Y/%m/%d")." ##########"
+endfunction
+
+function! BackSearchPhpVar()
+	let l:w = "\$" . expand('<cword>')
+	let @/=l:w
 endfunction
 
 function! ClogVar()
@@ -518,11 +494,18 @@ function! OpenWinExplorer()
 		call system('cygstart ' . expand('%:h'))
 	endif
 endfunction
+
+function! CopyIntoOrgDir(newName)
+	let l:cmd = 'cp ' . expand('%') . ' ' . expand('%:h') . '/'. a:newName
+	echo l:cmd
+	call system(l:cmd)
+	execute 'edit ' . expand('%:h') . '/'. a:newName
+endfunction
 "}}}
 
 "my ex command {{{
 "grep設定
-command! -nargs=+ Grep execute 'silent !sh ~/myscript/greplogo.sh' | execute 'silent grep! <args>'| execute 'silent !clear' |:redraw! |:cfirst
+command! -nargs=+ Grep execute 'silent !sh ~/myscript/greplogo.sh' | execute 'silent grep! <args>'| execute 'silent !clear' |:redraw! |:cfirst |:wincmd j
 autocmd QuickFixCmdPost *grep* cwindow
 "set grepprg=grep\ -rn\ --color=never\ --exclude-dir=smarty\ --exclude-dir=templates_c\ --exclude-dir=cache\ --exclude-dir=.svn\ --exclude-dir=.git\ --exclude=tags\ --exclude=.htaccess
 " > Globs are interpreted in exactly the same way as .gitignore patterns. That is, later globs will override earlier globs.
@@ -561,6 +544,11 @@ augroup Misc
     autocmd VimResized * exe "normal! \<c-w>="
 augroup END
 
+" push quickfix window always to the bottom
+autocmd FileType qf wincmd J
+"spacing for Haskell
+autocmd FileType haskell set tabstop=4|set shiftwidth=4|set expandtab
+
 "}}}
 
 "read external files {{{
@@ -570,28 +558,3 @@ endif
 
 source $VIMRUNTIME/macros/matchit.vim
 "}}}
-
-"experimental----------------------------------
-"fuzzy search
-nnoremap fo :PickerEdit<CR>
-nnoremap fb :PickerBuffer<CR>
-let g:picker_height = 10
-
-let g:picker_find_executable = 'rg'
-let g:picker_find_flags = '--color never --files'
-
-let g:picker_selector_executable = 'fzy'
-let g:picker_selector_flags = ''
-
-" push quickfix window always to the bottom
-autocmd FileType qf wincmd J
-autocmd FileType haskell set tabstop=4|set shiftwidth=4|set expandtab
-
-if &diff                             " only for diff mode/vimdiff
-  set diffopt=filler,context:1000000 " filler is default and inserts empty lines for sync
-endif
-
-let g:html_number_lines = 0
-let g:html_ignore_folding = 1
-let g:html_font = "Consolas"
-
