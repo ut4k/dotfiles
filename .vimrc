@@ -204,46 +204,39 @@ ia hlw <c-r>="hello,world!"<CR>
 "vim-plug{{{
 call plug#begin('~/.vim/plugged')
 Plug 'ctrlpvim/ctrlp.vim'
-Plug 'junegunn/vim-easy-align'
-Plug 'majutsushi/tagbar'
-Plug 'mattn/emmet-vim'
-Plug 'qpkorr/vim-bufkill'
-Plug 'tpope/vim-surround'
+Plug 'ivalkeen/vim-ctrlp-tjump'
 Plug 'w0rp/ale'
-Plug 'xolox/vim-colorscheme-switcher' "colorscheme-switcherとmiscはセットで使用
-Plug 'xolox/vim-misc'
-Plug 'tpope/vim-unimpaired'
-Plug 'kshenoy/vim-signature'
+Plug 'majutsushi/tagbar'
+Plug 'vim-scripts/tagbar-phpctags'
+Plug 'tpope/vim-surround'
 Plug 'StanAngeloff/php.vim'
 Plug 'alvan/vim-php-manual'
+" Plug 'shawncplus/phpcomplete.vim'
+Plug 'junegunn/vim-easy-align'
+Plug 'tpope/vim-unimpaired'
+Plug 'mattn/emmet-vim'
+Plug 'Konfekt/FastFold'
 Plug 'vim-scripts/PDV--phpDocumentor-for-Vim'
-Plug 'kana/vim-arpeggio'
 Plug 'tpope/vim-commentary'
 Plug 'will133/vim-dirdiff'
 Plug 'robmiller/vim-movar'
-Plug 'ivalkeen/vim-ctrlp-tjump'
 Plug 'heavenshell/vim-jsdoc'
 Plug 'pangloss/vim-javascript'
 Plug 'vim-scripts/httplog' "setf httplog
-Plug 'yous/vim-open-color'
-Plug 'yuttie/comfortable-motion.vim'
-Plug 'dag/vim2hs'
-Plug 'itchyny/vim-haskell-indent'
-Plug 'shawncplus/phpcomplete.vim'
-Plug 'vim-scripts/tagbar-phpctags'
-Plug 'Nequo/vim-allomancer'
-Plug 'micke/vim-hybrid'
-Plug 'caksoylar/vim-mysticaltutor'
-Plug 'connorholyday/vim-snazzy'
-Plug 'micke/vim-hybrid'
-Plug 'nightsense/stellarized'
-Plug 'evturn/cosmic-barf'
-Plug 'evturn/vim-hardaway'
-Plug 'rovalles/drew.vim'
 call plug#end()
 "}}}
 
 "plugin settings{{{
+"----------------------------------------
+" FastFold
+"----------------------------------------
+"let g:fastfold_savehook = 1
+let g:fastfold_fold_command_suffixes =  ['x','X','a','A','o','O','c','C']
+let g:fastfold_fold_movement_commands = [']z', '[z', 'zj', 'zk']
+let g:markdown_folding = 1
+let g:vimsyn_folding = 'af'
+let g:php_folding = 1
+
 "----------------------------------------
 " Emmet
 "----------------------------------------
@@ -322,25 +315,18 @@ let g:php_sql_query = 1
 "----------------------------------------
 autocmd FileType php setlocal commentstring=//\ %s
 "----------------------------------------
-" arpeggio
-"----------------------------------------
-"jk or kj to escape
-call arpeggio#load()
-call arpeggio#map('i', '', 0, 'fj', '<Esc>')
-call arpeggio#map('i', '', 0, 'jf', '<Esc>')
-call arpeggio#map('v', '', 0, 'fj', '<Esc>')
-call arpeggio#map('v', '', 0, 'jf', '<Esc>')
-"----------------------------------------
 " ALE
 "----------------------------------------
 let g:ale_linters = {'php': ['phpmd','php'], 'javascript': ['jshint'] , 'haskell' : []}
 let g:ale_php_phpmd_use_global = 1
 let g:ale_php_phpmd_ruleset = 'unusedcode'
 let g:ale_php_phan_use_global = 1
-let g:ale_sign_column_always = 1
+let g:ale_sign_column_always = 0
 let g:ale_lint_on_save = 0
 let g:ale_lint_on_insert_leave = 0
 let g:ale_set_balloons = 0
+let g:ale_lint_on_enter = 0
+let g:ale_lint_on_text_changed = 1
 "}}}
 
 "functions{{{
@@ -574,3 +560,4 @@ endif
 
 source $VIMRUNTIME/macros/matchit.vim
 "}}}
+"
