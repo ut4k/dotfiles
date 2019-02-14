@@ -162,13 +162,13 @@ nnoremap <leader>cw cw<c-r>0
 "go to abs path file
 nnoremap gaf :<C-u>call GotoFileFromDocRoot()<CR>
 "php variable var_dump strin into regester
-nnoremap vr :call VdVar()<CR>
+nnoremap vr :call VarDumpPhpVariable()<CR>
 "console log js variable
 nnoremap cvr :call ClogVar()<CR>
 "tagjump
 nnoremap <c-]> :CtrlPtjump<CR>
 "serch php variable back
-nnoremap vb :call BackSearchPhpVar()<CR>
+nnoremap vb :call SearchPhpVariable()<CR>
 "-- HACK disable built-in help
 nmap <F1> :echo<CR>
 imap <F1> <C-o>:echo<CR>
@@ -278,7 +278,7 @@ let g:tagbar_singleclick = 1
 let g:tagbar_sort = 0
 let g:tagbar_indent = 2
 let g:tagbar_autopreview = 0
-let g:tagbar_iconchars = ['+', '-']
+let g:tagbar_iconchars = ['▸', '▾']
 let g:tagbar_silent = 1
 let g:tagbar_type_php  = {
     \ 'kinds'     : [
@@ -302,14 +302,17 @@ let g:pdv_cfg_Access = ""
 "----------------------------------------
 " php.vim
 "----------------------------------------
-let g:php_html_load=1
-let g:php_html_in_heredoc=1
-let g:php_html_in_nowdoc=1
-let g:php_var_selector_is_identifier=1
+let g:php_html_load = 0
+let g:php_html_in_heredoc = 0
+let g:php_html_in_nowdoc = 0
+let g:php_var_selector_is_identifier= 1
 let g:php_baselib = 1
-let g:php_parent_error_close = 1
-let g:php_parent_error_open = 1
-let g:php_sql_query = 1
+let g:php_parent_error_close = 0
+let g:php_parent_error_open = 0
+let g:php_sql_query = 0
+let g:php_folding = 0
+let g:php_sql_heredoc = 0
+let g:php_sql_nowdoc = 0
 "----------------------------------------
 " commentary
 "----------------------------------------
@@ -326,23 +329,11 @@ let g:ale_lint_on_save = 0
 let g:ale_lint_on_insert_leave = 0
 let g:ale_set_balloons = 0
 let g:ale_lint_on_enter = 0
-let g:ale_lint_on_text_changed = 1
+let g:ale_lint_on_text_changed = 0
+let g:ale_lint_on_filetype_changed = 0
 "}}}
 
 "functions{{{
-"ctrlpbuffer時にctrl+@でカーソル下のバッファを閉じる
-let g:ctrlp_buffer_func = { 'enter': 'CtrlPMappings' }
-function! CtrlPMappings()
-  nnoremap <buffer> <silent> <C-@> :call <sid>DeleteBuffer()<cr>
-endfunction
-
-function! s:DeleteBuffer()
-  let path = fnamemodify(getline('.')[2:], ':p')
-  let bufn = matchstr(path, '\v\d+\ze\*No Name')
-  exec "bd" bufn ==# "" ? path : bufn
-  exec "norm \<F5>"
-endfunction
-
 "今いるファンクション名でgrep
 function! GrepCurrentFunc()
 	let l:func_name=expand(tagbar#currenttag('%s',''))
@@ -368,7 +359,7 @@ if has('syntax')
     augroup END
     call ZenkakuSpace()
 endif
-"シモンさんからもらったやつ <3
+"シモンさんからもらったやつ <3 {{{
 
 "上のファンクションの宣言にジャンプする
 function! FunctionJumpUp()
@@ -407,6 +398,8 @@ function! FunctionsList()
 		cw
 	endif
 endfunction
+"}}}
+
 "現在のファイルをインタプリタで実行
 function! RunScript()
 	"haskellならghcのインタプリタ
@@ -418,19 +411,6 @@ function! RunScript()
 	endif
 	let l:file = expand('%')
 	execute ':vnew | 0read ! '. l:bin .' #'
-endfunction
-"行移動したらカーソル下ハイライト //switches behaviour by argument
-function! ToggleHighlight(...)
-  if a:0 == 1 "toggle behaviour
-    let g:toggleHighlight = 1 - g:toggleHighlight
-  endif
-
-  if g:toggleHighlight == 0 "normal action, do the hi
-    silent! exe printf('match IncSearch /\V\<%s\>/', escape(expand('<cword>'), '/\'))
-    " silent! exe printf('match IncSearch //', escape(expand('<cword>'), '/\'))
-  else
-    call clearmatches()
-  endif
 endfunction
 
 function! PhpSyntaxOverride()
@@ -457,15 +437,11 @@ function! GotoFileFromDocRoot()
     endif
 endfunction
 
-function! PreVar()
-  let @* = "echo \"<small style=color:magenta>\\$" . expand('<cword>') . ":</small>\"; pre($" . expand('<cword>') . "); //########## debug kimura ".strftime("%Y/%m/%d")." ##########"
-endfunction
-
-function! VdVar()
+function! VarDumpPhpVariable()
   let @* = "echo \"<small>\\$" . expand('<cword>') . ":</small>\"; var_dump($" . expand('<cword>') . "); //########## debug kimura ".strftime("%Y/%m/%d")." ##########"
 endfunction
 
-function! BackSearchPhpVar()
+function! SearchPhpVariable()
 	let l:w = "\$" . expand('<cword>')
 	let @/=l:w
 endfunction
@@ -560,4 +536,14 @@ endif
 
 source $VIMRUNTIME/macros/matchit.vim
 "}}}
-"
+
+"highlight line number(without cursorline)
+hi clear CursorLine
+augroup CLClear
+    autocmd! ColorScheme * hi clear CursorLine
+augroup END
+
+hi CursorLineNR cterm=bold
+augroup CLNRSet
+    autocmd! ColorScheme * hi CursorLineNR cterm=bold
+augroup END
