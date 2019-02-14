@@ -108,7 +108,8 @@ set statusline+=%5.l/%L
 "
 "mappings{{{
 let mapleader = ';' "Leader
-
+"save
+nnoremap <leader>ww :w<CR>
 "xで削除したらブラッホールにぶちこむ
 nnoremap x "_x
 nnoremap gR :Grep "<cword>"<CR>
@@ -121,19 +122,19 @@ nnoremap <silent> ]t :tabnext<CR>
 "前のタブ
 nnoremap <silent> [t :tabprevious<CR>
 "Quickfixlist
-nnoremap ;ee :call QFixToggle()<CR>:wincmd=<CR><CR>
+nnoremap <leader>ee :call QFixToggle()<CR>:wincmd=<CR><CR>
 "no higlight
 nnoremap <F3> :noh<CR><CR>
 "vimrcを縦スプリットで開く
-nnoremap <Leader>ev :e $MYVIMRC<CR><CR>
+nnoremap <leader>ev :e $MYVIMRC<CR><CR>
 "vimrcを再読み込みする
 nnoremap <F12> :source $MYVIMRC<CR>
 "Tagbarトグル tagbar pop
 nnoremap tp :TagbarToggle<CR>
 "currenttagコピー
-nnoremap <Leader>ct :let @+=expand(tagbar#currenttag('%s',''))<CR>
+nnoremap <leader>ct :let @+=expand(tagbar#currenttag('%s',''))<CR>
 "currenttagのファンクション名でgrep look-functionとか?...
-nnoremap <Leader>lf :call GrepCurrentFunc()<CR>
+nnoremap <leader>lf :call GrepCurrentFunc()<CR>
 "上のファンクションの宣言にジャンプ
 nnoremap <buffer> <up> :call FunctionJumpUp()<CR>
 "下のファンクションの宣言にジャンプ
@@ -168,8 +169,6 @@ nnoremap cvr :call ClogVar()<CR>
 nnoremap <c-]> :CtrlPtjump<CR>
 "serch php variable back
 nnoremap vb :call BackSearchPhpVar()<CR>
-"save
-nnoremap ;w :w<CR>
 "-- HACK disable built-in help
 nmap <F1> :echo<CR>
 imap <F1> <C-o>:echo<CR>
@@ -186,6 +185,8 @@ nnoremap <leader>we :call OpenWinExplorer()<Esc>
 nnoremap <S-h> :vert resize +15<CR>
 "- buffer vertically
 nnoremap <S-l> :vert resize -15<CR>
+"
+nnoremap <F4> :call PhpSyntaxOverride()<CR>
 "}}}
 
 "abbrevations{{{
@@ -231,6 +232,14 @@ Plug 'itchyny/vim-haskell-indent'
 Plug 'shawncplus/phpcomplete.vim'
 Plug 'vim-scripts/tagbar-phpctags'
 Plug 'Nequo/vim-allomancer'
+Plug 'micke/vim-hybrid'
+Plug 'caksoylar/vim-mysticaltutor'
+Plug 'connorholyday/vim-snazzy'
+Plug 'micke/vim-hybrid'
+Plug 'nightsense/stellarized'
+Plug 'evturn/cosmic-barf'
+Plug 'evturn/vim-hardaway'
+Plug 'rovalles/drew.vim'
 call plug#end()
 "}}}
 
@@ -265,6 +274,8 @@ let g:ctrlp_lazy_update = 1
 let g:ctrlp_working_path_mode = 0
 let g:ctrlp_match_current_file = 1
 let g:ctrlp_cmd = 'CtrlPBuffer'
+let g:ctrlp_mruf_default_order = 1
+let g:ctrlp_mruf_relative = 1
 "----------------------------------------
 " Tagbar
 "----------------------------------------
@@ -315,8 +326,10 @@ autocmd FileType php setlocal commentstring=//\ %s
 "----------------------------------------
 "jk or kj to escape
 call arpeggio#load()
-call arpeggio#map('i', '', 0, 'jk', '<Esc>')
-call arpeggio#map('i', '', 0, 'kj', '<Esc>')
+call arpeggio#map('i', '', 0, 'fj', '<Esc>')
+call arpeggio#map('i', '', 0, 'jf', '<Esc>')
+call arpeggio#map('v', '', 0, 'fj', '<Esc>')
+call arpeggio#map('v', '', 0, 'jf', '<Esc>')
 "----------------------------------------
 " ALE
 "----------------------------------------
@@ -325,6 +338,9 @@ let g:ale_php_phpmd_use_global = 1
 let g:ale_php_phpmd_ruleset = 'unusedcode'
 let g:ale_php_phan_use_global = 1
 let g:ale_sign_column_always = 1
+let g:ale_lint_on_save = 0
+let g:ale_lint_on_insert_leave = 0
+let g:ale_set_balloons = 0
 "}}}
 
 "functions{{{
