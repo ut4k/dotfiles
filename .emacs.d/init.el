@@ -25,7 +25,8 @@ There are two things you can do about this warning:
 (setq auto-save-default nil) ; stop creating #autosave# files
 (windmove-default-keybindings)
 
-(setq inferior-lisp-program "sbcl")
+; (setq inferior-lisp-program "sbcl")
+(setq inferior-lisp-program "clisp")
 ;; ~/.emacs.d/slimeをload-pathに追加
 (add-to-list 'load-path (expand-file-name "~/.emacs.d/elpa/slime.el"))
 ;; SLIMEのロード
