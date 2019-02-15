@@ -93,6 +93,7 @@ set statusline+=%0*
 "right
 set statusline+=%=
 set statusline+=%0*
+set statusline+=%{LinterStatus()}
 set statusline+=%1*
 set statusline+=%{tagbar#currenttag('%s','')}
 set statusline+=%0*
@@ -186,7 +187,12 @@ nnoremap <S-h> :vert resize +15<CR>
 "- buffer vertically
 nnoremap <S-l> :vert resize -15<CR>
 "
-nnoremap <F4> :call PhpSyntaxOverride()<CR>
+nnoremap <F11> :call PhpSyntaxOverride()<CR>
+"
+nnoremap <F5> :cnext<CR>
+nnoremap <S-F5> :cprevious<CR>
+"Remember
+nnoremap mk :marks<CR>
 "}}}
 
 "abbrevations{{{
@@ -326,7 +332,7 @@ let g:ale_php_phpmd_ruleset = 'unusedcode'
 let g:ale_php_phan_use_global = 1
 let g:ale_sign_column_always = 0
 let g:ale_lint_on_save = 0
-let g:ale_lint_on_insert_leave = 0
+let g:ale_lint_on_insert_leave = 1
 let g:ale_set_balloons = 0
 let g:ale_lint_on_enter = 0
 let g:ale_lint_on_text_changed = 0
@@ -479,6 +485,21 @@ function! CopyIntoOrgDir(newName)
 	call system(l:cmd)
 	execute 'edit ' . expand('%:h') . '/'. a:newName
 endfunction
+
+function! LinterStatus() abort
+    let l:counts = ale#statusline#Count(bufnr(''))
+
+    let l:all_errors = l:counts.error + l:counts.style_error
+    let l:all_non_errors = l:counts.total - l:all_errors
+
+    return l:counts.total == 0 ? 'OK' : printf(
+    \   '%dW %dE',
+    \   all_non_errors,
+    \   all_errors
+    \)
+endfunction
+
+
 "}}}
 
 "my ex command {{{
@@ -547,3 +568,4 @@ hi CursorLineNR cterm=bold
 augroup CLNRSet
     autocmd! ColorScheme * hi CursorLineNR cterm=bold
 augroup END
+
