@@ -1,3 +1,4 @@
+;;package--------------------------------------------------
 (require 'package)
 (let* ((no-ssl (and (memq system-type '(windows-nt ms-dos))
                     (not (gnutls-available-p))))
@@ -16,21 +17,14 @@ There are two things you can do about this warning:
     ;; For important compatibility libraries like cl-lib
     (add-to-list 'package-archives (cons "gnu" (concat proto "://elpa.gnu.org/packages/")))))
 (package-initialize)
-
-
+;;basic--------------------------------------------------
 (menu-bar-mode 0)
-(tool-bar-mode 0)(menu-bar-mode -1)
-
-(setq make-backup-files nil) ; stop creating backup~ files
-(setq auto-save-default nil) ; stop creating #autosave# files
+(global-linum-mode 1)
+(setq make-backup-files nil)
+(setq auto-save-default nil)
 (windmove-default-keybindings)
-
-; (setq inferior-lisp-program "sbcl")
+;;SLIME--------------------------------------------------
 (setq inferior-lisp-program "clisp")
-;; ~/.emacs.d/slimeをload-pathに追加
 (add-to-list 'load-path (expand-file-name "~/.emacs.d/elpa/slime.el"))
-;; SLIMEのロード
 (require 'slime)
 (slime-setup '(slime-repl slime-fancy slime-banner)) 
-(global-linum-mode 1) ; always show line numbers
-

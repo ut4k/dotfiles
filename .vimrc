@@ -93,6 +93,7 @@ set statusline+=%0*
 "right
 set statusline+=%=
 set statusline+=%0*
+set statusline+=%{LinterStatus()}
 set statusline+=%1*
 set statusline+=%{tagbar#currenttag('%s','')}
 set statusline+=%0*
@@ -108,7 +109,8 @@ set statusline+=%5.l/%L
 "
 "mappings{{{
 let mapleader = ';' "Leader
-
+"save
+nnoremap <leader>ww :w<CR>
 "xで削除したらブラッホールにぶちこむ
 nnoremap x "_x
 nnoremap gR :Grep "<cword>"<CR>
@@ -121,19 +123,19 @@ nnoremap <silent> ]t :tabnext<CR>
 "前のタブ
 nnoremap <silent> [t :tabprevious<CR>
 "Quickfixlist
-nnoremap ;ee :call QFixToggle()<CR>:wincmd=<CR><CR>
+nnoremap <leader>ee :call QFixToggle()<CR>:wincmd=<CR><CR>
 "no higlight
 nnoremap <F3> :noh<CR><CR>
 "vimrcを縦スプリットで開く
-nnoremap <Leader>ev :e $MYVIMRC<CR><CR>
+nnoremap <leader>ev :e $MYVIMRC<CR><CR>
 "vimrcを再読み込みする
 nnoremap <F12> :source $MYVIMRC<CR>
 "Tagbarトグル tagbar pop
 nnoremap tp :TagbarToggle<CR>
 "currenttagコピー
-nnoremap <Leader>ct :let @+=expand(tagbar#currenttag('%s',''))<CR>
+nnoremap <leader>ct :let @+=expand(tagbar#currenttag('%s',''))<CR>
 "currenttagのファンクション名でgrep look-functionとか?...
-nnoremap <Leader>lf :call GrepCurrentFunc()<CR>
+nnoremap <leader>lf :call GrepCurrentFunc()<CR>
 "上のファンクションの宣言にジャンプ
 nnoremap <buffer> <up> :call FunctionJumpUp()<CR>
 "下のファンクションの宣言にジャンプ
@@ -161,15 +163,13 @@ nnoremap <leader>cw cw<c-r>0
 "go to abs path file
 nnoremap gaf :<C-u>call GotoFileFromDocRoot()<CR>
 "php variable var_dump strin into regester
-nnoremap vr :call VdVar()<CR>
+nnoremap vr :call VarDumpPhpVariable()<CR>
 "console log js variable
 nnoremap cvr :call ClogVar()<CR>
 "tagjump
 nnoremap <c-]> :CtrlPtjump<CR>
 "serch php variable back
-nnoremap vb :call BackSearchPhpVar()<CR>
-"save
-nnoremap ;w :w<CR>
+nnoremap vb :call SearchPhpVariable()<CR>
 "-- HACK disable built-in help
 nmap <F1> :echo<CR>
 imap <F1> <C-o>:echo<CR>
@@ -186,6 +186,13 @@ nnoremap <leader>we :call OpenWinExplorer()<Esc>
 nnoremap <S-h> :vert resize +15<CR>
 "- buffer vertically
 nnoremap <S-l> :vert resize -15<CR>
+"
+nnoremap <F11> :call PhpSyntaxOverride()<CR>
+"
+nnoremap <F5> :cnext<CR>
+nnoremap <S-F5> :cprevious<CR>
+"Remember
+nnoremap mk :marks<CR>
 "}}}
 
 "abbrevations{{{
@@ -203,38 +210,39 @@ ia hlw <c-r>="hello,world!"<CR>
 "vim-plug{{{
 call plug#begin('~/.vim/plugged')
 Plug 'ctrlpvim/ctrlp.vim'
-Plug 'junegunn/vim-easy-align'
-Plug 'majutsushi/tagbar'
-Plug 'mattn/emmet-vim'
-Plug 'qpkorr/vim-bufkill'
-Plug 'tpope/vim-surround'
+Plug 'ivalkeen/vim-ctrlp-tjump'
 Plug 'w0rp/ale'
-Plug 'xolox/vim-colorscheme-switcher' "colorscheme-switcherとmiscはセットで使用
-Plug 'xolox/vim-misc'
-Plug 'tpope/vim-unimpaired'
-Plug 'kshenoy/vim-signature'
+Plug 'majutsushi/tagbar'
+Plug 'vim-scripts/tagbar-phpctags'
+Plug 'tpope/vim-surround'
 Plug 'StanAngeloff/php.vim'
 Plug 'alvan/vim-php-manual'
+" Plug 'shawncplus/phpcomplete.vim'
+Plug 'junegunn/vim-easy-align'
+Plug 'tpope/vim-unimpaired'
+Plug 'mattn/emmet-vim'
+Plug 'Konfekt/FastFold'
 Plug 'vim-scripts/PDV--phpDocumentor-for-Vim'
-Plug 'kana/vim-arpeggio'
 Plug 'tpope/vim-commentary'
 Plug 'will133/vim-dirdiff'
 Plug 'robmiller/vim-movar'
-Plug 'ivalkeen/vim-ctrlp-tjump'
 Plug 'heavenshell/vim-jsdoc'
 Plug 'pangloss/vim-javascript'
 Plug 'vim-scripts/httplog' "setf httplog
-Plug 'yous/vim-open-color'
-Plug 'yuttie/comfortable-motion.vim'
-Plug 'dag/vim2hs'
-Plug 'itchyny/vim-haskell-indent'
-Plug 'shawncplus/phpcomplete.vim'
-Plug 'vim-scripts/tagbar-phpctags'
-Plug 'Nequo/vim-allomancer'
 call plug#end()
 "}}}
 
 "plugin settings{{{
+"----------------------------------------
+" FastFold
+"----------------------------------------
+"let g:fastfold_savehook = 1
+let g:fastfold_fold_command_suffixes =  ['x','X','a','A','o','O','c','C']
+let g:fastfold_fold_movement_commands = [']z', '[z', 'zj', 'zk']
+let g:markdown_folding = 1
+let g:vimsyn_folding = 'af'
+let g:php_folding = 1
+
 "----------------------------------------
 " Emmet
 "----------------------------------------
@@ -265,6 +273,8 @@ let g:ctrlp_lazy_update = 1
 let g:ctrlp_working_path_mode = 0
 let g:ctrlp_match_current_file = 1
 let g:ctrlp_cmd = 'CtrlPBuffer'
+let g:ctrlp_mruf_default_order = 1
+let g:ctrlp_mruf_relative = 1
 "----------------------------------------
 " Tagbar
 "----------------------------------------
@@ -274,7 +284,7 @@ let g:tagbar_singleclick = 1
 let g:tagbar_sort = 0
 let g:tagbar_indent = 2
 let g:tagbar_autopreview = 0
-let g:tagbar_iconchars = ['+', '-']
+let g:tagbar_iconchars = ['▸', '▾']
 let g:tagbar_silent = 1
 let g:tagbar_type_php  = {
     \ 'kinds'     : [
@@ -298,25 +308,21 @@ let g:pdv_cfg_Access = ""
 "----------------------------------------
 " php.vim
 "----------------------------------------
-let g:php_html_load=1
-let g:php_html_in_heredoc=1
-let g:php_html_in_nowdoc=1
-let g:php_var_selector_is_identifier=1
+let g:php_html_load = 0
+let g:php_html_in_heredoc = 0
+let g:php_html_in_nowdoc = 0
+let g:php_var_selector_is_identifier= 1
 let g:php_baselib = 1
-let g:php_parent_error_close = 1
-let g:php_parent_error_open = 1
-let g:php_sql_query = 1
+let g:php_parent_error_close = 0
+let g:php_parent_error_open = 0
+let g:php_sql_query = 0
+let g:php_folding = 0
+let g:php_sql_heredoc = 0
+let g:php_sql_nowdoc = 0
 "----------------------------------------
 " commentary
 "----------------------------------------
 autocmd FileType php setlocal commentstring=//\ %s
-"----------------------------------------
-" arpeggio
-"----------------------------------------
-"jk or kj to escape
-call arpeggio#load()
-call arpeggio#map('i', '', 0, 'jk', '<Esc>')
-call arpeggio#map('i', '', 0, 'kj', '<Esc>')
 "----------------------------------------
 " ALE
 "----------------------------------------
@@ -324,23 +330,16 @@ let g:ale_linters = {'php': ['phpmd','php'], 'javascript': ['jshint'] , 'haskell
 let g:ale_php_phpmd_use_global = 1
 let g:ale_php_phpmd_ruleset = 'unusedcode'
 let g:ale_php_phan_use_global = 1
-let g:ale_sign_column_always = 1
+let g:ale_sign_column_always = 0
+let g:ale_lint_on_save = 0
+let g:ale_lint_on_insert_leave = 1
+let g:ale_set_balloons = 0
+let g:ale_lint_on_enter = 0
+let g:ale_lint_on_text_changed = 0
+let g:ale_lint_on_filetype_changed = 0
 "}}}
 
 "functions{{{
-"ctrlpbuffer時にctrl+@でカーソル下のバッファを閉じる
-let g:ctrlp_buffer_func = { 'enter': 'CtrlPMappings' }
-function! CtrlPMappings()
-  nnoremap <buffer> <silent> <C-@> :call <sid>DeleteBuffer()<cr>
-endfunction
-
-function! s:DeleteBuffer()
-  let path = fnamemodify(getline('.')[2:], ':p')
-  let bufn = matchstr(path, '\v\d+\ze\*No Name')
-  exec "bd" bufn ==# "" ? path : bufn
-  exec "norm \<F5>"
-endfunction
-
 "今いるファンクション名でgrep
 function! GrepCurrentFunc()
 	let l:func_name=expand(tagbar#currenttag('%s',''))
@@ -366,7 +365,7 @@ if has('syntax')
     augroup END
     call ZenkakuSpace()
 endif
-"シモンさんからもらったやつ <3
+"シモンさんからもらったやつ <3 {{{
 
 "上のファンクションの宣言にジャンプする
 function! FunctionJumpUp()
@@ -405,6 +404,8 @@ function! FunctionsList()
 		cw
 	endif
 endfunction
+"}}}
+
 "現在のファイルをインタプリタで実行
 function! RunScript()
 	"haskellならghcのインタプリタ
@@ -416,19 +417,6 @@ function! RunScript()
 	endif
 	let l:file = expand('%')
 	execute ':vnew | 0read ! '. l:bin .' #'
-endfunction
-"行移動したらカーソル下ハイライト //switches behaviour by argument
-function! ToggleHighlight(...)
-  if a:0 == 1 "toggle behaviour
-    let g:toggleHighlight = 1 - g:toggleHighlight
-  endif
-
-  if g:toggleHighlight == 0 "normal action, do the hi
-    silent! exe printf('match IncSearch /\V\<%s\>/', escape(expand('<cword>'), '/\'))
-    " silent! exe printf('match IncSearch //', escape(expand('<cword>'), '/\'))
-  else
-    call clearmatches()
-  endif
 endfunction
 
 function! PhpSyntaxOverride()
@@ -455,15 +443,11 @@ function! GotoFileFromDocRoot()
     endif
 endfunction
 
-function! PreVar()
-  let @* = "echo \"<small style=color:magenta>\\$" . expand('<cword>') . ":</small>\"; pre($" . expand('<cword>') . "); //########## debug kimura ".strftime("%Y/%m/%d")." ##########"
-endfunction
-
-function! VdVar()
+function! VarDumpPhpVariable()
   let @* = "echo \"<small>\\$" . expand('<cword>') . ":</small>\"; var_dump($" . expand('<cword>') . "); //########## debug kimura ".strftime("%Y/%m/%d")." ##########"
 endfunction
 
-function! BackSearchPhpVar()
+function! SearchPhpVariable()
 	let l:w = "\$" . expand('<cword>')
 	let @/=l:w
 endfunction
@@ -501,6 +485,21 @@ function! CopyIntoOrgDir(newName)
 	call system(l:cmd)
 	execute 'edit ' . expand('%:h') . '/'. a:newName
 endfunction
+
+function! LinterStatus() abort
+    let l:counts = ale#statusline#Count(bufnr(''))
+
+    let l:all_errors = l:counts.error + l:counts.style_error
+    let l:all_non_errors = l:counts.total - l:all_errors
+
+    return l:counts.total == 0 ? 'OK' : printf(
+    \   '%dW %dE',
+    \   all_non_errors,
+    \   all_errors
+    \)
+endfunction
+
+
 "}}}
 
 "my ex command {{{
@@ -558,3 +557,15 @@ endif
 
 source $VIMRUNTIME/macros/matchit.vim
 "}}}
+
+"highlight line number(without cursorline)
+hi clear CursorLine
+augroup CLClear
+    autocmd! ColorScheme * hi clear CursorLine
+augroup END
+
+hi CursorLineNR cterm=bold
+augroup CLNRSet
+    autocmd! ColorScheme * hi CursorLineNR cterm=bold
+augroup END
+
