@@ -110,7 +110,7 @@ set statusline+=%5.l/%L
 "mappings{{{
 let mapleader = ';' "Leader
 "save
-nnoremap <leader>ww :w<CR>
+nnoremap <leader>s :w<CR>
 "xで削除したらブラッホールにぶちこむ
 nnoremap x "_x
 nnoremap gR :Grep "<cword>"<CR>
@@ -179,20 +179,18 @@ nmap <silent> <C-j> <Plug>(ale_next_wrap)
 nnoremap <F9> :call RunC()<CR>
 nnoremap <leader>D :Commentary<Esc>^$A dlsr
 "prepare grep command
-nnoremap ff :Grep ""<Left>
+nnoremap ff :call GrepConfirm()<CR>
 "open file dir in windows explorer
 nnoremap <leader>we :call OpenWinExplorer()<Esc>
 "+ buffer size vertically
 nnoremap <S-h> :vert resize +15<CR>
 "- buffer vertically
 nnoremap <S-l> :vert resize -15<CR>
-"
 nnoremap <F11> :call PhpSyntaxOverride()<CR>
-"
 nnoremap <F5> :cnext<CR>
 nnoremap <S-F5> :cprevious<CR>
-"Remember
-nnoremap mk :marks<CR>
+nnoremap <F7> :set scb<CR>
+nnoremap <S-F7> :set noscb<CR>
 "}}}
 
 "abbrevations{{{
@@ -229,6 +227,8 @@ Plug 'robmiller/vim-movar'
 Plug 'heavenshell/vim-jsdoc'
 Plug 'pangloss/vim-javascript'
 Plug 'vim-scripts/httplog' "setf httplog
+Plug 'MattesGroeger/vim-bookmarks'
+Plug 'junegunn/goyo.vim'
 call plug#end()
 "}}}
 
@@ -330,20 +330,20 @@ let g:ale_linters = {'php': ['phpmd','php'], 'javascript': ['jshint'] , 'haskell
 let g:ale_php_phpmd_use_global = 1
 let g:ale_php_phpmd_ruleset = 'unusedcode'
 let g:ale_php_phan_use_global = 1
-let g:ale_sign_column_always = 0
-let g:ale_lint_on_save = 0
+let g:ale_sign_column_always = 1
+let g:ale_lint_on_save = 1
 let g:ale_lint_on_insert_leave = 1
 let g:ale_set_balloons = 0
 let g:ale_lint_on_enter = 0
-let g:ale_lint_on_text_changed = 0
+let g:ale_lint_on_text_changed = 1
 let g:ale_lint_on_filetype_changed = 0
 "}}}
 
 "functions{{{
 "今いるファンクション名でgrep
 function! GrepCurrentFunc()
-	let l:func_name=expand(tagbar#currenttag('%s',''))
-	execute 'silent rg! '.l:func_name.' |:redraw!'
+	let l:func_name= expand(tagbar#currenttag('%s',''))
+	execute 'Grep "'.l:func_name.'"'
 endfunction
 
 "今ひらいているファイル名でgrep
@@ -499,15 +499,20 @@ function! LinterStatus() abort
     \)
 endfunction
 
+function! GrepConfirm()
+	:let inputtext = input("grep:")
+	if inputtext == ""
+	 return
+	endif
+	execute 'Grep "'.inputtext.'"'
+endfunction
 
 "}}}
 
 "my ex command {{{
-"grep設定
+"Grep
 command! -nargs=+ Grep execute 'silent !sh ~/myscript/greplogo.sh' | execute 'silent grep! <args>'| execute 'silent !clear' |:redraw! |:cfirst |:wincmd j
 autocmd QuickFixCmdPost *grep* cwindow
-"set grepprg=grep\ -rn\ --color=never\ --exclude-dir=smarty\ --exclude-dir=templates_c\ --exclude-dir=cache\ --exclude-dir=.svn\ --exclude-dir=.git\ --exclude=tags\ --exclude=.htaccess
-" > Globs are interpreted in exactly the same way as .gitignore patterns. That is, later globs will override earlier globs.
 if executable("rg")
   set grepprg=rg\ --vimgrep\ --no-heading\ --sort-files\ --no-column\ --line-number\ --path-separator\ '/'\ --glob\ '!tags'\ --glob\ '!.svn'\ --glob\ '!*.min.css'\ --glob\ '!*.min.js'\ --glob\ '!jquery.js'\ --glob\ '!www/material/flash/*'
   set grepformat=%f:%l:%c:%m,%f:%l:%m
@@ -568,4 +573,13 @@ hi CursorLineNR cterm=bold
 augroup CLNRSet
     autocmd! ColorScheme * hi CursorLineNR cterm=bold
 augroup END
+
+function! s:goyo_enter()
+	set number
+endfunction
+
+let g:goyo_width = 100
+let g:goyo_height = '120%'
+let g:goyo_linenr = 10
+autocmd! User GoyoEnter nested call <SID>goyo_enter()
 
