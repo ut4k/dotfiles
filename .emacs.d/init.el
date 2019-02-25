@@ -24,7 +24,7 @@ There are two things you can do about this warning:
 (setq auto-save-default nil)
 (windmove-default-keybindings)
 ;;SLIME--------------------------------------------------
-(setq inferior-lisp-program "sbcl")
+(setq inferior-lisp-program "clisp")
 (add-to-list 'load-path (expand-file-name "~/.emacs.d/elpa/slime.el"))
 (require 'slime)
 (slime-setup '(slime-repl slime-fancy slime-banner)) 
