@@ -93,16 +93,13 @@ set statusline+=%0*
 "right
 set statusline+=%=
 set statusline+=%0*
-set statusline+=%{LinterStatus()}
+" set statusline+=%{LinterStatus()}
 set statusline+=%1*
-set statusline+=%{tagbar#currenttag('%s','')}
+" set statusline+=%{tagbar#currenttag('%s','')}
 set statusline+=%0*
 set statusline+=[%{&fileencoding}]
 set statusline+=[%{&ff=='mac'?'CR':&ff=='unix'?'LF':'CRLF'}]
 set statusline+=%1*
-" if exists('current_project')
-"   set statusline+=\ [%{current_project}]
-" endif
 set statusline+=%0*
 set statusline+=%5.l/%L
 "}}}
@@ -134,6 +131,7 @@ nnoremap <F12> :source $MYVIMRC<CR>
 nnoremap tp :TagbarToggle<CR>
 "currenttagコピー
 nnoremap <leader>ct :let @+=expand(tagbar#currenttag('%s',''))<CR>
+nnoremap <leader>tt :echo expand(tagbar#currenttag('%s',''))<CR>
 "currenttagのファンクション名でgrep look-functionとか?...
 nnoremap <leader>lf :call GrepCurrentFunc()<CR>
 "上のファンクションの宣言にジャンプ
@@ -219,7 +217,6 @@ Plug 'alvan/vim-php-manual'
 Plug 'junegunn/vim-easy-align'
 Plug 'tpope/vim-unimpaired'
 Plug 'mattn/emmet-vim'
-Plug 'Konfekt/FastFold'
 Plug 'vim-scripts/PDV--phpDocumentor-for-Vim'
 Plug 'tpope/vim-commentary'
 Plug 'will133/vim-dirdiff'
@@ -228,21 +225,10 @@ Plug 'heavenshell/vim-jsdoc'
 Plug 'pangloss/vim-javascript'
 Plug 'vim-scripts/httplog' "setf httplog
 Plug 'MattesGroeger/vim-bookmarks'
-Plug 'junegunn/goyo.vim'
 call plug#end()
 "}}}
 
 "plugin settings{{{
-"----------------------------------------
-" FastFold
-"----------------------------------------
-"let g:fastfold_savehook = 1
-let g:fastfold_fold_command_suffixes =  ['x','X','a','A','o','O','c','C']
-let g:fastfold_fold_movement_commands = [']z', '[z', 'zj', 'zk']
-let g:markdown_folding = 1
-let g:vimsyn_folding = 'af'
-let g:php_folding = 1
-
 "----------------------------------------
 " Emmet
 "----------------------------------------
@@ -260,6 +246,9 @@ let g:user_emmet_settings = {
 xmap ga <Plug>(EasyAlign)
 " Start interactive EasyAlign for a motion/text object (e.g. gaip)
 nmap ga <Plug>(EasyAlign)
+" let g:easy_align_ignore_groups = ['Comment', 'String']
+" ignore nothing
+let g:easy_align_ignore_groups = []
 "----------------------------------------
 " CtrlP
 "----------------------------------------
@@ -558,28 +547,23 @@ autocmd FileType haskell set tabstop=4|set shiftwidth=4|set expandtab
 "read external files {{{
 if filereadable(expand("$HOME/.vim/config/srl.vim"))
  source $HOME/.vim/config/srl.vim
+ nnoremap <leader>esr :e $HOME/.vim/config/srl.vim<CR><CR>
 endif
 
-source $VIMRUNTIME/macros/matchit.vim
+" source $VIMRUNTIME/macros/matchit.vim
 "}}}
 
 "highlight line number(without cursorline)
-hi clear CursorLine
+" hi clear CursorLine
 augroup CLClear
     autocmd! ColorScheme * hi clear CursorLine
 augroup END
 
-hi CursorLineNR cterm=bold
+" hi CursorLineNR cterm=bold
 augroup CLNRSet
     autocmd! ColorScheme * hi CursorLineNR cterm=bold
 augroup END
 
-function! s:goyo_enter()
-	set number
-endfunction
-
-let g:goyo_width = 100
-let g:goyo_height = '120%'
-let g:goyo_linenr = 10
-autocmd! User GoyoEnter nested call <SID>goyo_enter()
-
+"to enable termiguicolors in tmux
+let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
