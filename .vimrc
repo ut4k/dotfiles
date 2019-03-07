@@ -160,8 +160,8 @@ vnoremap p !sed 's/^/\//'<CR>
 nnoremap <leader>cw cw<c-r>0
 "go to abs path file
 nnoremap gaf :<C-u>call GotoFileFromDocRoot()<CR>
-"php variable var_dump strin into regester
 nnoremap vr :call VarDumpPhpVariable()<CR>
+nnoremap vp :call PrePhpVariable()<CR>
 "console log js variable
 nnoremap cvr :call ClogVar()<CR>
 "tagjump
@@ -436,6 +436,10 @@ function! VarDumpPhpVariable()
   let @* = "echo \"<small>\\$" . expand('<cword>') . ":</small>\"; var_dump($" . expand('<cword>') . "); //########## debug kimura ".strftime("%Y/%m/%d")." ##########"
 endfunction
 
+function! PrePhpVariable()
+  let @* = "echo \"<small>\\$" . expand('<cword>') . ":</small>\"; pre($" . expand('<cword>') . "); //########## debug kimura ".strftime("%Y/%m/%d")." ##########"
+endfunction
+
 function! SearchPhpVariable()
 	let l:w = "\$" . expand('<cword>')
 	let @/=l:w
@@ -550,7 +554,7 @@ if filereadable(expand("$HOME/.vim/config/srl.vim"))
  nnoremap <leader>esr :e $HOME/.vim/config/srl.vim<CR><CR>
 endif
 
-" source $VIMRUNTIME/macros/matchit.vim
+source $VIMRUNTIME/macros/matchit.vim
 "}}}
 
 "highlight line number(without cursorline)
