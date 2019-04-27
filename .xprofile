@@ -1,4 +1,7 @@
 #!/bin/bash
+export GTK_IM_MODULE=fcitx
+export QT_IM_MODULE=fcitx
+export XMODIFIERS=@im=fcitx
 termite &
 #don't forget to setting tags_mask for chromium in dwm config!
 chromium &
