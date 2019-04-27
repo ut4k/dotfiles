@@ -23,6 +23,7 @@ There are two things you can do about this warning:
 (setq make-backup-files nil)
 (setq auto-save-default nil)
 (windmove-default-keybindings)
+(show-paren-mode 1)
 ;;SLIME--------------------------------------------------
 (setq inferior-lisp-program "clisp")
 (add-to-list 'load-path (expand-file-name "~/.emacs.d/elpa/slime.el"))
@@ -33,13 +34,13 @@ There are two things you can do about this warning:
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(custom-enabled-themes (quote (afternoon)))
+ '(custom-enabled-themes (quote (spacemacs-dark)))
  '(custom-safe-themes
    (quote
-    ("2540689fd0bc5d74c4682764ff6c94057ba8061a98be5dd21116bf7bf301acfb" default)))
+    ("bffa9739ce0752a37d9b1eee78fc00ba159748f50dc328af4be661484848e476" "2540689fd0bc5d74c4682764ff6c94057ba8061a98be5dd21116bf7bf301acfb" default)))
  '(package-selected-packages
    (quote
-    (afternoon-theme rainbow-identifiers slime htmlize helm))))
+    (auto-complete shell-pop spacemacs-theme afternoon-theme rainbow-identifiers slime htmlize helm))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -50,4 +51,17 @@ There are two things you can do about this warning:
 (global-set-key (kbd "C-x C-f") 'helm-find-files)
 
  (setq-default left-margin-width 3) ; Define new widths.
- (set-window-buffer nil (current-buffer)) ; Use them now.
+ (set-window-buffer nil (current-buffer)) ; Use them now
+
+;;
+;; Auto Complete
+;;
+(require 'auto-complete-config)
+(ac-config-default)
+(add-to-list 'ac-modes 'text-mode)         ;; text-modeでも自動的に有効にする
+(add-to-list 'ac-modes 'fundamental-mode)  ;; fundamental-mode
+(add-to-list 'ac-modes 'org-mode)
+(add-to-list 'ac-modes 'yatex-mode)
+(ac-set-trigger-key "TAB")
+(setq ac-use-menu-map t)       ;; 補完メニュー表示時にC-n/C-pで補完候補選択
+(setq ac-use-fuzzy t)          ;; 曖昧マッチ
