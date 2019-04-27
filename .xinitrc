@@ -31,4 +31,5 @@ xbindkeys
 compton -b --config ~/.config/compton/compton.conf
 
 #launch dwm
-exec dwm
+exec dwm;
+#no scripts work below here.
