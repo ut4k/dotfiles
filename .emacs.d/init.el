@@ -17,6 +17,7 @@ There are two things you can do about this warning:
     ;; For important compatibility libraries like cl-lib
     (add-to-list 'package-archives (cons "gnu" (concat proto "://elpa.gnu.org/packages/")))))
 (package-initialize)
+
 ;;basic--------------------------------------------------
 (menu-bar-mode 0)
 (global-linum-mode 1)
@@ -24,6 +25,10 @@ There are two things you can do about this warning:
 (setq auto-save-default nil)
 (windmove-default-keybindings)
 (show-paren-mode 1)
+(setq create-lockfiles nil)
+(setq-default left-margin-width 3) ; Define new widths.
+(set-window-buffer nil (current-buffer)) ; Use them now.
+
 ;;SLIME--------------------------------------------------
 (setq inferior-lisp-program "clisp")
 (add-to-list 'load-path (expand-file-name "~/.emacs.d/elpa/slime.el"))
@@ -34,6 +39,8 @@ There are two things you can do about this warning:
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(ansi-color-faces-vector
+   [default bold shadow italic underline bold bold-italic bold])
  '(custom-enabled-themes (quote (spacemacs-dark)))
  '(custom-safe-themes
    (quote
@@ -41,6 +48,33 @@ There are two things you can do about this warning:
  '(package-selected-packages
    (quote
     (auto-complete shell-pop spacemacs-theme afternoon-theme rainbow-identifiers slime htmlize helm))))
+ '(fci-rule-color "#121212")
+ '(package-selected-packages
+   (quote
+    (spacemacs-theme afternoon-theme rainbow-identifiers slime htmlize helm)))
+ '(vc-annotate-background nil)
+ '(vc-annotate-color-map
+   (quote
+    ((20 . "#d54e53")
+     (40 . "goldenrod")
+     (60 . "#e7c547")
+     (80 . "DarkOliveGreen3")
+     (100 . "#70c0b1")
+     (120 . "DeepSkyBlue1")
+     (140 . "#c397d8")
+     (160 . "#d54e53")
+     (180 . "goldenrod")
+     (200 . "#e7c547")
+     (220 . "DarkOliveGreen3")
+     (240 . "#70c0b1")
+     (260 . "DeepSkyBlue1")
+     (280 . "#c397d8")
+     (300 . "#d54e53")
+     (320 . "goldenrod")
+     (340 . "#e7c547")
+     (360 . "DarkOliveGreen3"))))
+ '(vc-annotate-very-old-color nil)
+
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
