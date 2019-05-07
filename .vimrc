@@ -15,7 +15,6 @@ set encoding=utf-8
 set termguicolors
 set background=dark
 set t_Co=256
-colorscheme skeletor
 set redrawtime=20000
 set ttyfast
 set updatetime=200
@@ -93,9 +92,7 @@ set statusline+=%0*
 "right
 set statusline+=%=
 set statusline+=%0*
-" set statusline+=%{LinterStatus()}
 set statusline+=%1*
-" set statusline+=%{tagbar#currenttag('%s','')}
 set statusline+=%0*
 set statusline+=[%{&fileencoding}]
 set statusline+=[%{&ff=='mac'?'CR':&ff=='unix'?'LF':'CRLF'}]
@@ -131,7 +128,7 @@ nnoremap <F12> :source $MYVIMRC<CR>
 nnoremap tp :TagbarToggle<CR>
 "currenttagコピー
 nnoremap <leader>ct :let @+=expand(tagbar#currenttag('%s',''))<CR>
-nnoremap <leader>tt :echo expand(tagbar#currenttag('%s',''))<CR>
+nnoremap <leader>tt :call EnableStatusLineCurrentTag()<CR>
 "currenttagのファンクション名でgrep look-functionとか?...
 nnoremap <leader>lf :call GrepCurrentFunc()<CR>
 "上のファンクションの宣言にジャンプ
@@ -189,6 +186,8 @@ nnoremap <F5> :cnext<CR>
 nnoremap <S-F5> :cprevious<CR>
 nnoremap <F7> :set scb<CR>
 nnoremap <S-F7> :set noscb<CR>
+"center screen after pressing n
+nnoremap n nzz
 "}}}
 
 "abbrevations{{{
@@ -211,6 +210,7 @@ Plug 'w0rp/ale'
 Plug 'majutsushi/tagbar'
 Plug 'vim-scripts/tagbar-phpctags'
 Plug 'tpope/vim-surround'
+Plug 'tpope/vim-repeat'
 Plug 'StanAngeloff/php.vim'
 Plug 'alvan/vim-php-manual'
 " Plug 'shawncplus/phpcomplete.vim'
@@ -225,6 +225,17 @@ Plug 'heavenshell/vim-jsdoc'
 Plug 'pangloss/vim-javascript'
 Plug 'vim-scripts/httplog' "setf httplog
 Plug 'MattesGroeger/vim-bookmarks'
+Plug 'ntk148v/vim-horizon'
+Plug 'ajmwagar/vim-deus'
+Plug 'drewtempelmeyer/palenight.vim'
+Plug 'KabbAmine/yowish.vim'
+Plug 'bluz71/vim-moonfly-colors'
+Plug 'aonemd/kuroi.vim'
+Plug 'DankNeon/vim'
+Plug 'mgutz/gosu-colors'
+Plug 'caksoylar/vim-mysticaltutor'
+Plug 'ntk148v/vim-horizon'
+Plug 'neutaaaaan/iosvkem'
 call plug#end()
 "}}}
 
@@ -268,21 +279,21 @@ let g:ctrlp_mruf_relative = 1
 " Tagbar
 "----------------------------------------
 let g:tagbar_autofocus = 0
-let g:tagbar_compact = 1
+let g:tagbar_compact = 0
 let g:tagbar_singleclick = 1
 let g:tagbar_sort = 0
-let g:tagbar_indent = 2
+let g:tagbar_indent = 0
 let g:tagbar_autopreview = 0
 let g:tagbar_iconchars = ['▸', '▾']
 let g:tagbar_silent = 1
+let g:tagbar_left = 0
+let g:tagbar_width = 55
 let g:tagbar_type_php  = {
     \ 'kinds'     : [
         \ 'i:interfaces',
         \ 'c:classes',
         \ 'f:functions',
-        \ 'm:members:0:0',
-        \ 'v:variables:0:0'
-    \ ]
+   \ ]
   \ }
 "----------------------------------------
 " pdv
@@ -500,6 +511,27 @@ function! GrepConfirm()
 	execute 'Grep "'.inputtext.'"'
 endfunction
 
+function! EnableStatusLineCurrentTag()
+	"left
+	set statusline=
+	set statusline+=%t
+	set statusline+=%r%w
+	set statusline+=%1*
+	set statusline+=%m
+	set statusline+=%0*
+	"right
+	set statusline+=%=
+	set statusline+=%0*
+	set statusline+=%1*
+	set statusline+=%{tagbar#currenttag('%s','')}
+	set statusline+=%0*
+	set statusline+=[%{&fileencoding}]
+	set statusline+=[%{&ff=='mac'?'CR':&ff=='unix'?'LF':'CRLF'}]
+	set statusline+=%1*
+	set statusline+=%0*
+	set statusline+=%5.l/%L
+endfunction
+
 "}}}
 
 "my ex command {{{
@@ -571,3 +603,9 @@ augroup END
 "to enable termiguicolors in tmux
 let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
 let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+
+"set colorscheme at the end
+"colorscheme skeletor
+colorscheme mysticaltutor
+
+let g:surround_{char2nr('q')} = "\\\"\r\\\""
