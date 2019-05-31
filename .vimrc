@@ -23,7 +23,7 @@ set ignorecase
 set list
 set listchars=tab:»\ ,precedes:«,extends:»,eol:↲
 set ambiwidth=single
-"set ambiwidth=double
+" set ambiwidth=double
 
 set mouse=a
 set ttimeoutlen=10
@@ -188,6 +188,8 @@ nnoremap <F7> :set scb<CR>
 nnoremap <S-F7> :set noscb<CR>
 "center screen after pressing n
 nnoremap n nzz
+"search by register "
+nnoremap <F6> /<c-r>"<CR>
 "}}}
 
 "abbrevations{{{
@@ -224,7 +226,7 @@ Plug 'robmiller/vim-movar'
 Plug 'heavenshell/vim-jsdoc'
 Plug 'pangloss/vim-javascript'
 Plug 'vim-scripts/httplog' "setf httplog
-Plug 'MattesGroeger/vim-bookmarks'
+" Plug 'MattesGroeger/vim-bookmarks'
 Plug 'ntk148v/vim-horizon'
 Plug 'ajmwagar/vim-deus'
 Plug 'drewtempelmeyer/palenight.vim'
@@ -236,6 +238,7 @@ Plug 'mgutz/gosu-colors'
 Plug 'caksoylar/vim-mysticaltutor'
 Plug 'ntk148v/vim-horizon'
 Plug 'neutaaaaan/iosvkem'
+" Plug 'svermeulen/vim-easyclip'
 call plug#end()
 "}}}
 
