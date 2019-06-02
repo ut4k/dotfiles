@@ -30,7 +30,8 @@ There are two things you can do about this warning:
 (set-window-buffer nil (current-buffer)) ; Use them now.
 
 ;;SLIME--------------------------------------------------
-(setq inferior-lisp-program "clisp")
+; (setq inferior-lisp-program "clisp")
+(setq inferior-lisp-program "sbcl")
 (add-to-list 'load-path (expand-file-name "~/.emacs.d/elpa/slime.el"))
 (require 'slime)
 (slime-setup '(slime-repl slime-fancy slime-banner)) 
@@ -99,3 +100,6 @@ There are two things you can do about this warning:
 (ac-set-trigger-key "TAB")
 (setq ac-use-menu-map t)       ;; 補完メニュー表示時にC-n/C-pで補完候補選択
 (setq ac-use-fuzzy t)          ;; 曖昧マッチ
+
+(setq split-height-threshold nil)
+(setq split-width-threshold 0)
