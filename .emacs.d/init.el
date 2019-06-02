@@ -28,6 +28,7 @@ There are two things you can do about this warning:
 (setq create-lockfiles nil)
 (setq-default left-margin-width 3) ; Define new widths.
 (set-window-buffer nil (current-buffer)) ; Use them now.
+(setq inhibit-startup-screen t) ; skip welcome buffer
 
 ;;SLIME--------------------------------------------------
 ; (setq inferior-lisp-program "clisp")
