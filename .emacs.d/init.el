@@ -31,7 +31,8 @@ There are two things you can do about this warning:
 (setq inhibit-startup-screen t) ; skip welcome buffer
 
 ;;SLIME--------------------------------------------------
-(setq inferior-lisp-program "clisp")
+; (setq inferior-lisp-program "clisp")
+(setq inferior-lisp-program "sbcl")
 (add-to-list 'load-path (expand-file-name "~/.emacs.d/elpa/slime.el"))
 (require 'slime)
 (slime-setup '(slime-repl slime-fancy slime-banner)) 
@@ -111,3 +112,6 @@ There are two things you can do about this warning:
 	 (insert-file-contents-literally source)
 	 (buffer-string)))
       (file-name-nondirectory source)))
+
+(setq split-height-threshold nil)
+(setq split-width-threshold 0)
