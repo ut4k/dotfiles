@@ -100,3 +100,14 @@ There are two things you can do about this warning:
 (ac-set-trigger-key "TAB")
 (setq ac-use-menu-map t)       ;; 補完メニュー表示時にC-n/C-pで補完候補選択
 (setq ac-use-fuzzy t)          ;; 曖昧マッチ
+
+;;htmlエクスポート時に画像をbase64変換
+;;https://www.reddit.com/r/orgmode/comments/7dyywu/creating_a_selfcontained_html/
+(defun org-html--format-image (source attributes info)
+  (format "<img src=\"data:image/%s;base64,%s\"%s />"
+      (or (file-name-extension source) "")
+      (base64-encode-string
+       (with-temp-buffer
+	 (insert-file-contents-literally source)
+	 (buffer-string)))
+      (file-name-nondirectory source)))
