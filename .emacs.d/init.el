@@ -31,8 +31,8 @@ There are two things you can do about this warning:
 (setq inhibit-startup-screen t) ; skip welcome buffer
 
 ;;SLIME--------------------------------------------------
-; (setq inferior-lisp-program "clisp")
-(setq inferior-lisp-program "sbcl")
+(setq inferior-lisp-program "clisp")
+; (setq inferior-lisp-program "sbcl")
 (add-to-list 'load-path (expand-file-name "~/.emacs.d/elpa/slime.el"))
 (require 'slime)
 (slime-setup '(slime-repl slime-fancy slime-banner)) 

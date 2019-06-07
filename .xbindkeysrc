@@ -1,9 +1,9 @@
 # Increase volume
-"amixer -q sset Headphone 3%+ && sh ~/scripts/dwmstatus"
+"amixer -q sset Speaker 3%+ && sh ~/scripts/dwmstatus"
    XF86AudioRaiseVolume
 
 # Decrease volume
-"amixer -q sset Headphone 3%- && sh ~/scripts/dwmstatus"
+"amixer -q sset Speaker 3%- && sh ~/scripts/dwmstatus"
    XF86AudioLowerVolume
 
 "sh ~/scripts/powermenu"

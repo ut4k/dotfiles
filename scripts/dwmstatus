@@ -1,7 +1,7 @@
 #!/bin/bash
 while true
 do
-	VOL="VOL:$(amixer get Headphone | tail -1 | sed 's/.*\[\([0-9]*%\)\].*/\1/')"
+	VOL="VOL:$(amixer get Speaker | tail -1 | sed 's/.*\[\([0-9]*%\)\].*/\1/')"
 	LOCALTIME=$(date +%Y-%m-%d\ %H:%M)
 	IP=$(for i in `ip r`; do echo $i; done | grep -A 1 src | tail -n1) # can get confused if you use vmware
 
