@@ -57,4 +57,5 @@ https://superuser.com/questions/729424/remove-starting-bin-bash-exe-on-cygwin-ch
 
 cygwinディレクトリの`bin`だけパスに設定。
 
-export PATH=/cygdrive/c/cygwin/bin
+export PATH=/cygdrive/c/cygwin64/bin
+export PATH=$PATH:/cygdrive/c/cygwin64/usr/local/bin
