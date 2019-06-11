@@ -539,7 +539,7 @@ endfunction
 
 "my ex command {{{
 "Grep
-command! -nargs=+ Grep execute 'silent !sh ~/myscript/greplogo.sh' | execute 'silent grep! <args>'| execute 'silent !clear' |:redraw! |:cfirst |:wincmd j
+command! -nargs=+ Grep execute 'silent !sh $SCRIPTS/greplogo.sh' | execute 'silent grep! <args>'| execute 'silent !clear' |:redraw! |:cfirst |:wincmd j
 autocmd QuickFixCmdPost *grep* cwindow
 if executable("rg")
   set grepprg=rg\ --vimgrep\ --no-heading\ --sort-files\ --no-column\ --line-number\ --path-separator\ '/'\ --glob\ '!tags'\ --glob\ '!.svn'\ --glob\ '!*.min.css'\ --glob\ '!*.min.js'\ --glob\ '!jquery.js'\ --glob\ '!www/material/flash/*'\ --glob\ '!ent/*'

@@ -52,3 +52,9 @@ Unable to require openssl, install OpenSSL and rebuild ruby (preferred) or use n
 `Starting /bin/bash.exe`
 
 https://superuser.com/questions/729424/remove-starting-bin-bash-exe-on-cygwin-chere
+
+### Windowsのbinは使わない
+
+cygwinディレクトリの`bin`だけパスに設定。
+
+export PATH=/cygdrive/c/cygwin/bin
