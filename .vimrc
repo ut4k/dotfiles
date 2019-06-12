@@ -19,7 +19,7 @@ set redrawtime=20000
 set ttyfast
 set updatetime=200
 
-set ignorecase
+set noignorecase
 set list
 set listchars=tab:»\ ,precedes:«,extends:»,eol:↲
 set ambiwidth=single
@@ -123,7 +123,7 @@ nnoremap <F3> :noh<CR><CR>
 "vimrcを縦スプリットで開く
 nnoremap <leader>ev :e $MYVIMRC<CR><CR>
 "vimrcを再読み込みする
-nnoremap <F12> :source $MYVIMRC<CR>
+nnoremap <F12> :source $MYVIMRC<CR>:call PhpSyntaxOverride()<CR>
 "Tagbarトグル tagbar pop
 nnoremap tp :TagbarToggle<CR>
 "currenttagコピー
@@ -181,13 +181,12 @@ nnoremap <leader>we :call OpenWinExplorer()<Esc>
 nnoremap <S-h> :vert resize +15<CR>
 "- buffer vertically
 nnoremap <S-l> :vert resize -15<CR>
-nnoremap <F11> :call PhpSyntaxOverride()<CR>
 nnoremap <F5> :cnext<CR>
 nnoremap <S-F5> :cprevious<CR>
 nnoremap <F7> :set scb<CR>
 nnoremap <S-F7> :set noscb<CR>
-"center screen after pressing n
-nnoremap n nzz
+"center screen after pressing n <--- じゃま
+" nnoremap n nzz
 "search by register "
 nnoremap <F6> /<c-r>"<CR>
 "}}}
@@ -206,39 +205,29 @@ ia hlw <c-r>="hello,world!"<CR>
 
 "vim-plug{{{
 call plug#begin('~/.vim/plugged')
-Plug 'ctrlpvim/ctrlp.vim'
-Plug 'ivalkeen/vim-ctrlp-tjump'
-Plug 'w0rp/ale'
-Plug 'majutsushi/tagbar'
-Plug 'vim-scripts/tagbar-phpctags'
-Plug 'tpope/vim-surround'
-Plug 'tpope/vim-repeat'
-Plug 'StanAngeloff/php.vim'
-Plug 'alvan/vim-php-manual'
 " Plug 'shawncplus/phpcomplete.vim'
-Plug 'junegunn/vim-easy-align'
-Plug 'tpope/vim-unimpaired'
-Plug 'mattn/emmet-vim'
-Plug 'vim-scripts/PDV--phpDocumentor-for-Vim'
-Plug 'tpope/vim-commentary'
-Plug 'will133/vim-dirdiff'
-Plug 'robmiller/vim-movar'
-Plug 'heavenshell/vim-jsdoc'
-Plug 'pangloss/vim-javascript'
-Plug 'vim-scripts/httplog' "setf httplog
-" Plug 'MattesGroeger/vim-bookmarks'
-Plug 'ntk148v/vim-horizon'
+Plug 'StanAngeloff/php.vim'
 Plug 'ajmwagar/vim-deus'
-Plug 'drewtempelmeyer/palenight.vim'
-Plug 'KabbAmine/yowish.vim'
-Plug 'bluz71/vim-moonfly-colors'
-Plug 'aonemd/kuroi.vim'
-Plug 'DankNeon/vim'
-Plug 'mgutz/gosu-colors'
+Plug 'alvan/vim-php-manual'
 Plug 'caksoylar/vim-mysticaltutor'
-Plug 'ntk148v/vim-horizon'
-Plug 'neutaaaaan/iosvkem'
-" Plug 'svermeulen/vim-easyclip'
+Plug 'ctrlpvim/ctrlp.vim'
+Plug 'drewtempelmeyer/palenight.vim'
+Plug 'flrnprz/taffy.vim'
+Plug 'heavenshell/vim-jsdoc'
+Plug 'ivalkeen/vim-ctrlp-tjump'
+Plug 'junegunn/vim-easy-align'
+Plug 'majutsushi/tagbar'
+Plug 'mattn/emmet-vim'
+Plug 'pangloss/vim-javascript'
+Plug 'robmiller/vim-movar'
+Plug 'tpope/vim-commentary'
+Plug 'tpope/vim-repeat'
+Plug 'tpope/vim-surround'
+Plug 'vim-scripts/PDV--phpDocumentor-for-Vim'
+Plug 'vim-scripts/httplog' "usage: setf httplog
+Plug 'vim-scripts/tagbar-phpctags'
+Plug 'w0rp/ale'
+Plug 'will133/vim-dirdiff'
 call plug#end()
 "}}}
 
@@ -301,13 +290,17 @@ let g:tagbar_type_php  = {
 "----------------------------------------
 " pdv
 "----------------------------------------
-let g:pdv_cfg_Type = "mixed"
+let g:pdv_cfg_Type = "string"
 let g:pdv_cfg_Package = ""
 let g:pdv_cfg_Version = "$id$"
 let g:pdv_cfg_Author = ""
 let g:pdv_cfg_Copyright = ""
 let g:pdv_cfg_License = ""
 let g:pdv_cfg_Access = ""
+let g:pdv_cfg_php4always = 0
+let g:pdv_cfg_Uses       = 0
+let g:pdv_cfg_php4always = 0
+let g:pdv_cfg_php4guess  = 0
 "----------------------------------------
 " php.vim
 "----------------------------------------
@@ -427,7 +420,10 @@ function! PhpSyntaxOverride()
   hi! def link phpDocTags  phpDefine
   hi! def link phpDocParam phpType
   hi! phpFunctions ctermfg=121 ctermbg=NONE cterm=NONE
-  hi! phpVarSelector ctermfg=229 ctermbg=NONE cterm=NONE
+
+  hi! phpVarSelector guifg=#A685C3 guibg=#1E1E28 cterm=NONE
+  hi! phpIdentifier guifg=#F0DD8A guibg=#1E1E28 cterm=NONE
+
   hi! phpMemberSelector ctermfg=121 ctermbg=NONE cterm=NONE
   hi! link phpDocTags phpDefine
   hi! link phpDocParam phpType
@@ -535,6 +531,14 @@ function! EnableStatusLineCurrentTag()
 	set statusline+=%5.l/%L
 endfunction
 
+function! Colors1()
+	:so $VIMRUNTIME/syntax/colortest.vim
+endfunction
+
+function! Colors2()
+	:so $VIMRUNTIME/syntax/hitest.vim
+endfunction
+
 "}}}
 
 "my ex command {{{
@@ -553,6 +557,7 @@ endif
 augroup phpSyntaxOverride
   autocmd!
   autocmd FileType php call PhpSyntaxOverride()
+	call PhpSyntaxOverride()
 augroup END
 
 if has("win32unix")
@@ -581,6 +586,9 @@ autocmd FileType qf wincmd J
 "spacing for Haskell
 autocmd FileType haskell set tabstop=4|set shiftwidth=4|set expandtab
 
+"phpは$をキーワードとしてあつかう wで $variable 全体がとれるように
+" autocmd FileType php :setlocal iskeyword+=$
+
 "}}}
 
 "read external files {{{
@@ -608,7 +616,7 @@ let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
 let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
 
 "set colorscheme at the end
-"colorscheme skeletor
-colorscheme mysticaltutor
+colorscheme skeletor
+" colorscheme mysticaltutor
 
 let g:surround_{char2nr('q')} = "\\\"\r\\\""
