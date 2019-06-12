@@ -4,14 +4,14 @@
 
 ### コンテキストメニュー追加
 
-`chere -ian -e "bash here" -t mintty -s bash`
+`chere -ian -e "bash here" -t mintty -s bash`  
 
-`i - Install`
-`a - All users`
-`n - Be nice ?`
-`e <menutext>`
-`t <term>`
-`s <shell>`
+`i - Install`  
+`a - All users`  
+`n - Be nice ?`  
+`e <menutext>`  
+`t <term>`  
+`s <shell>`  
 
 ### コンテキストメニュー削除
 
@@ -31,31 +31,36 @@ Winのショートカットを作成したら、作業フォルダー(S):を指�
 
 `ruby`はWin用のbinを使わず、ビルドして入れるほうが正常に動くっぽい。
 
-`./configure`
-`make`
-`make install`
+`./configure`  
+`make`  
+`make install`  
 
-`ruby`の正しいバージョンが入ったら
+`ruby`の正しいバージョンが入ったら  
 `gem install tmuxinator`
-
-この例外が出たら、ソースを`https://`でなく`http://`に変えればおｋ。
-`gem source --add <ソース>`でもまた別のエラーが出て面倒な場合は、`~/.gemrc`に直接ソースを記述する。
 
 ```
 ERROR:  While executing gem ... (Gem::Exception)
 Unable to require openssl, install OpenSSL and rebuild ruby (preferred) or use non-HTTPS sources
 ```
 
+この例外が出たら、ソースを`https://`でなく`http://`に変えればおｋ。  
+`gem source --add <ソース>`でもまた別のエラーが出て面倒な場合は、`~/.gemrc`に直接ソースを記述する。
+
+
 ### chereでmintty起動したときのちっちゃいメッセージを消す
 
-これ
+これ:
 `Starting /bin/bash.exe`
 
 https://superuser.com/questions/729424/remove-starting-bin-bash-exe-on-cygwin-chere
+
+`/bin/xhere`の`echo`している行をコメントアウトするだけ。
 
 ### Windowsのbinは使わない
 
 cygwinディレクトリの`bin`だけパスに設定。
 
-export PATH=/cygdrive/c/cygwin64/bin
-export PATH=$PATH:/cygdrive/c/cygwin64/usr/local/bin
+`export PATH=/cygdrive/c/cygwin64/bin`  
+`export PATH=$PATH:/cygdrive/c/cygwin64/usr/local/bin`  
+
+`node`と`npm`は`cygwin`ではサポート外らしい?ので（ビルドも）Win用のバイナリを入れてパスを通す。
