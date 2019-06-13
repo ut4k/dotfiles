@@ -163,8 +163,6 @@ nnoremap vp :call PrePhpVariable()<CR>
 nnoremap cvr :call ClogVar()<CR>
 "tagjump
 nnoremap <c-]> :CtrlPtjump<CR>
-"serch php variable back
-nnoremap vb :call SearchPhpVariable()<CR>
 "-- HACK disable built-in help
 nmap <F1> :echo<CR>
 imap <F1> <C-o>:echo<CR>
@@ -443,16 +441,11 @@ function! GotoFileFromDocRoot()
 endfunction
 
 function! VarDumpPhpVariable()
-  let @* = "echo \"<small>\\$" . expand('<cword>') . ":</small>\"; var_dump($" . expand('<cword>') . "); //########## debug kimura ".strftime("%Y/%m/%d")." ##########"
+  let @* = "var_dump(" . expand('<cword>') . "); //########## debug kimura ".strftime("%Y/%m/%d")." ##########"
 endfunction
 
 function! PrePhpVariable()
-  let @* = "echo \"<small>\\$" . expand('<cword>') . ":</small>\"; pre($" . expand('<cword>') . "); //########## debug kimura ".strftime("%Y/%m/%d")." ##########"
-endfunction
-
-function! SearchPhpVariable()
-	let l:w = "\$" . expand('<cword>')
-	let @/=l:w
+  let @* = "pre(" . expand('<cword>') . "); //########## debug kimura ".strftime("%Y/%m/%d")." ##########"
 endfunction
 
 function! ClogVar()
@@ -587,7 +580,7 @@ autocmd FileType qf wincmd J
 autocmd FileType haskell set tabstop=4|set shiftwidth=4|set expandtab
 
 "phpは$をキーワードとしてあつかう wで $variable 全体がとれるように
-" autocmd FileType php :setlocal iskeyword+=$
+autocmd FileType php :setlocal iskeyword+=$
 
 "}}}
 
