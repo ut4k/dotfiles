@@ -2,7 +2,6 @@
 autocmd ColorScheme * highlight User1 ctermbg=black ctermfg=121 cterm=bold
 "}}}
 
-
 "basic{{{
 "winのときだけ言語enにする
 if has("win32unix")
@@ -128,6 +127,7 @@ nnoremap <F12> :source $MYVIMRC<CR>:call PhpSyntaxOverride()<CR>
 nnoremap tp :TagbarToggle<CR>
 "currenttagコピー
 nnoremap <leader>ct :let @+=expand(tagbar#currenttag('%s',''))<CR>
+"statuslineにcurrenttag表示
 nnoremap <leader>tt :call EnableStatusLineCurrentTag()<CR>
 "currenttagのファンクション名でgrep look-functionとか?...
 nnoremap <leader>lf :call GrepCurrentFunc()<CR>
@@ -157,20 +157,24 @@ vnoremap p !sed 's/^/\//'<CR>
 nnoremap <leader>cw cw<c-r>0
 "go to abs path file
 nnoremap gaf :<C-u>call GotoFileFromDocRoot()<CR>
+"var_dump($phpvariable);
 nnoremap vr :call VarDumpPhpVariable()<CR>
+"pre($phpvariable);
 nnoremap vp :call PrePhpVariable()<CR>
 "console log js variable
 nnoremap cvr :call ClogVar()<CR>
 "tagjump
 nnoremap <c-]> :CtrlPtjump<CR>
-"-- HACK disable built-in help
+"disable built-in help(hacky){{{
 nmap <F1> :echo<CR>
 imap <F1> <C-o>:echo<CR>
+"}}}
+"ale previous
 nmap <silent> <C-k> <Plug>(ale_previous_wrap)
+"ale next
 nmap <silent> <C-j> <Plug>(ale_next_wrap)
 "compile c and run the bin
 nnoremap <F9> :call RunC()<CR>
-nnoremap <leader>D :Commentary<Esc>^$A dlsr
 "prepare grep command
 nnoremap ff :call GrepConfirm()<CR>
 "open file dir in windows explorer
@@ -183,8 +187,6 @@ nnoremap <F5> :cnext<CR>
 nnoremap <S-F5> :cprevious<CR>
 nnoremap <F7> :set scb<CR>
 nnoremap <S-F7> :set noscb<CR>
-"center screen after pressing n <--- じゃま
-" nnoremap n nzz
 "search by register "
 nnoremap <F6> /<c-r>"<CR>
 "}}}
@@ -203,21 +205,17 @@ ia hlw <c-r>="hello,world!"<CR>
 
 "vim-plug{{{
 call plug#begin('~/.vim/plugged')
-" Plug 'shawncplus/phpcomplete.vim'
 Plug 'StanAngeloff/php.vim'
 Plug 'ajmwagar/vim-deus'
 Plug 'alvan/vim-php-manual'
 Plug 'caksoylar/vim-mysticaltutor'
 Plug 'ctrlpvim/ctrlp.vim'
-Plug 'drewtempelmeyer/palenight.vim'
-Plug 'flrnprz/taffy.vim'
 Plug 'heavenshell/vim-jsdoc'
 Plug 'ivalkeen/vim-ctrlp-tjump'
 Plug 'junegunn/vim-easy-align'
 Plug 'majutsushi/tagbar'
 Plug 'mattn/emmet-vim'
 Plug 'pangloss/vim-javascript'
-Plug 'robmiller/vim-movar'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-surround'
@@ -247,7 +245,6 @@ let g:user_emmet_settings = {
 xmap ga <Plug>(EasyAlign)
 " Start interactive EasyAlign for a motion/text object (e.g. gaip)
 nmap ga <Plug>(EasyAlign)
-" let g:easy_align_ignore_groups = ['Comment', 'String']
 " ignore nothing
 let g:easy_align_ignore_groups = []
 "----------------------------------------
@@ -359,45 +356,6 @@ if has('syntax')
     augroup END
     call ZenkakuSpace()
 endif
-"シモンさんからもらったやつ <3 {{{
-
-"上のファンクションの宣言にジャンプする
-function! FunctionJumpUp()
-	" saving previous search
-	let l:sch = @/
-	let l:line = search("function", 'b')
-	" restore search
-	let @/ = l:sch
-	normal zz
-endfunction
-"下のファンクションの宣言にジャンプする
-function! FunctionJumpDown()
-	" saving previous search
-	let l:sch = @/
-	let l:line = search("function")
-	" restore search
-	let @/ = l:sch
-	normal zz
-endfunction
-"ファンクションをリストする
-function! FunctionsList()
-	let ok=1
-	if (&filetype == "php")
-		vimgrep /\<function\>.*(/j %
-	elseif (&filetype == "javascript")
-		" This is a lazy regex but it'll do for now!
-		" also used to count functions in azet-comment.vin
-		vimgrep /^\s*function/j %
-	else
-		echo "File type ".&filetype." not yet supported"
-		let ok=0
-	endif
-	" TODO adding other file type support
-	" finally showing the results
-	if (ok==1)
-		cw
-	endif
-endfunction
 "}}}
 
 "現在のファイルをインタプリタで実行
@@ -599,7 +557,6 @@ augroup CLClear
     autocmd! ColorScheme * hi clear CursorLine
 augroup END
 
-" hi CursorLineNR cterm=bold
 augroup CLNRSet
     autocmd! ColorScheme * hi CursorLineNR cterm=bold
 augroup END
@@ -608,8 +565,6 @@ augroup END
 let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
 let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
 
-"set colorscheme at the end
-colorscheme skeletor
-" colorscheme mysticaltutor
-
 let g:surround_{char2nr('q')} = "\\\"\r\\\""
+
+colorscheme skeletor
