@@ -201,6 +201,7 @@ ia cdt <c-r>=strftime("%Y/%m/%d")<CR>
 "c basic header files
 ia chdr <c-r>="#include <stdio.h>\n\nint main(int argc, char *argv[]){\n}"<CR>
 ia hlw <c-r>="hello,world!"<CR>
+ia jvz <c-r>="javascript:void(0);"<CR>
 "abbrevations}}}
 
 "vim-plug{{{
@@ -224,6 +225,7 @@ Plug 'vim-scripts/httplog' "usage: setf httplog
 Plug 'vim-scripts/tagbar-phpctags'
 Plug 'w0rp/ale'
 Plug 'will133/vim-dirdiff'
+Plug 'junegunn/goyo.vim'
 call plug#end()
 "}}}
 
@@ -252,7 +254,7 @@ let g:easy_align_ignore_groups = []
 "----------------------------------------
 let g:ctrlp_use_caching = 1
 let g:ctrlp_max_files  = 3000
-let g:ctrlp_match_window = 'min:2,max:18,results=100,order:btt'
+let g:ctrlp_match_window = 'min:2,max:21,results=100,order:btt'
 let g:ctrlp_custom_ignore = '\v[\/]\.(git|svn|ico|swp|jpg|jpeg|png|gif|swf|uranai_lib/templates_c|ent)$'
 let g:ctrlp_show_hidden = 0
 let g:ctrlp_clear_cache_on_exit = 0
