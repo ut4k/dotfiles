@@ -261,7 +261,7 @@ let g:ctrlp_clear_cache_on_exit = 0
 let g:ctrlp_lazy_update = 1
 let g:ctrlp_working_path_mode = 0
 let g:ctrlp_match_current_file = 1
-let g:ctrlp_cmd = 'CtrlPBuffer'
+let g:ctrlp_cmd = 'CtrlP'
 let g:ctrlp_mruf_default_order = 1
 let g:ctrlp_mruf_relative = 1
 "----------------------------------------
@@ -389,8 +389,9 @@ endfunction
 
 "docrootからのパスで開く
 function! GotoFileFromDocRoot()
+    let root_dir = getcwd() . "/"
     let filename = getline('.')
-    let filepath = g:root_dir . filename
+    let filepath = root_dir . filename
     if filereadable(filepath)
         execute 'edit ' . filepath
     else
