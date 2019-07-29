@@ -115,3 +115,19 @@ There are two things you can do about this warning:
 
 (setq split-height-threshold nil)
 (setq split-width-threshold 0)
+
+(defun insert-current-date () (interactive)
+       (insert (shell-command-to-string "echo -n $(date +%Y-%m-%d)")))
+
+(defun er-find-user-init-file ()
+  (interactive)
+  (find-file "~/.emacs.d/init.el"))
+
+(global-set-key (kbd "C-c I") #'er-find-user-init-file)
+(global-set-key "\C-cd" 'kill-whole-line)
+(global-set-key "\C-cr" 'revert-buffer-no-confirm)
+
+(defun revert-buffer-no-confirm ()
+    "Revert buffer without confirmation."
+    (interactive)
+    (revert-buffer :ignore-auto :noconfirm))

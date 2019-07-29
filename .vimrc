@@ -189,6 +189,10 @@ nnoremap <F7> :set scb<CR>
 nnoremap <S-F7> :set noscb<CR>
 "search by register "
 nnoremap <F6> /<c-r>"<CR>
+"identify hilight under cursor
+nnoremap <F10> :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<'
+\ . synIDattr(synID(line("."),col("."),0),"name") . "> lo<"
+\ . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">"<CR>
 "}}}
 
 "abbrevations{{{
@@ -226,6 +230,8 @@ Plug 'vim-scripts/tagbar-phpctags'
 Plug 'w0rp/ale'
 Plug 'will133/vim-dirdiff'
 Plug 'junegunn/goyo.vim'
+Plug 'flrnprz/candid.vim'
+Plug 'vim-scripts/phd'
 call plug#end()
 "}}}
 
@@ -402,15 +408,15 @@ function! GotoFileFromDocRoot()
 endfunction
 
 function! VarDumpPhpVariable()
-  let @* = "var_dump(" . expand('<cword>') . "); //########## debug kimura ".strftime("%Y/%m/%d")." ##########"
+  let @* = "var_dump(" . expand('<cword>') . "); //########## TODO kimura ".strftime("%Y/%m/%d")." ##########"
 endfunction
 
 function! PrePhpVariable()
-  let @* = "pre(" . expand('<cword>') . "); //########## debug kimura ".strftime("%Y/%m/%d")." ##########"
+  let @* = "pre(" . expand('<cword>') . "); //########## TODO kimura ".strftime("%Y/%m/%d")." ##########"
 endfunction
 
 function! ClogVar()
-  let @* = "console.log(" . expand('<cword>') . "); //########## debug kimura ".strftime("%Y/%m/%d")." ##########"
+  let @* = "console.log(" . expand('<cword>') . "); //########## TODO kimura ".strftime("%Y/%m/%d")." ##########"
 endfunction
 
 function! QFixToggle()
@@ -500,7 +506,25 @@ endfunction
 command! -nargs=+ Grep execute 'silent !sh $SCRIPTS/greplogo.sh' | execute 'silent grep! <args>'| execute 'silent !clear' |:redraw! |:cfirst |:wincmd j
 autocmd QuickFixCmdPost *grep* cwindow
 if executable("rg")
-  set grepprg=rg\ --vimgrep\ --no-heading\ --sort-files\ --no-column\ --line-number\ --path-separator\ '/'\ --glob\ '!tags'\ --glob\ '!.svn'\ --glob\ '!*.min.css'\ --glob\ '!*.min.js'\ --glob\ '!jquery.js'\ --glob\ '!www/material/flash/*'\ --glob\ '!ent/*'
+  let &grepprg="rg
+                \ --vimgrep
+                \ --no-heading
+                \ --no-column
+                \ --line-number
+                \ --path-separator '/'
+                \ --glob '!tags'
+                \ --glob '!.svn'
+                \ --glob '!*.min.css'
+                \ --glob '!*.min.js'
+                \ --glob '!jquery.js'
+                \ --glob '!www/material/flash/*'
+                \ --glob '!ent/*'
+                \ --glob '!tags'
+                \ --glob '!cgi-bin'
+                \ --glob '!opt'
+                \ --glob '!www/tegaki'
+                \ --glob '!www/tegaki_v2'
+                \"
   set grepformat=%f:%l:%c:%m,%f:%l:%m
 endif
 "}}}

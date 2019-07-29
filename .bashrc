@@ -17,19 +17,18 @@ if [[ $(uname -s) == CYGWIN* ]];then
 	alias pandoc_html="pandoc -s --self-contained -t html5 -c d:/pandoc_style/markdown7.css"
 
 	#ssh-agent
-	if ! pgrep -x "ssh-agent" > /dev/null
-	then
-		echo "hi"
-		eval `ssh-agent`
-		if [ -f $HOME/.ssh/suralacore01.key ]; then
-			ssh-add $HOME/.ssh/suralacore01.key
-		fi
-	fi
+	# if ! pgrep -x "ssh-agent" > /dev/null
+	# then
+	# 	eval `ssh-agent`
+	# 	if [ -f $HOME/.ssh/suralacore01.key ]; then
+	# 		ssh-add $HOME/.ssh/suralacore01.key
+	# 	fi
+	# fi
 
 	#ssh-pagent
-	# if [ -f /usr/bin/ssh-pagent ]; then
-	#     eval $(/usr/bin/ssh-pageant -r -a "/tmp/.ssh-pageant-$USERNAME")
-	# fi
+	if [ -f /usr/bin/ssh-pageant ]; then
+	    eval $(/usr/bin/ssh-pageant -r -a "/tmp/.ssh-pageant-$USERNAME")
+	fi
 
 fi
 
@@ -37,6 +36,7 @@ fi
 # unix
 # ---
 alias ~='cd $HOME'
+alias work='cd d:/workspace'
 alias wifi='sudo wifi-menu'
 alias ls='ls --color=auto'
 alias ll='ls -l'
