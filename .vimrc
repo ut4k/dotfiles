@@ -211,9 +211,7 @@ ia jvz <c-r>="javascript:void(0);"<CR>
 "vim-plug{{{
 call plug#begin('~/.vim/plugged')
 Plug 'StanAngeloff/php.vim'
-Plug 'ajmwagar/vim-deus'
 Plug 'alvan/vim-php-manual'
-Plug 'caksoylar/vim-mysticaltutor'
 Plug 'ctrlpvim/ctrlp.vim'
 Plug 'heavenshell/vim-jsdoc'
 Plug 'ivalkeen/vim-ctrlp-tjump'
@@ -229,9 +227,6 @@ Plug 'vim-scripts/httplog' "usage: setf httplog
 Plug 'vim-scripts/tagbar-phpctags'
 Plug 'w0rp/ale'
 Plug 'will133/vim-dirdiff'
-Plug 'junegunn/goyo.vim'
-Plug 'flrnprz/candid.vim'
-Plug 'vim-scripts/phd'
 call plug#end()
 "}}}
 
@@ -261,7 +256,6 @@ let g:easy_align_ignore_groups = []
 let g:ctrlp_use_caching = 1
 let g:ctrlp_max_files  = 3000
 let g:ctrlp_match_window = 'min:2,max:21,results=100,order:btt'
-let g:ctrlp_custom_ignore = '\v[\/]\.(git|svn|ico|swp|jpg|jpeg|png|gif|swf|uranai_lib/templates_c|ent)$'
 let g:ctrlp_show_hidden = 0
 let g:ctrlp_clear_cache_on_exit = 0
 let g:ctrlp_lazy_update = 1
@@ -329,7 +323,7 @@ let g:ale_linters = {'php': ['phpmd','php'], 'javascript': ['jshint'] , 'haskell
 let g:ale_php_phpmd_use_global = 1
 let g:ale_php_phpmd_ruleset = 'unusedcode'
 let g:ale_php_phan_use_global = 1
-let g:ale_sign_column_always = 1
+let g:ale_sign_column_always = 0
 let g:ale_lint_on_save = 1
 let g:ale_lint_on_insert_leave = 1
 let g:ale_set_balloons = 0
@@ -563,6 +557,8 @@ augroup END
 autocmd FileType qf wincmd J
 "spacing for Haskell
 autocmd FileType haskell set tabstop=4|set shiftwidth=4|set expandtab
+autocmd FileType vim set tabstop=2|set shiftwidth=2|set expandtab
+autocmd FileType php set noexpandtab
 
 "phpは$をキーワードとしてあつかう wで $variable 全体がとれるように
 autocmd FileType php :setlocal iskeyword+=$
@@ -593,5 +589,14 @@ let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
 let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
 
 let g:surround_{char2nr('q')} = "\\\"\r\\\""
+
+"netrw
+" let g:netrw_liststyle=1
+let g:netrw_liststyle=3
+let g:netrw_banner=0
+let g:netrw_sizestyle="H"
+let g:netrw_timefmt="%Y/%m/%d(%a) %H:%M:%S"
+let g:netrw_preview=1
+let g:netrw_altv=1
 
 colorscheme skeletor

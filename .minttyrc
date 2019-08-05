@@ -28,3 +28,5 @@ Charset=UTF-8
 Transparency=medium
 ThemeFile=Galaxy.minttyrc
 OpaqueWhenFocused=yes
+ClickTargetMod=off
+WindowShortcuts=no
