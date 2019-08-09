@@ -193,6 +193,7 @@ nnoremap <F6> /<c-r>"<CR>
 nnoremap <F10> :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<'
 \ . synIDattr(synID(line("."),col("."),0),"name") . "> lo<"
 \ . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">"<CR>
+nnoremap <c-@> :FZF<CR>
 "}}}
 
 "abbrevations{{{
@@ -227,6 +228,8 @@ Plug 'vim-scripts/httplog' "usage: setf httplog
 Plug 'vim-scripts/tagbar-phpctags'
 Plug 'w0rp/ale'
 Plug 'will133/vim-dirdiff'
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf.vim'
 call plug#end()
 "}}}
 
@@ -402,15 +405,15 @@ function! GotoFileFromDocRoot()
 endfunction
 
 function! VarDumpPhpVariable()
-  let @* = "var_dump(" . expand('<cword>') . "); //########## TODO kimura ".strftime("%Y/%m/%d")." ##########"
+  let @" = "var_dump(" . expand('<cword>') . "); //########## TODO kimura ".strftime("%Y/%m/%d")." ##########"
 endfunction
 
 function! PrePhpVariable()
-  let @* = "pre(" . expand('<cword>') . "); //########## TODO kimura ".strftime("%Y/%m/%d")." ##########"
+  let @" = "pre(" . expand('<cword>') . "); //########## TODO kimura ".strftime("%Y/%m/%d")." ##########"
 endfunction
 
 function! ClogVar()
-  let @* = "console.log(" . expand('<cword>') . "); //########## TODO kimura ".strftime("%Y/%m/%d")." ##########"
+  let @" = "console.log(" . expand('<cword>') . "); //########## TODO kimura ".strftime("%Y/%m/%d")." ##########"
 endfunction
 
 function! QFixToggle()
@@ -503,7 +506,6 @@ if executable("rg")
   let &grepprg="rg
                 \ --vimgrep
                 \ --no-heading
-                \ --no-column
                 \ --line-number
                 \ --path-separator '/'
                 \ --glob '!tags'
@@ -576,13 +578,13 @@ source $VIMRUNTIME/macros/matchit.vim
 
 "highlight line number(without cursorline)
 " hi clear CursorLine
-augroup CLClear
-    autocmd! ColorScheme * hi clear CursorLine
-augroup END
+" augroup CLClear
+"     autocmd! ColorScheme * hi clear CursorLine
+" augroup END
 
-augroup CLNRSet
-    autocmd! ColorScheme * hi CursorLineNR cterm=bold
-augroup END
+" augroup CLNRSet
+"     autocmd! ColorScheme * hi CursorLineNR cterm=bold
+" augroup END
 
 "to enable termiguicolors in tmux
 let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
