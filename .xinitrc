@@ -28,7 +28,7 @@ feh --bg-scale ~/images/wall.jpg
 xbindkeys
 
 #enable compton
-compton -b --config ~/.config/compton/compton.conf
+# compton -b --config ~/.config/compton/compton.conf
 
 #launch dwm
 exec dwm;
