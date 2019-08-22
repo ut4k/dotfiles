@@ -1,5 +1,51 @@
 # dotfiles
 
+## WSL用ノート
+
+### ターミナル
+
+`wsltty`を利用。
+
+### コンテキストメニュー追加
+
+Windowsスタートメニュー -> WSLtty -> add to ...
+
+### sshエージェント
+
+`ssh-agent`は別セッション間でシェアするのは面倒くさそうなので`weasel-pageant`を使う。  
+
+https://github.com/vuori/weasel-pageant
+
+releaseからzipをダウンロードしてきてWindows側のディレクトリに解凍（`C:\weasel-pageant` など）  
+`.bashrc`に`eval $(/path/to/weasel-pageant -r)`を追加すればpageantに追加してあるキーを見てくれるようになる。
+
+### wslショートカット
+
+`C:\Users\ユーザー名\AppData\Local\wsltty\bin\mintty.exe --WSL= --configdir="C:\Users\ユーザー名\AppData\Roaming\wsltty" -~`
+
+### 他
+
+`explorer.exe .`でカレント作業ディレクトリだけはWindowsエクスプローラーで開ける様子。  
+特定の場所をファイル選択状態で開くような方法はまだ不明。 2019/08/22
+
+## vim
+
+### ale+phpmd
+
+phpmd導入はこちらのサイトさんの解説が分かりやすい。
+
+[https://blog-ja.sideci.com/entry/2017/06/27/110000](https://blog-ja.sideci.com/entry/2017/06/27/110000)
+
+1. `composer`インストール
+2. `composer global require "phpmd/phpmd=@stable"`
+3. `~/.composer/vendor/bin/phpmd` か `~/.config/composer/vendor/bin/phpmd` あたりにphpmdがインストールされる
+4. binが置かれた場所にパスを通して`phpmd`コマンドが使えるようにしておく。 `export PATH=$PATH:~/.config/composer/vendor/bin`
+
+(たぶんシンプルXML拡張モジュールが要るかも?)  
+`sudo apt-get install php-xml`  
+
+vimからLintが動いてるかテストするには`:!phpmd % text unusedcode.xml`のようにする。(phpmdは引数が3つ必要）  
+
 ## cygwin用ノート
 
 ### コンテキストメニュー追加

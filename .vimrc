@@ -326,10 +326,10 @@ let g:ale_linters = {'php': ['phpmd','php'], 'javascript': ['jshint'] , 'haskell
 let g:ale_php_phpmd_use_global = 1
 let g:ale_php_phpmd_ruleset = 'unusedcode'
 let g:ale_php_phan_use_global = 1
-let g:ale_sign_column_always = 0
+let g:ale_sign_column_always = 1
 let g:ale_lint_on_save = 1
 let g:ale_lint_on_insert_leave = 1
-let g:ale_set_balloons = 0
+let g:ale_set_balloons = 1
 let g:ale_lint_on_enter = 0
 let g:ale_lint_on_text_changed = 1
 let g:ale_lint_on_filetype_changed = 0
@@ -432,11 +432,9 @@ function! RunC()
   endif
 endfunction
 
+
 function! OpenWinExplorer()
-	if has("win32unix")
-		echo "opened " . expand('%:h')
-		call system('cygstart ' . expand('%:h'))
-	endif
+  call system('explorer.exe .')
 endfunction
 
 function! CopyIntoOrgDir(newName)
@@ -500,7 +498,7 @@ endfunction
 
 "my ex command {{{
 "Grep
-command! -nargs=+ Grep execute 'silent !sh $SCRIPTS/greplogo.sh' | execute 'silent grep! <args>'| execute 'silent !clear' |:redraw! |:cfirst |:wincmd j
+command! -nargs=+ Grep execute 'silent !sh ~/scripts/greplogo.sh' | execute 'silent grep! <args>'| execute 'silent !clear' |:redraw! |:cfirst |:wincmd j
 autocmd QuickFixCmdPost *grep* cwindow
 if executable("rg")
   let &grepprg="rg
@@ -564,6 +562,14 @@ autocmd FileType php set noexpandtab
 
 "phpは$をキーワードとしてあつかう wで $variable 全体がとれるように
 autocmd FileType php :setlocal iskeyword+=$
+
+" WSL ヤンクでクリップボードにコピー
+if system('uname -a | grep Microsoft') != ''
+  augroup myYank
+    autocmd!
+    autocmd TextYankPost * :call system('clip.exe', @")
+  augroup END
+endif
 
 "}}}
 

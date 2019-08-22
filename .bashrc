@@ -33,12 +33,14 @@ alias ll='ls -l'
 alias work='cd /d/workspace'
 alias rc='source $HOME/.bashrc'
 alias vrc='vim $HOME/.bashrc'
-alias path="sed 's/:/\n/g' <<< \"$PATH\""
+alias showpath="sed 's/:/\n/g' <<< \"$PATH\""
 alias mux='tmuxinator'
 alias srans='~/srlscripts/answer.sh'
 
 export EDITOR='vim'
 export TERM="xterm-256color"
+export SCRIPTS=$HOME/scripts
+export PATH=$PATH:~/.config/composer/vendor/bin
 
 alias chromium="/usr/bin/chromium-browser --start-fullscreen --disable-session-crashed-bubble --disable-infobars"
 alias v="vim"
@@ -57,5 +59,7 @@ PS_INFO="$GREEN\u@\h$RESET:$BLUE\w"
 PS_TIME="\[\033[\$((COLUMNS-10))G\] $RED[\t]"
 export PS1="\${PS_FILL}\[\033[0G\]${PS_INFO} ${PS_TIME}\n${RESET}\$ "
 export TMUX_TMPDIR=/tmp/tmp.tmux
+
+eval $(/c/weasel-pageant/weasel-pageant -r)
 
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
