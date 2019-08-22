@@ -207,6 +207,7 @@ ia cdt <c-r>=strftime("%Y/%m/%d")<CR>
 ia chdr <c-r>="#include <stdio.h>\n\nint main(int argc, char *argv[]){\n}"<CR>
 ia hlw <c-r>="hello,world!"<CR>
 ia jvz <c-r>="javascript:void(0);"<CR>
+ia shb <c-r>="#!/bin/bash"<CR>
 "abbrevations}}}
 
 "vim-plug{{{

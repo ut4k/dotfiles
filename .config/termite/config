@@ -1,5 +1,6 @@
 [options]
-font = UbuntuMono 18px
+#font = UbuntuMono 18px
+font = FantasqueSansMono 18px
 
 # Dracula theme for termite
 # https://github.com/dracula/termite
