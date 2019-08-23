@@ -41,6 +41,7 @@ export EDITOR='vim'
 export TERM="xterm-256color"
 export SCRIPTS=$HOME/scripts
 export PATH=$PATH:~/.config/composer/vendor/bin
+export PATH=$PATH:~/phpctags/phpctags.phar
 
 alias chromium="/usr/bin/chromium-browser --start-fullscreen --disable-session-crashed-bubble --disable-infobars"
 alias v="vim"

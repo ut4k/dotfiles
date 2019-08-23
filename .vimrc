@@ -164,7 +164,7 @@ nnoremap vp :call PrePhpVariable()<CR>
 "console log js variable
 nnoremap cvr :call ClogVar()<CR>
 "tagjump
-nnoremap <c-]> :CtrlPtjump<CR>
+" nnoremap <c-]> :CtrlPtjump<CR>
 "disable built-in help(hacky){{{
 nmap <F1> :echo<CR>
 imap <F1> <C-o>:echo<CR>
@@ -219,7 +219,7 @@ Plug 'StanAngeloff/php.vim'
 Plug 'alvan/vim-php-manual'
 " Plug 'ctrlpvim/ctrlp.vim'
 Plug 'heavenshell/vim-jsdoc'
-Plug 'ivalkeen/vim-ctrlp-tjump'
+" Plug 'ivalkeen/vim-ctrlp-tjump'
 Plug 'junegunn/vim-easy-align'
 Plug 'majutsushi/tagbar'
 Plug 'mattn/emmet-vim'
@@ -229,11 +229,12 @@ Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-surround'
 Plug 'vim-scripts/PDV--phpDocumentor-for-Vim'
 Plug 'vim-scripts/httplog' "usage: setf httplog
-" Plug 'vim-scripts/tagbar-phpctags'
+Plug 'vim-scripts/tagbar-phpctags'
 Plug 'w0rp/ale'
 Plug 'will133/vim-dirdiff'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
+Plug 'shawncplus/phpcomplete.vim'
 call plug#end()
 "}}}
 
@@ -337,6 +338,14 @@ let g:ale_set_balloons = 1
 let g:ale_lint_on_enter = 0
 let g:ale_lint_on_text_changed = 1
 let g:ale_lint_on_filetype_changed = 0
+"----------------------------------------
+" tagbar-phpctags
+" ---------------------------------------
+let g:tagbar_phpctags_bin = '~/phpctags/phpctags.phar'
+"----------------------------------------
+" phpcomplete
+" ---------------------------------------
+let g:phpcomplete_complete_for_unknown_classes = 0
 "}}}
 
 "functions{{{
