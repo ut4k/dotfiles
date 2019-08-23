@@ -144,7 +144,7 @@ vnoremap <leader>s :sort u<CR>
 "run script
 nnoremap <leader>rs :call RunScript()<CR><CR>
 "align docs
-vnoremap ad :!column -t -o " " \| sed 's/^/ /'<CR><CR>
+vnoremap ad :!column -t -s " " \| sed 's/^/ /'<CR><CR>
 "mark列表示
 nnoremap <leader>x :SignatureToggle<CR>
 "backward loop whileかforeachかforを前方検索で探す
@@ -193,7 +193,10 @@ nnoremap <F6> /<c-r>"<CR>
 nnoremap <F10> :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<'
 \ . synIDattr(synID(line("."),col("."),0),"name") . "> lo<"
 \ . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">"<CR>
+"fzf
 nnoremap <c-@> :FZF<CR>
+nnoremap <c-p> :History<CR>
+nnoremap <c-t> :Tags<CR>
 "}}}
 
 "abbrevations{{{
@@ -213,7 +216,7 @@ ia jvz <c-r>="javascript:void(0);"<CR>
 call plug#begin('~/.vim/plugged')
 Plug 'StanAngeloff/php.vim'
 Plug 'alvan/vim-php-manual'
-Plug 'ctrlpvim/ctrlp.vim'
+" Plug 'ctrlpvim/ctrlp.vim'
 Plug 'heavenshell/vim-jsdoc'
 Plug 'ivalkeen/vim-ctrlp-tjump'
 Plug 'junegunn/vim-easy-align'
@@ -225,7 +228,7 @@ Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-surround'
 Plug 'vim-scripts/PDV--phpDocumentor-for-Vim'
 Plug 'vim-scripts/httplog' "usage: setf httplog
-Plug 'vim-scripts/tagbar-phpctags'
+" Plug 'vim-scripts/tagbar-phpctags'
 Plug 'w0rp/ale'
 Plug 'will133/vim-dirdiff'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
