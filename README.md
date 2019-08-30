@@ -46,6 +46,22 @@ phpmd導入はこちらのサイトさんの解説が分かりやすい。
 
 vimからLintが動いてるかテストするには`:!phpmd % text unusedcode.xml`のようにする。(phpmdは引数が3つ必要）  
 
+## 便利そうなツール
+
+| なまえ | 備考 |
+| --- | --- |
+| fzf | ファジーファインダー。vim用プラグインあり |
+| fd | `find`の高速版。`fzf`に結果を食べさせられる。 `wsl`の`ubuntu`には`.deb`を入手して`dpkg`でインストールすればok |
+| ripgrep | `find`の高速版。 |
+
+[fdのインストール(ubuntu)](https://www.tecmint.com/fd-alternative-to-find-command/)
+
+ほかにもいろいろlinuxのデフォルトコマンドの高速版をリストアップしてくれている方の記事。
+
+[https://qiita.com/kikuchi_kentaro/items/22b7fe3b93729f8e7b17](https://qiita.com/kikuchi_kentaro/items/22b7fe3b93729f8e7b17)
+
+---
+
 ## cygwin用ノート
 
 ### コンテキストメニュー追加

@@ -42,6 +42,7 @@ export TERM="xterm-256color"
 export SCRIPTS=$HOME/scripts
 export PATH=$PATH:~/.config/composer/vendor/bin
 export PATH=$PATH:~/phpctags/phpctags.phar
+export PATH=$PATH:~/AppData/Local/hyper/app-2.0.0/resources/bin
 
 alias chromium="/usr/bin/chromium-browser --start-fullscreen --disable-session-crashed-bubble --disable-infobars"
 alias v="vim"
@@ -61,7 +62,9 @@ PS_TIME="\[\033[\$((COLUMNS-10))G\] $RED[\t]"
 export PS1="\${PS_FILL}\[\033[0G\]${PS_INFO} ${PS_TIME}\n${RESET}\$ "
 export TMUX_TMPDIR=/tmp/tmp.tmux
 
-eval $(/c/weasel-pageant/weasel-pageant -r)
+export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git --exclude google-api-php-client --exclude *.min.js --exclude tags --exclude .svn'
+
+eval $(/c/weasel-pageant/weasel-pageant -rq)
 
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
 

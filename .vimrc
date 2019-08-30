@@ -195,7 +195,8 @@ nnoremap <F10> :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> 
 \ . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">"<CR>
 "fzf
 nnoremap <c-@> :FZF<CR>
-nnoremap <c-p> :History<CR>
+nnoremap <c-p> :Buffers<CR>
+nnoremap <c-h> :Hist<CR>
 nnoremap <c-t> :Tags<CR>
 "}}}
 
@@ -331,7 +332,7 @@ let g:ale_linters = {'php': ['phpmd','php'], 'javascript': ['jshint'] , 'haskell
 let g:ale_php_phpmd_use_global = 1
 let g:ale_php_phpmd_ruleset = 'unusedcode'
 let g:ale_php_phan_use_global = 1
-let g:ale_sign_column_always = 1
+let g:ale_sign_column_always = 0
 let g:ale_lint_on_save = 1
 let g:ale_lint_on_insert_leave = 1
 let g:ale_set_balloons = 1
