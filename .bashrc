@@ -62,7 +62,9 @@ PS_TIME="\[\033[\$((COLUMNS-10))G\] $RED[\t]"
 export PS1="\${PS_FILL}\[\033[0G\]${PS_INFO} ${PS_TIME}\n${RESET}\$ "
 export TMUX_TMPDIR=/tmp/tmp.tmux
 
-export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git --exclude google-api-php-client --exclude *.min.js --exclude tags --exclude .svn'
+if [ -f /usr/bin/fd ]; then
+	export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git --exclude google-api-php-client --exclude *.min.js --exclude tags --exclude .svn'
+fi
 
 eval $(/c/weasel-pageant/weasel-pageant -rq)
 
