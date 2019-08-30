@@ -40,6 +40,10 @@ alias srans='~/srlscripts/answer.sh'
 export EDITOR='vim'
 export TERM="xterm-256color"
 export SCRIPTS=$HOME/scripts
+
+# bin path
+export PATH=$PATH:/usr/bin
+export PATH=$PATH:/usr/local/bin
 export PATH=$PATH:~/.config/composer/vendor/bin
 export PATH=$PATH:~/phpctags/phpctags.phar
 export PATH=$PATH:~/AppData/Local/hyper/app-2.0.0/resources/bin

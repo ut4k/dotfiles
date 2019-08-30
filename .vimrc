@@ -3,11 +3,6 @@ autocmd ColorScheme * highlight User1 ctermbg=black ctermfg=121 cterm=bold
 "}}}
 
 "basic{{{
-"winのときだけ言語enにする
-if has("win32unix")
-	language en_US.UTF-8
-endif
-
 scriptencoding utf-8
 set encoding=utf-8
 
@@ -21,8 +16,7 @@ set updatetime=200
 set noignorecase
 set list
 set listchars=tab:»\ ,precedes:«,extends:»,eol:↲
-set ambiwidth=single
-" set ambiwidth=double
+set ambiwidth=double
 
 set mouse=a
 set ttimeoutlen=10
@@ -42,7 +36,7 @@ set noswapfile
 set noundofile
 set nowrap
 set number
-set regexpengine=1 "正規表現エンジン 0か1
+set regexpengine=1
 set shiftwidth=2
 set showcmd
 set showmatch
@@ -58,21 +52,12 @@ set wildignore+=*\\.git\\*,*\\.hg\\*,*\\.svn\\*
 set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*.jpg,*.png,*.gif,*.jpeg,*.swf
 set wildignore+=*/.git/*,*/tmp/*,*.swp
 
-if has("win32unix")
-	"for cygwin
-	let &t_ti.="\e[1 q"
-	let &t_SI.="\e[5 q"
-	let &t_EI.="\e[1 q"
-	let &t_te.="\e[0 q"
-endif
-
 let g:sql_type_default = 'mysql'
 
 "html output
 let g:html_number_lines = 0
 let g:html_ignore_folding = 1
 let g:html_font = "Consolas"
-
 
 "diff setting
 if &diff                             " only for diff mode/vimdiff
@@ -131,10 +116,6 @@ nnoremap <leader>ct :let @+=expand(tagbar#currenttag('%s',''))<CR>
 nnoremap <leader>tt :call EnableStatusLineCurrentTag()<CR>
 "currenttagのファンクション名でgrep look-functionとか?...
 nnoremap <leader>lf :call GrepCurrentFunc()<CR>
-"上のファンクションの宣言にジャンプ
-nnoremap <buffer> <up> :call FunctionJumpUp()<CR>
-"下のファンクションの宣言にジャンプ
-nnoremap <buffer> <down> :call FunctionJumpDown()<CR>
 "ファイル名をクリップボードにコピー
 nnoremap <leader>cn :let @+ = expand('%')<CR>
 "gs : gf縦分割バージョン
@@ -145,16 +126,12 @@ vnoremap <leader>s :sort u<CR>
 nnoremap <leader>rs :call RunScript()<CR><CR>
 "align docs
 vnoremap ad :!column -t -s " " \| sed 's/^/ /'<CR><CR>
-"mark列表示
-nnoremap <leader>x :SignatureToggle<CR>
-"backward loop whileかforeachかforを前方検索で探す
-nnoremap <leader>bl ?\(while\\|foreach\\|for\)<CR>
 "phpdoc
 nnoremap <leader>dc :call PhpDocSingle()<CR>
 "add / on top of line on VisualMode
 vnoremap p !sed 's/^/\//'<CR>
 "change word by register0 word
-nnoremap <leader>cw cw<c-r>0
+nnoremap <leader>x cw<c-r>0
 "go to abs path file
 nnoremap gaf :<C-u>call GotoFileFromDocRoot()<CR>
 "var_dump($phpvariable);
@@ -163,8 +140,6 @@ nnoremap vr :call VarDumpPhpVariable()<CR>
 nnoremap vp :call PrePhpVariable()<CR>
 "console log js variable
 nnoremap cvr :call ClogVar()<CR>
-"tagjump
-" nnoremap <c-]> :CtrlPtjump<CR>
 "disable built-in help(hacky){{{
 nmap <F1> :echo<CR>
 imap <F1> <C-o>:echo<CR>
@@ -177,16 +152,12 @@ nmap <silent> <C-j> <Plug>(ale_next_wrap)
 nnoremap <F9> :call RunC()<CR>
 "prepare grep command
 nnoremap ff :call GrepConfirm()<CR>
-"open file dir in windows explorer
-nnoremap <leader>we :call OpenWinExplorer()<Esc>
 "+ buffer size vertically
 nnoremap <S-h> :vert resize +15<CR>
 "- buffer vertically
 nnoremap <S-l> :vert resize -15<CR>
 nnoremap <F5> :cnext<CR>
 nnoremap <S-F5> :cprevious<CR>
-nnoremap <F7> :set scb<CR>
-nnoremap <S-F7> :set noscb<CR>
 "search by register "
 nnoremap <F6> /<c-r>"<CR>
 "identify hilight under cursor
@@ -218,9 +189,7 @@ ia shb <c-r>="#!/bin/bash"<CR>
 call plug#begin('~/.vim/plugged')
 Plug 'StanAngeloff/php.vim'
 Plug 'alvan/vim-php-manual'
-" Plug 'ctrlpvim/ctrlp.vim'
 Plug 'heavenshell/vim-jsdoc'
-" Plug 'ivalkeen/vim-ctrlp-tjump'
 Plug 'junegunn/vim-easy-align'
 Plug 'majutsushi/tagbar'
 Plug 'mattn/emmet-vim'
@@ -235,7 +204,8 @@ Plug 'w0rp/ale'
 Plug 'will133/vim-dirdiff'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
-Plug 'shawncplus/phpcomplete.vim'
+" Plug 'shawncplus/phpcomplete.vim'
+Plug 'drewtempelmeyer/palenight.vim'
 call plug#end()
 "}}}
 
@@ -259,20 +229,6 @@ xmap ga <Plug>(EasyAlign)
 nmap ga <Plug>(EasyAlign)
 " ignore nothing
 let g:easy_align_ignore_groups = []
-"----------------------------------------
-" CtrlP
-"----------------------------------------
-let g:ctrlp_use_caching = 1
-let g:ctrlp_max_files  = 3000
-let g:ctrlp_match_window = 'min:2,max:21,results=100,order:btt'
-let g:ctrlp_show_hidden = 0
-let g:ctrlp_clear_cache_on_exit = 0
-let g:ctrlp_lazy_update = 1
-let g:ctrlp_working_path_mode = 0
-let g:ctrlp_match_current_file = 1
-let g:ctrlp_cmd = 'CtrlP'
-let g:ctrlp_mruf_default_order = 1
-let g:ctrlp_mruf_relative = 1
 "----------------------------------------
 " Tagbar
 "----------------------------------------
@@ -317,8 +273,8 @@ let g:php_var_selector_is_identifier= 1
 let g:php_baselib = 1
 let g:php_parent_error_close = 0
 let g:php_parent_error_open = 0
-let g:php_sql_query = 0
-let g:php_folding = 0
+let g:php_sql_query = 1
+let g:php_folding = 1
 let g:php_sql_heredoc = 0
 let g:php_sql_nowdoc = 0
 "----------------------------------------
@@ -391,17 +347,16 @@ function! RunScript()
 endfunction
 
 function! PhpSyntaxOverride()
-  " Put snippet overrides in this function.
-  hi! def link phpDocTags  phpDefine
-  hi! def link phpDocParam phpType
-  hi! phpFunctions ctermfg=121 ctermbg=NONE cterm=NONE
+
+  " hi! phpVarSelector guifg=#A685C3 guibg=#1E1E28 cterm=NONE
+  " hi! phpIdentifier guifg=#F0DD8A guibg=#1E1E28 cterm=NONE
+  " hi! phpMemberSelector ctermfg=121 ctermbg=NONE cterm=NONE
 
   hi! phpVarSelector guifg=#A685C3 guibg=#1E1E28 cterm=NONE
-  hi! phpIdentifier guifg=#F0DD8A guibg=#1E1E28 cterm=NONE
-
-  hi! phpMemberSelector ctermfg=121 ctermbg=NONE cterm=NONE
+  hi! link phpIdentifier phpIdentifierSimply
   hi! link phpDocTags phpDefine
   hi! link phpDocParam phpType
+  hi! link phpFunctions phpFunction
 endfunction
 
 "docrootからのパスで開く
@@ -499,15 +454,6 @@ function! EnableStatusLineCurrentTag()
 	set statusline+=%0*
 	set statusline+=%5.l/%L
 endfunction
-
-function! Colors1()
-	:so $VIMRUNTIME/syntax/colortest.vim
-endfunction
-
-function! Colors2()
-	:so $VIMRUNTIME/syntax/hitest.vim
-endfunction
-
 "}}}
 
 "my ex command {{{
@@ -543,22 +489,12 @@ endif
 augroup phpSyntaxOverride
   autocmd!
   autocmd FileType php call PhpSyntaxOverride()
-	call PhpSyntaxOverride()
 augroup END
-
-if has("win32unix")
-	"cygwin用 モード切替のラグを減らす
-	augroup FastEscape
-		autocmd!
-		au InsertEnter * set timeoutlen=0
-		au InsertLeave * set timeoutlen=1000
-	augroup END
-endif
 
 " インサートモードから抜けたらIMEを英語にセット
 augroup reset_ime
-	au!
-	au InsertLeave * set iminsert=0
+  au!
+  au InsertLeave * set iminsert=0
 augroup END
 
 "リサイズ時に画面幅をそろえる
@@ -569,7 +505,6 @@ augroup END
 
 " push quickfix window always to the bottom
 autocmd FileType qf wincmd J
-"spacing for Haskell
 autocmd FileType haskell set tabstop=4|set shiftwidth=4|set expandtab
 autocmd FileType vim set tabstop=2|set shiftwidth=2|set expandtab
 autocmd FileType php set noexpandtab
@@ -596,29 +531,11 @@ endif
 source $VIMRUNTIME/macros/matchit.vim
 "}}}
 
-"highlight line number(without cursorline)
-" hi clear CursorLine
-" augroup CLClear
-"     autocmd! ColorScheme * hi clear CursorLine
-" augroup END
-
-" augroup CLNRSet
-"     autocmd! ColorScheme * hi CursorLineNR cterm=bold
-" augroup END
-
 "to enable termiguicolors in tmux
 let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
 let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
 
 let g:surround_{char2nr('q')} = "\\\"\r\\\""
 
-"netrw
-" let g:netrw_liststyle=1
-let g:netrw_liststyle=3
-let g:netrw_banner=0
-let g:netrw_sizestyle="H"
-let g:netrw_timefmt="%Y/%m/%d(%a) %H:%M:%S"
-let g:netrw_preview=1
-let g:netrw_altv=1
-
 colorscheme skeletor
+" colorscheme palenight
