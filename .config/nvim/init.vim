@@ -1,6 +1,4 @@
-"this needs to be on top ???{{{
-autocmd ColorScheme * highlight User1 ctermbg=black ctermfg=121 cterm=bold
-"}}}
+autocmd ColorScheme * highlight User1 ctermbg=black guifg=lightgreen cterm=bold gui=bold
 
 "basic{{{
 scriptencoding utf-8
@@ -9,11 +7,12 @@ set encoding=utf-8
 set termguicolors
 set background=dark
 set t_Co=256
-set redrawtime=20000
 set ttyfast
-set updatetime=200
+set updatetime=300
+set shortmess+=c
+set signcolumn=yes
 
-set noignorecase
+set ignorecase
 set list
 set listchars=tab:»\ ,precedes:«,extends:»,eol:↲
 set ambiwidth=double
@@ -21,7 +20,7 @@ set ambiwidth=double
 set mouse=a
 set ttimeoutlen=10
 set backspace=indent,eol,start
-set clipboard=unnamed,autoselect
+set clipboard=unnamed
 
 set autoread
 set cursorline
@@ -52,12 +51,14 @@ set wildignore+=*\\.git\\*,*\\.hg\\*,*\\.svn\\*
 set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*.jpg,*.png,*.gif,*.jpeg,*.swf
 set wildignore+=*/.git/*,*/tmp/*,*.swp
 
-let g:sql_type_default = 'mysql'
-
 "html output
 let g:html_number_lines = 0
 let g:html_ignore_folding = 1
 let g:html_font = "Consolas"
+
+"to enable termiguicolors in tmux
+let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
 
 "diff setting
 if &diff                             " only for diff mode/vimdiff
@@ -107,7 +108,7 @@ nnoremap <F3> :noh<CR><CR>
 "vimrcを縦スプリットで開く
 nnoremap <leader>ev :e $MYVIMRC<CR><CR>
 "vimrcを再読み込みする
-nnoremap <F12> :source $MYVIMRC<CR>:call PhpSyntaxOverride()<CR>
+nnoremap <F12> :source $MYVIMRC<CR>:call PhpSyntaxOverride()<CR>:call LightlineReload()<CR><CR>
 "Tagbarトグル tagbar pop
 nnoremap tp :TagbarToggle<CR>
 "currenttagコピー
@@ -165,10 +166,9 @@ nnoremap <F10> :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> 
 \ . synIDattr(synID(line("."),col("."),0),"name") . "> lo<"
 \ . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">"<CR>
 "fzf
-nnoremap <c-@> :FZF<CR>
+nnoremap <c-space> :Files<CR>
 nnoremap <c-p> :Buffers<CR>
 nnoremap <c-h> :Hist<CR>
-nnoremap <c-t> :Tags<CR>
 "}}}
 
 "abbrevations{{{
@@ -186,7 +186,7 @@ ia shb <c-r>="#!/bin/bash"<CR>
 "abbrevations}}}
 
 "vim-plug{{{
-call plug#begin('~/.vim/plugged')
+call plug#begin('~/.local/share/nvim/plugged')
 Plug 'StanAngeloff/php.vim'
 Plug 'alvan/vim-php-manual'
 Plug 'heavenshell/vim-jsdoc'
@@ -204,8 +204,10 @@ Plug 'w0rp/ale'
 Plug 'will133/vim-dirdiff'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
-" Plug 'shawncplus/phpcomplete.vim'
 Plug 'drewtempelmeyer/palenight.vim'
+Plug 'skreek/skeletor.vim'
+Plug 'neoclide/coc.nvim', {'branch': 'release', 'do': { -> coc#util#install()}}
+Plug 'itchyny/lightline.vim'
 call plug#end()
 "}}}
 
@@ -225,8 +227,6 @@ let g:user_emmet_settings = {
 "----------------------------------------
 " Start interactive EasyAlign in visual mode (e.g. vipga)
 xmap ga <Plug>(EasyAlign)
-" Start interactive EasyAlign for a motion/text object (e.g. gaip)
-nmap ga <Plug>(EasyAlign)
 " ignore nothing
 let g:easy_align_ignore_groups = []
 "----------------------------------------
@@ -297,12 +297,30 @@ let g:ale_lint_on_text_changed = 1
 let g:ale_lint_on_filetype_changed = 0
 "----------------------------------------
 " tagbar-phpctags
-" ---------------------------------------
+"---------------------------------------
 let g:tagbar_phpctags_bin = '~/phpctags/phpctags.phar'
 "----------------------------------------
 " phpcomplete
-" ---------------------------------------
+"---------------------------------------
 let g:phpcomplete_complete_for_unknown_classes = 0
+"-----------------------------------------
+" sorround
+"-----------------------------------------
+let g:surround_{char2nr('q')} = "\\\"\r\\\""
+"-----------------------------------------
+" lightline
+"-----------------------------------------
+let g:lightline = {
+      \ 'colorscheme': 'wombat',
+      \ 'active': {
+      \   'right': [ [ 'mylineinfo' ], [ 'myfileformatinfo', 'fileencoding', 'filetype' ] ],
+      \ },
+      \ 'component_function': {
+      \   'myfileformatinfo': "MyFileformatInfo",
+      \   'mylineinfo': "MyLineinfo",
+      \   'currentfunction': 'CocCurrentFunction'
+      \ },
+      \ }
 "}}}
 
 "functions{{{
@@ -454,6 +472,26 @@ function! EnableStatusLineCurrentTag()
 	set statusline+=%0*
 	set statusline+=%5.l/%L
 endfunction
+
+command! LightlineReload call LightlineReload()
+
+function! LightlineReload()
+  call lightline#init()
+  call lightline#colorscheme()
+  call lightline#update()
+endfunction
+
+function! CocCurrentFunction()
+    return get(b:, 'coc_current_function', '')
+endfunction
+
+function! MyLineinfo()
+  return line('.') . '/' . line('$')
+endfunction
+
+function! MyFileformatInfo()
+  return &ff=='mac'?'mac[CR]':&ff=='unix'?'unix[LF]':'dos[CRLF]'
+endfunction
 "}}}
 
 "my ex command {{{
@@ -479,15 +517,25 @@ if executable("rg")
                 \ --glob '!www/tegaki'
                 \ --glob '!www/tegaki_v2'
                 \"
+  let &grepprg="rg
+                \ --vimgrep
+                \ --no-heading
+                \ --line-number
+                \ --path-separator '/'
+                \ --glob '!tags'
+                \ --glob '!.svn'
+                \ --glob '!*.min.css'
+                \ --glob '!*.min.js'
+                \ --glob '!jquery.js'
+                \ --glob '!www/material/flash/*'
+                \ --glob '!tags'
+                \ --glob '!cgi-bin'
+                \ --glob '!opt'
+                \ --glob '!www/tegaki'
+                \ --glob '!www/tegaki_v2'
+                \"
   set grepformat=%f:%l:%c:%m,%f:%l:%m
 endif
-
-command! -bang -nargs=* Rg
-  \ call fzf#vim#grep(
-  \   'rg --column --line-number --no-heading --color=always --smart-case '.shellescape(<q-args>), 1,
-  \   <bang>0 ? fzf#vim#with_preview('up:60%')
-  \           : fzf#vim#with_preview('right:50%:hidden', '?'),
-  \   <bang>0)
 "}}}
 
 "auto command {{{
@@ -534,15 +582,6 @@ if filereadable(expand("$HOME/.vim/config/srl.vim"))
  source $HOME/.vim/config/srl.vim
  nnoremap <leader>esr :e $HOME/.vim/config/srl.vim<CR><CR>
 endif
-
-source $VIMRUNTIME/macros/matchit.vim
 "}}}
 
-"to enable termiguicolors in tmux
-let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
-let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
-
-let g:surround_{char2nr('q')} = "\\\"\r\\\""
-
 colorscheme skeletor
-" colorscheme palenight

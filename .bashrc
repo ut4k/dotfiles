@@ -42,14 +42,13 @@ export TERM="xterm-256color"
 export SCRIPTS=$HOME/scripts
 
 # bin path
-export PATH=$PATH:/usr/bin
-export PATH=$PATH:/usr/local/bin
 export PATH=$PATH:~/.config/composer/vendor/bin
 export PATH=$PATH:~/phpctags/phpctags.phar
 export PATH=$PATH:~/AppData/Local/hyper/app-2.0.0/resources/bin
 
 alias chromium="/usr/bin/chromium-browser --start-fullscreen --disable-session-crashed-bubble --disable-infobars"
-alias v="vim"
+alias vi="nvim"
+alias vim="nvim"
 alias e="emacs -nw"
 alias emacs="emacs -nw"
 alias playcd="sudo mplayer -cdrom-device /dev/sr0 cdda://"
