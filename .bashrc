@@ -53,6 +53,10 @@ alias e="emacs -nw"
 alias emacs="emacs -nw"
 alias playcd="sudo mplayer -cdrom-device /dev/sr0 cdda://"
 
+pandochtml () {
+    pandoc -s --self-contained -t html5 --syntax-definition=/d/pandoc_style/hi/bash.xml -c /d/pandoc_style/markdown10.css --metadata title=title --highlight-style=zenburn $1 -o out.html
+}
+
 RESET="\[\033[0m\]"
 RED="\[\033[0;31m\]"
 GREEN="\[\033[01;32m\]"
