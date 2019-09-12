@@ -61,7 +61,9 @@ PS_TIME="\[\033[\$((COLUMNS-10))G\] $RED[\t]"
 export PS1="\${PS_FILL}\[\033[0G\]${PS_INFO} ${PS_TIME}\n${RESET}\$ "
 export TMUX_TMPDIR=/tmp/tmp.tmux
 
-eval $(/c/weasel-pageant/weasel-pageant -r)
+if [[ $(uname -r) =~ Microsoft$ ]]; then
+    eval $(/c/weasel-pageant/weasel-pageant -r)
+fi
 
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
 

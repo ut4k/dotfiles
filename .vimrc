@@ -568,10 +568,10 @@ augroup END
 
 " push quickfix window always to the bottom
 autocmd FileType qf wincmd J
-"spacing for Haskell
 autocmd FileType haskell set tabstop=4|set shiftwidth=4|set expandtab
 autocmd FileType vim set tabstop=2|set shiftwidth=2|set expandtab
 autocmd FileType php set noexpandtab
+autocmd FileType sh set tabstop=2|set shiftwidth=2|set expandtab
 
 "phpは$をキーワードとしてあつかう wで $variable 全体がとれるように
 autocmd FileType php :setlocal iskeyword+=$
