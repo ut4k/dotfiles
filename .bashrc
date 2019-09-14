@@ -40,14 +40,22 @@ alias srans='~/srlscripts/answer.sh'
 export EDITOR='vim'
 export TERM="xterm-256color"
 export SCRIPTS=$HOME/scripts
+
+# bin path
 export PATH=$PATH:~/.config/composer/vendor/bin
 export PATH=$PATH:~/phpctags/phpctags.phar
+export PATH=$PATH:~/AppData/Local/hyper/app-2.0.0/resources/bin
 
 alias chromium="/usr/bin/chromium-browser --start-fullscreen --disable-session-crashed-bubble --disable-infobars"
-alias v="vim"
+alias vi="nvim"
+alias vim="nvim"
 alias e="emacs -nw"
 alias emacs="emacs -nw"
 alias playcd="sudo mplayer -cdrom-device /dev/sr0 cdda://"
+
+pandochtml () {
+    pandoc -s --self-contained -t html5 --syntax-definition=/d/pandoc_style/hi/bash.xml -c /d/pandoc_style/markdown10.css --metadata title=title --highlight-style=zenburn $1 -o out.html
+}
 
 RESET="\[\033[0m\]"
 RED="\[\033[0;31m\]"
@@ -63,6 +71,10 @@ export TMUX_TMPDIR=/tmp/tmp.tmux
 
 if [[ $(uname -r) =~ Microsoft$ ]]; then
     eval $(/c/weasel-pageant/weasel-pageant -r)
+fi
+
+if [ -f /usr/bin/fd ]; then
+	export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git --exclude google-api-php-client --exclude *.min.js --exclude tags --exclude .svn'
 fi
 
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
