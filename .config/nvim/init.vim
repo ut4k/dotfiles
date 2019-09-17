@@ -85,6 +85,25 @@ set statusline+=%1*
 set statusline+=%0*
 set statusline+=%5.l/%L
 "}}}
+
+"variable
+if executable("rg")
+  let &grepprg="rg
+                \ --vimgrep
+                \ --glob '!tags'
+                \ --glob '!.svn'
+                \ --glob '!*.min.css'
+                \ --glob '!*.min.js'
+                \ --glob '!jquery.js'
+                \ --glob '!www/material/flash/*'
+                \ --glob '!tags'
+                \ --glob '!cgi-bin'
+                \ --glob '!opt'
+                \ --glob '!www/tegaki'
+                \ --glob '!www/tegaki_v2'
+                \"
+endif
+
 "
 "mappings{{{
 let mapleader = ';' "Leader
@@ -92,7 +111,7 @@ let mapleader = ';' "Leader
 nnoremap <leader>s :w<CR>
 "xで削除したらブラッホールにぶちこむ
 nnoremap x "_x
-nnoremap gR :Grep "<cword>"<CR>
+nnoremap gR :Grepper-cword<CR>
 "次のバッファ
 nnoremap <silent> ]b :bnext<CR>
 "前のバッファ
@@ -152,7 +171,7 @@ nmap <silent> <C-j> <Plug>(ale_next_wrap)
 "compile c and run the bin
 nnoremap <F9> :call RunC()<CR>
 "prepare grep command
-nnoremap ff :call GrepConfirm()<CR>
+nnoremap ff :Grepper<CR>
 "+ buffer size vertically
 nnoremap <S-h> :vert resize +15<CR>
 "- buffer vertically
@@ -166,8 +185,8 @@ nnoremap <F10> :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> 
 \ . synIDattr(synID(line("."),col("."),0),"name") . "> lo<"
 \ . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">"<CR>
 "fzf
-nnoremap <c-space> :Files<CR>
-nnoremap <c-p> :Buffers<CR>
+nnoremap <c-space> :Buffers<CR>
+nnoremap <c-p> :Files<CR>
 nnoremap <c-h> :Hist<CR>
 "}}}
 
@@ -208,6 +227,7 @@ Plug 'drewtempelmeyer/palenight.vim'
 Plug 'skreek/skeletor.vim'
 Plug 'neoclide/coc.nvim', {'branch': 'release', 'do': { -> coc#util#install()}}
 Plug 'itchyny/lightline.vim'
+Plug 'mhinz/vim-grepper'
 call plug#end()
 "}}}
 
@@ -321,19 +341,21 @@ let g:lightline = {
       \   'currentfunction': 'CocCurrentFunction'
       \ },
       \ }
+"-----------------------------------------
+" Grepper
+"-----------------------------------------
+let g:grepper = {}
+let g:grepper.highlight = 1
+let g:grepper.tools = ['rg']
+let g:grepper.jump = 0
+"-----------------------------------------
 "}}}
 
 "functions{{{
 "今いるファンクション名でgrep
 function! GrepCurrentFunc()
 	let l:func_name= expand(tagbar#currenttag('%s',''))
-	execute 'Grep "'.l:func_name.'"'
-endfunction
-
-"今ひらいているファイル名でgrep
-function! GrepCurrentFile()
-	let l:file_name=expand('%:t')
-	echo l:file_name
+	execute 'Grepper-query "'.l:func_name.'"'
 endfunction
 
 "全角スペースをハイライト表示
@@ -444,14 +466,6 @@ function! LinterStatus() abort
     \)
 endfunction
 
-function! GrepConfirm()
-	:let inputtext = input("grep:")
-	if inputtext == ""
-	 return
-	endif
-	execute 'Grep "'.inputtext.'"'
-endfunction
-
 function! EnableStatusLineCurrentTag()
 	"left
 	set statusline=
@@ -494,51 +508,11 @@ function! MyFileformatInfo()
 endfunction
 "}}}
 
-"my ex command {{{
-"Grep
-command! -nargs=+ Grep execute 'silent !sh ~/scripts/greplogo.sh' | execute 'silent grep! <args>'| execute 'silent !clear' |:redraw! |:cfirst |:wincmd j
-autocmd QuickFixCmdPost *grep* cwindow
-if executable("rg")
-  let &grepprg="rg
-                \ --vimgrep
-                \ --no-heading
-                \ --line-number
-                \ --path-separator '/'
-                \ --glob '!tags'
-                \ --glob '!.svn'
-                \ --glob '!*.min.css'
-                \ --glob '!*.min.js'
-                \ --glob '!jquery.js'
-                \ --glob '!www/material/flash/*'
-                \ --glob '!ent/*'
-                \ --glob '!tags'
-                \ --glob '!cgi-bin'
-                \ --glob '!opt'
-                \ --glob '!www/tegaki'
-                \ --glob '!www/tegaki_v2'
-                \"
-  let &grepprg="rg
-                \ --vimgrep
-                \ --no-heading
-                \ --line-number
-                \ --path-separator '/'
-                \ --glob '!tags'
-                \ --glob '!.svn'
-                \ --glob '!*.min.css'
-                \ --glob '!*.min.js'
-                \ --glob '!jquery.js'
-                \ --glob '!www/material/flash/*'
-                \ --glob '!tags'
-                \ --glob '!cgi-bin'
-                \ --glob '!opt'
-                \ --glob '!www/tegaki'
-                \ --glob '!www/tegaki_v2'
-                \"
-  set grepformat=%f:%l:%c:%m,%f:%l:%m
-endif
+"define ex command {{{
 "}}}
 
 "auto command {{{
+" autocmd QuickFixCmdPost *grep* cwindow
 
 "phpシンタックス上書き
 augroup phpSyntaxOverride
@@ -585,3 +559,4 @@ endif
 "}}}
 
 colorscheme skeletor
+
