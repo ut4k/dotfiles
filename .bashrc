@@ -31,6 +31,7 @@ alias wifi='sudo wifi-menu'
 alias ls='ls --color=auto'
 alias ll='ls -l'
 alias work='cd /d/workspace'
+alias surala='cd /d/workspace/surala && vim'
 alias rc='source $HOME/.bashrc'
 alias vrc='vim $HOME/.bashrc'
 alias showpath="sed 's/:/\n/g' <<< \"$PATH\""
@@ -45,6 +46,7 @@ export SCRIPTS=$HOME/scripts
 export PATH=$PATH:~/.config/composer/vendor/bin
 export PATH=$PATH:~/phpctags/phpctags.phar
 export PATH=$PATH:~/AppData/Local/hyper/app-2.0.0/resources/bin
+export PATH=$PATH:~/.local/bin
 
 alias chromium="/usr/bin/chromium-browser --start-fullscreen --disable-session-crashed-bubble --disable-infobars"
 alias vi="nvim"
@@ -54,7 +56,8 @@ alias emacs="emacs -nw"
 alias playcd="sudo mplayer -cdrom-device /dev/sr0 cdda://"
 
 pandochtml () {
-    pandoc -s --self-contained -t html5 --syntax-definition=/d/pandoc_style/hi/bash.xml -c /d/pandoc_style/markdown10.css --metadata title=title --highlight-style=zenburn $1 -o out.html
+    f=$1
+    pandoc -s --self-contained -t html5 --syntax-definition=/d/pandoc_style/hi/bash.xml -c /d/pandoc_style/markdown10.css --metadata title=title --highlight-style=zenburn $1 -o ${f::-3}.html
 }
 
 RESET="\[\033[0m\]"

@@ -228,6 +228,7 @@ Plug 'skreek/skeletor.vim'
 Plug 'neoclide/coc.nvim', {'branch': 'release', 'do': { -> coc#util#install()}}
 Plug 'itchyny/lightline.vim'
 Plug 'mhinz/vim-grepper'
+Plug 'sainnhe/lightline_foobar.vim'
 call plug#end()
 "}}}
 
@@ -330,17 +331,28 @@ let g:surround_{char2nr('q')} = "\\\"\r\\\""
 "-----------------------------------------
 " lightline
 "-----------------------------------------
+function! GrepperStatus()
+ return grepper#statusline()
+endfunction
+
 let g:lightline = {
       \ 'colorscheme': 'wombat',
       \ 'active': {
-      \   'right': [ [ 'mylineinfo' ], [ 'myfileformatinfo', 'fileencoding', 'filetype' ] ],
+      \   'right': [ [ 'mylineinfo' ], [ 'grepperstatus', 'myfileformatinfo', 'fileencoding', 'filetype' ] ],
       \ },
       \ 'component_function': {
       \   'myfileformatinfo': "MyFileformatInfo",
       \   'mylineinfo': "MyLineinfo",
-      \   'currentfunction': 'CocCurrentFunction'
+      \   'currentfunction': 'CocCurrentFunction',
+      \   'grepperstatus': 'GrepperStatus'
       \ },
+      \ 'separator': { 'left': "\ue0b0", 'right': "" },
+      \ 'subseparator': { 'left': "\ue0b1", 'right': "\ue0b3" }
       \ }
+"-----------------------------------------
+" lightline_foobar
+"-----------------------------------------
+let g:lightline.colorscheme = 'palenight_alter'
 "-----------------------------------------
 " Grepper
 "-----------------------------------------
@@ -387,16 +399,10 @@ function! RunScript()
 endfunction
 
 function! PhpSyntaxOverride()
-
-  " hi! phpVarSelector guifg=#A685C3 guibg=#1E1E28 cterm=NONE
-  " hi! phpIdentifier guifg=#F0DD8A guibg=#1E1E28 cterm=NONE
-  " hi! phpMemberSelector ctermfg=121 ctermbg=NONE cterm=NONE
-
-  hi! phpVarSelector guifg=#A685C3 guibg=#1E1E28 cterm=NONE
-  hi! link phpIdentifier phpIdentifierSimply
+  hi! phpVarSelector guifg=#ffcb6b guibg=#1E1E28 cterm=NONE
+  hi! link phpIdentifier phpVarSelector
   hi! link phpDocTags phpDefine
   hi! link phpDocParam phpType
-  hi! link phpFunctions phpFunction
 endfunction
 
 "docrootからのパスで開く
@@ -558,5 +564,5 @@ if filereadable(expand("$HOME/.vim/config/srl.vim"))
 endif
 "}}}
 
-colorscheme skeletor
+colorscheme palenight
 
