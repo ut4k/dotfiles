@@ -72,11 +72,13 @@ PS_TIME="\[\033[\$((COLUMNS-10))G\] $RED[\t]"
 export PS1="\${PS_FILL}\[\033[0G\]${PS_INFO} ${PS_TIME}\n${RESET}\$ "
 export TMUX_TMPDIR=/tmp/tmp.tmux
 
+if [[ $(uname -r) =~ Microsoft$ ]]; then
+    eval $(/c/weasel-pageant/weasel-pageant -r)
+fi
+
 if [ -f /usr/bin/fd ]; then
 	export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git --exclude google-api-php-client --exclude *.min.js --exclude tags --exclude .svn'
 fi
-
-eval $(/c/weasel-pageant/weasel-pageant -rq)
 
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
 
