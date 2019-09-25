@@ -188,6 +188,9 @@ nnoremap <F10> :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> 
 nnoremap <c-space> :Buffers<CR>
 nnoremap <c-p> :Files<CR>
 nnoremap <c-h> :Hist<CR>
+" Use K to show documentation in preview window
+nnoremap <silent> K :call <SID>show_documentation()<CR>
+
 "}}}
 
 "abbrevations{{{
@@ -207,7 +210,7 @@ ia shb <c-r>="#!/bin/bash"<CR>
 "vim-plug{{{
 call plug#begin('~/.local/share/nvim/plugged')
 Plug 'StanAngeloff/php.vim'
-Plug 'alvan/vim-php-manual'
+" Plug 'alvan/vim-php-manual'
 Plug 'heavenshell/vim-jsdoc'
 Plug 'junegunn/vim-easy-align'
 Plug 'majutsushi/tagbar'
@@ -229,6 +232,7 @@ Plug 'neoclide/coc.nvim', {'branch': 'release', 'do': { -> coc#util#install()}}
 Plug 'itchyny/lightline.vim'
 Plug 'mhinz/vim-grepper'
 Plug 'sainnhe/lightline_foobar.vim'
+Plug 'triglav/vim-visual-increment'
 call plug#end()
 "}}}
 
@@ -512,6 +516,14 @@ endfunction
 function! MyFileformatInfo()
   return &ff=='mac'?'mac[CR]':&ff=='unix'?'unix[LF]':'dos[CRLF]'
 endfunction
+
+function! s:show_documentation()
+  if (index(['vim','help'], &filetype) >= 0)
+    execute 'h '.expand('<cword>')
+  else
+    call CocAction('doHover')
+  endif
+endfunction
 "}}}
 
 "define ex command {{{
@@ -548,12 +560,19 @@ autocmd FileType php set noexpandtab
 autocmd FileType php :setlocal iskeyword+=$
 
 " WSL ヤンクでクリップボードにコピー
-if system('uname -a | grep Microsoft') != ''
-  augroup myYank
-    autocmd!
-    autocmd TextYankPost * :call system('clip.exe', @")
-  augroup END
-endif
+" if system('uname -a | grep Microsoft') != ''
+"   augroup myYank
+"     autocmd!
+"     autocmd TextYankPost * :call system('clip.exe', @")
+"   augroup END
+" endif
+
+" nnoremap <silent>yy :.w !win32yank.exe -i<CR><CR>
+" vnoremap <silent>y :w !win32yank.exe -i<CR><CR>
+" nnoremap <silent>dd :.w !win32yank.exe -i<CR>dd
+" vnoremap <silent>d x:let pos = getpos(".")<CR>GpVG:w !win32yank.exe -i<CR>VGx:call setpos(".", pos)<CR>
+" nnoremap <silent>p :r !win32yank.exe -o<CR>
+" vnoremap <silent>p :r !win32yank.exe -o<CR>
 
 "}}}
 
@@ -565,4 +584,3 @@ endif
 "}}}
 
 colorscheme palenight
-
