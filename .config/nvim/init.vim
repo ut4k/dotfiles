@@ -64,6 +64,7 @@ endif
 "}}}
 
 "variable {{{
+let $PRJCONF = "$HOME/.vim/config/prj.vim"
 let $MYVIMRC2 = "$HOME/.vim/config/local.vim"
 
 if executable("rg")
@@ -577,6 +578,7 @@ endif
 "}}}
 
 "read external files {{{
+if filereadable(expand($PRJCONF)) | source $PRJCONF | endif
 if filereadable(expand($MYVIMRC2)) | source $MYVIMRC2 | endif
 "}}}
 

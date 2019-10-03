@@ -6,6 +6,7 @@
 !/.xbindkeysrc
 /.vim/plugged/*
 !/.vim/config/*
+/.vim/config/prj.vim
 !/.tmux.conf
 /.vim/.netrwhist 
 !/.zshrc

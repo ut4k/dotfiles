@@ -8,10 +8,7 @@ let g:winwd =   substitute(getcwd(), "^/mnt", "", "g")
 
 "エントリー側にいるか？
 let g:on_ent_dir = 0
-
-if winwd == $SURALA.'/ent'
-  let g:on_ent_dir = 1
-endif
+if winwd == $SURALA.'/ent' | let g:on_ent_dir = 1 | endif
 
 "エントリー用設定
 if g:on_ent_dir == 1
@@ -20,18 +17,6 @@ if g:on_ent_dir == 1
 else
   let g:ctrlp_custom_ignore = '\v[\/]\.(git|svn|ico|swp|jpg|jpeg|png|gif|swf|uranai_lib/templates_c|opt)$'
 endif
-
-let g:worker = "kimura"
-let g:studentid = "10193393"
-let g:teacherid = "5000000072"
-
-let g:current_project = ""
-"let g:current_project = "生徒画面TOP改修_ログ出力"
-"let g:current_project = "google連携"
-"let g:current_project = "すらら学習時間・クリアユニット数不正対策"
-"let g:current_project = "生徒画面TOP改修FB修正"
-"let g:current_project = "漢字学習コンテンツFB対応"
-let g:current_project = "Entry_理社対応開発"
 
 "-- mapping
 " nnoremap <leader>gct :!/usr/local/bin/ctags -R --exclude=.svn --exclude=node_modules --exclude=_test --exclude=smarty --exclude="*.min.*" --exclude=.git --langmap=php:.php.inc --PHP-kinds=+cf-v --exclude=material<CR>
@@ -58,20 +43,7 @@ nnoremap <leader>et :let @t = strftime("%Y\\/%m\\/%d")<CR>/<C-R>t<CR>
 nnoremap <leader>ey :let @t = strftime("%Y\\/%m\\/%d", localtime() - (60*60*24))<CR>/<C-R>t<CR>
 
 function! SvnCommitSrl()
-  let user_option = &guioptions
-  set guioptions-=v
-  let choice = confirm("コミットしますか？", "Yes\nNo")
-  if choice == 0
-    echo "コミットをキャンセルしました。"
-  elseif choice == "1"
-    " exec '! ~/scripts/svnlogging.sh'
-    exec '! ~/scripts/svnlogging.sh'
-  elseif choice == 2
-    echo "コミットをキャンセルしました。"
-  else
-    echo "エラー: "
-  endif
-  let &guioptions = user_option
+  call system("TortoiseProc.exe /command:commit /logmsg:'".g:worker."' /path:'D:/workspace/surala' /closeonend:3")
 endfunction
 
 "ライブラリ側を開く
