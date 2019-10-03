@@ -5,7 +5,8 @@
 !/.xprofile
 !/.xbindkeysrc
 /.vim/plugged/*
-/.vim/config/*
+!/.vim/config/*
+!/.tmux.conf
 /.vim/.netrwhist 
 !/.zshrc
 tags

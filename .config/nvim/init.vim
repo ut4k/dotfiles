@@ -1,5 +1,3 @@
-autocmd ColorScheme * highlight User1 ctermbg=black guifg=lightgreen cterm=bold gui=bold
-
 "basic{{{
 scriptencoding utf-8
 set encoding=utf-8
@@ -24,8 +22,7 @@ set clipboard=unnamed
 
 set autoread
 set cursorline
-set foldmethod=marker
-set foldlevel=99
+" set foldlevel=99
 set hlsearch
 set laststatus=2
 set lazyredraw
@@ -66,27 +63,9 @@ if &diff                             " only for diff mode/vimdiff
 endif
 "}}}
 
-"status line{{{
-"left
-set statusline=
-set statusline+=%t
-set statusline+=%r%w
-set statusline+=%1*
-set statusline+=%m
-set statusline+=%0*
-"right
-set statusline+=%=
-set statusline+=%0*
-set statusline+=%1*
-set statusline+=%0*
-set statusline+=[%{&fileencoding}]
-set statusline+=[%{&ff=='mac'?'CR':&ff=='unix'?'LF':'CRLF'}]
-set statusline+=%1*
-set statusline+=%0*
-set statusline+=%5.l/%L
-"}}}
+"variable {{{
+let $MYVIMRC2 = "$HOME/.vim/config/local.vim"
 
-"variable
 if executable("rg")
   let &grepprg="rg
                 \ --vimgrep
@@ -103,8 +82,28 @@ if executable("rg")
                 \ --glob '!www/tegaki_v2'
                 \"
 endif
+"}}}
 
-"
+"status line{{{
+"left
+" set statusline=
+" set statusline+=%t
+" set statusline+=%r%w
+" set statusline+=%1*
+" set statusline+=%m
+" set statusline+=%0*
+"right
+" set statusline+=%=
+" set statusline+=%0*
+" set statusline+=%1*
+" set statusline+=%0*
+" set statusline+=[%{&fileencoding}]
+" set statusline+=[%{&ff=='mac'?'CR':&ff=='unix'?'LF':'CRLF'}]
+" set statusline+=%1*
+" set statusline+=%0*
+" set statusline+=%5.l/%L
+"}}}
+
 "mappings{{{
 let mapleader = ';' "Leader
 "save
@@ -125,7 +124,9 @@ nnoremap <leader>ee :call QFixToggle()<CR>:wincmd=<CR><CR>
 "no higlight
 nnoremap <F3> :noh<CR><CR>
 "vimrcを縦スプリットで開く
-nnoremap <leader>ev :e $MYVIMRC<CR><CR>
+nnoremap <leader>ev :vs $MYVIMRC<CR><CR>
+"~/.tmux.confを縦スプリットで開く
+nnoremap <leader>tc :vs $HOME/.tmux.conf<CR><CR>
 "vimrcを再読み込みする
 nnoremap <F12> :source $MYVIMRC<CR>:call PhpSyntaxOverride()<CR>:call LightlineReload()<CR><CR>
 "Tagbarトグル tagbar pop
@@ -210,7 +211,6 @@ ia shb <c-r>="#!/bin/bash"<CR>
 "vim-plug{{{
 call plug#begin('~/.local/share/nvim/plugged')
 Plug 'StanAngeloff/php.vim'
-" Plug 'alvan/vim-php-manual'
 Plug 'heavenshell/vim-jsdoc'
 Plug 'junegunn/vim-easy-align'
 Plug 'majutsushi/tagbar'
@@ -230,9 +230,12 @@ Plug 'drewtempelmeyer/palenight.vim'
 Plug 'skreek/skeletor.vim'
 Plug 'neoclide/coc.nvim', {'branch': 'release', 'do': { -> coc#util#install()}}
 Plug 'itchyny/lightline.vim'
-Plug 'mhinz/vim-grepper'
 Plug 'sainnhe/lightline_foobar.vim'
+Plug 'mhinz/vim-grepper'
 Plug 'triglav/vim-visual-increment'
+Plug 'vim-python/python-syntax'
+Plug 'SirVer/ultisnips'
+Plug 'honza/vim-snippets'
 call plug#end()
 "}}}
 
@@ -266,7 +269,7 @@ let g:tagbar_autopreview = 0
 let g:tagbar_iconchars = ['▸', '▾']
 let g:tagbar_silent = 1
 let g:tagbar_left = 0
-let g:tagbar_width = 55
+let g:tagbar_width = 30
 let g:tagbar_type_php  = {
     \ 'kinds'     : [
         \ 'i:interfaces',
@@ -299,7 +302,7 @@ let g:php_baselib = 1
 let g:php_parent_error_close = 0
 let g:php_parent_error_open = 0
 let g:php_sql_query = 1
-let g:php_folding = 1
+let g:php_folding = 0
 let g:php_sql_heredoc = 0
 let g:php_sql_nowdoc = 0
 "----------------------------------------
@@ -365,6 +368,16 @@ let g:grepper.highlight = 1
 let g:grepper.tools = ['rg']
 let g:grepper.jump = 0
 "-----------------------------------------
+" UltiSnips
+"-----------------------------------------
+" Trigger configuration. Do not use <tab> if you use https://github.com/Valloric/YouCompleteMe.
+let g:UltiSnipsExpandTrigger="<tab>"
+let g:UltiSnipsJumpForwardTrigger="<c-b>"
+let g:UltiSnipsJumpBackwardTrigger="<c-z>"
+" If you want :UltiSnipsEdit to split your window.
+let g:UltiSnipsEditSplit="vertical"
+let g:UltiSnipsSnippetDirectories=[$HOME . '/.vim/config/snippets']
+"-----------------------------------------
 "}}}
 
 "functions{{{
@@ -387,7 +400,6 @@ if has('syntax')
     augroup END
     call ZenkakuSpace()
 endif
-"}}}
 
 "現在のファイルをインタプリタで実行
 function! RunScript()
@@ -424,20 +436,20 @@ function! GotoFileFromDocRoot()
 endfunction
 
 function! VarDumpPhpVariable()
-  let @" = "var_dump(" . expand('<cword>') . "); //########## TODO kimura ".strftime("%Y/%m/%d")." ##########"
+  let @* = "var_dump(" . expand('<cword>') . "); //########## TODO kimura ".strftime("%Y/%m/%d")." ##########"
 endfunction
 
 function! PrePhpVariable()
-  let @" = "pre(" . expand('<cword>') . "); //########## TODO kimura ".strftime("%Y/%m/%d")." ##########"
+  let @* = "pre(" . expand('<cword>') . "); //########## TODO kimura ".strftime("%Y/%m/%d")." ##########"
 endfunction
 
 function! ClogVar()
-  let @" = "console.log(" . expand('<cword>') . "); //########## TODO kimura ".strftime("%Y/%m/%d")." ##########"
+  let @* = "console.log(" . expand('<cword>') . "); //########## TODO kimura ".strftime("%Y/%m/%d")." ##########"
 endfunction
 
 function! QFixToggle()
   let _ = winnr('$')
-  cclose
+    cclose
   if _ == winnr('$')
     cwindow
   endif
@@ -526,12 +538,7 @@ function! s:show_documentation()
 endfunction
 "}}}
 
-"define ex command {{{
-"}}}
-
 "auto command {{{
-" autocmd QuickFixCmdPost *grep* cwindow
-
 "phpシンタックス上書き
 augroup phpSyntaxOverride
   autocmd!
@@ -552,6 +559,7 @@ augroup END
 
 " push quickfix window always to the bottom
 autocmd FileType qf wincmd J
+
 autocmd FileType haskell set tabstop=4|set shiftwidth=4|set expandtab
 autocmd FileType vim set tabstop=2|set shiftwidth=2|set expandtab
 autocmd FileType php set noexpandtab
@@ -560,27 +568,17 @@ autocmd FileType php set noexpandtab
 autocmd FileType php :setlocal iskeyword+=$
 
 " WSL ヤンクでクリップボードにコピー
-" if system('uname -a | grep Microsoft') != ''
-"   augroup myYank
-"     autocmd!
-"     autocmd TextYankPost * :call system('clip.exe', @")
-"   augroup END
-" endif
-
-" nnoremap <silent>yy :.w !win32yank.exe -i<CR><CR>
-" vnoremap <silent>y :w !win32yank.exe -i<CR><CR>
-" nnoremap <silent>dd :.w !win32yank.exe -i<CR>dd
-" vnoremap <silent>d x:let pos = getpos(".")<CR>GpVG:w !win32yank.exe -i<CR>VGx:call setpos(".", pos)<CR>
-" nnoremap <silent>p :r !win32yank.exe -o<CR>
-" vnoremap <silent>p :r !win32yank.exe -o<CR>
-
-"}}}
-
-"read external files {{{
-if filereadable(expand("$HOME/.vim/config/srl.vim"))
- source $HOME/.vim/config/srl.vim
- nnoremap <leader>esr :e $HOME/.vim/config/srl.vim<CR><CR>
+if system('uname -a | grep Microsoft') != ''
+  augroup myYank
+    autocmd!
+    autocmd TextYankPost * :call system('clip.exe', @")
+  augroup END
 endif
 "}}}
 
+"read external files {{{
+if filereadable(expand($MYVIMRC2)) | source $MYVIMRC2 | endif
+"}}}
+
 colorscheme palenight
+set foldmethod=marker
