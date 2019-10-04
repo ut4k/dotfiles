@@ -42,6 +42,7 @@ set splitright
 set tabstop=2
 set title
 set titlestring=%{expand('%:p')}
+set tags=tags
 
 "ワイルドカードで検索除外
 set wildignore+=*\\.git\\*,*\\.hg\\*,*\\.svn\\*
@@ -66,22 +67,11 @@ endif
 "variable {{{
 let $PRJCONF = "$HOME/.vim/config/prj.vim"
 let $MYVIMRC2 = "$HOME/.vim/config/local.vim"
+let $TMUXCONF = "$HOME/.tmux.conf"
+let $REPORTFILE = "$HOME/notes/mod_report.txt"
 
 if executable("rg")
-  let &grepprg="rg
-                \ --vimgrep
-                \ --glob '!tags'
-                \ --glob '!.svn'
-                \ --glob '!*.min.css'
-                \ --glob '!*.min.js'
-                \ --glob '!jquery.js'
-                \ --glob '!www/material/flash/*'
-                \ --glob '!tags'
-                \ --glob '!cgi-bin'
-                \ --glob '!opt'
-                \ --glob '!www/tegaki'
-                \ --glob '!www/tegaki_v2'
-                \"
+  let &grepprg='rg --vimgrep -H --no-heading --ignore-file $HOME/.rg/ignore'
 endif
 "}}}
 
@@ -127,9 +117,11 @@ nnoremap <F3> :noh<CR><CR>
 "vimrcを縦スプリットで開く
 nnoremap <leader>ev :vs $MYVIMRC<CR><CR>
 "~/.tmux.confを縦スプリットで開く
-nnoremap <leader>tc :vs $HOME/.tmux.conf<CR><CR>
+nnoremap <leader>tc :vs $TMUXCONF<CR><CR>
 "vimrcを再読み込みする
 nnoremap <F12> :source $MYVIMRC<CR>:call PhpSyntaxOverride()<CR>:call LightlineReload()<CR><CR>
+"mod_report.txtを縦スプリットで開く
+nnoremap <leader>mf :tabe $REPORTFILE<CR><CR>
 "Tagbarトグル tagbar pop
 nnoremap tp :TagbarToggle<CR>
 "currenttagコピー
@@ -161,7 +153,7 @@ nnoremap vr :call VarDumpPhpVariable()<CR>
 "pre($phpvariable);
 nnoremap vp :call PrePhpVariable()<CR>
 "console log js variable
-nnoremap cvr :call ClogVar()<CR>
+nnoremap cv :call ClogVar()<CR>
 "disable built-in help(hacky){{{
 nmap <F1> :echo<CR>
 imap <F1> <C-o>:echo<CR>
@@ -192,6 +184,9 @@ nnoremap <c-p> :Files<CR>
 nnoremap <c-h> :Hist<CR>
 " Use K to show documentation in preview window
 nnoremap <silent> K :call <SID>show_documentation()<CR>
+nnoremap <leader>gct :!ctags<CR>
+nnoremap <leader>gpt :!php ~/phpctags/phpctags.phar -R --kinds=dficpmnt<CR>
+nnoremap <leader>fn :let @+=expand("%")<CR>
 
 "}}}
 
@@ -365,9 +360,18 @@ let g:lightline.colorscheme = 'palenight_alter'
 " Grepper
 "-----------------------------------------
 let g:grepper = {}
-let g:grepper.highlight = 1
+" let g:grepper.rg = { 'grepprg':'rg -- --ignore-file'.g:rgopts }
+let g:grepper.rg = {
+    \'grepprg': 'rg --vimgrep --ignore-file $HOME/.rg/ignore',
+    \ 'grepformat': '%f:%l:%m',
+    \ 'escape':     '\^$.*[]',
+    \ }
+
 let g:grepper.tools = ['rg']
+let g:grepper.highlight = 1
 let g:grepper.jump = 0
+let g:grepper.prompt_text = '$t> '
+let g:grepper.switch = 0
 "-----------------------------------------
 " UltiSnips
 "-----------------------------------------
@@ -431,7 +435,7 @@ function! GotoFileFromDocRoot()
         execute 'edit ' . filepath
     else
         echohl ErrorMsg
-        echo 'ファイルが見つかりませんでした! ' . filename
+        echo 'ファイルが見つかりませんでした!  ---> ' . filename
         echohl None
     endif
 endfunction
@@ -445,7 +449,7 @@ function! PrePhpVariable()
 endfunction
 
 function! ClogVar()
-  let @* = "console.log(" . expand('<cword>') . "); //########## TODO kimura ".strftime("%Y/%m/%d")." ##########"
+  let @* = "console.log(\"" . expand('<cword>') . ":\", " . expand('<cword>') . "); //########## TODO kimura ".strftime("%Y/%m/%d")." ##########"
 endfunction
 
 function! QFixToggle()
@@ -584,3 +588,5 @@ if filereadable(expand($MYVIMRC2)) | source $MYVIMRC2 | endif
 
 colorscheme palenight
 set foldmethod=marker
+
+nnoremap <Leader>F :FZF -q <C-R><C-W><CR>

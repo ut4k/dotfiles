@@ -1,8 +1,6 @@
-"environment variables{{{
 let $DESKTOP   = "C:/Users/kimura.AZET/Desktop"
 let $WORKSPACE = "/d/workspace"
 let $SURALA    = "/d/workspace/surala"
-"}}}
 
 let g:winwd =   substitute(getcwd(), "^/mnt", "", "g")
 
@@ -18,12 +16,6 @@ else
   let g:ctrlp_custom_ignore = '\v[\/]\.(git|svn|ico|swp|jpg|jpeg|png|gif|swf|uranai_lib/templates_c|opt)$'
 endif
 
-"-- mapping
-" nnoremap <leader>gct :!/usr/local/bin/ctags -R --exclude=.svn --exclude=node_modules --exclude=_test --exclude=smarty --exclude="*.min.*" --exclude=.git --langmap=php:.php.inc --PHP-kinds=+cf-v --exclude=material<CR>
-nnoremap <leader>gct :!/usr/local/bin/ctags -R<CR>
-nnoremap <leader>gpt :!php ~/phpctags/phpctags.phar -R --kinds=dficpmnt<CR>
-nnoremap <leader>mf :e ~/notes/mod_report.txt<CR>
-nnoremap <leader>fn :let @"=expand("%")<CR>
 
 "コミットポップアップ
 noremap cm :call SvnCommitSrl()<CR>
@@ -32,7 +24,7 @@ nnoremap <leader>ol :call OpenLibSrl()<CR>
 "入り口プログラムを開く openentry
 nnoremap <leader>oe :call OpenEntrySrl()<CR>
 "TODOをgrep
-nnoremap <leader>gtd :GrepperRg "(debug\|TODO).*kimura"
+nnoremap <leader>gtd :GrepperRg "(debug\|TODO).*kimura"<CR>
 "find debug comments
 nnoremap <leader>fd /debug\\|TODO\s*\(start\\|end\)*\s*kimura<CR>
 "find my comments
@@ -77,3 +69,9 @@ function! OpenEntrySrl()
   let l:entrypath = l:path1 . "/" . l:path2 . "/" . l:plist[2]
   execute 'edit' l:entrypath
 endfunction
+
+"tplでもjs構文でハイライトする
+augroup hiAsJs
+  autocmd!
+  autocmd BufRead *_js.tpl set ft=javascript 
+augroup END

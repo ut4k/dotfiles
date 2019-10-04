@@ -38,7 +38,7 @@ alias vim="nvim"
 alias e="emacs -nw"
 alias emacs="emacs -nw"
 alias playcd="sudo mplayer -cdrom-device /dev/sr0 cdda://"
-alias ctags="/usr/local/bin/ctags --options=$HOME/.ctags"
+alias ctags="/usr/local/bin/ctags -R --options=$HOME/.ctags"
 
 #run weasel-pageant on WSL
 if [[ $(uname -r) =~ Microsoft$ ]]; then eval $(/c/weasel-pageant/weasel-pageant -rq); fi

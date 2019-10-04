@@ -1,0 +1,13 @@
+tags
+.svn
+*.min.css
+*.min.js
+jquery.js
+www/material/flash/*
+cgi-bin
+opt
+www/tegaki
+www/tegaki_v2
+
+
+
