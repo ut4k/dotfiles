@@ -25,7 +25,7 @@ set cursorline
 " set foldlevel=99
 set hlsearch
 set laststatus=2
-set lazyredraw
+" set lazyredraw
 set nobackup
 set noruler
 set noswapfile
@@ -76,23 +76,22 @@ endif
 "}}}
 
 "status line{{{
-"left
-" set statusline=
-" set statusline+=%t
-" set statusline+=%r%w
-" set statusline+=%1*
-" set statusline+=%m
-" set statusline+=%0*
-"right
-" set statusline+=%=
-" set statusline+=%0*
-" set statusline+=%1*
-" set statusline+=%0*
-" set statusline+=[%{&fileencoding}]
-" set statusline+=[%{&ff=='mac'?'CR':&ff=='unix'?'LF':'CRLF'}]
-" set statusline+=%1*
-" set statusline+=%0*
-" set statusline+=%5.l/%L
+set statusline=
+set statusline+=%t
+set statusline+=%r%w
+set statusline+=%1*
+set statusline+=%m
+set statusline+=%0*
+
+set statusline+=%=
+set statusline+=%0*
+set statusline+=%1*
+set statusline+=%0*
+set statusline+=[%{&fileencoding}]
+set statusline+=[%{&ff=='mac'?'CR':&ff=='unix'?'LF':'CRLF'}]
+set statusline+=%1*
+set statusline+=%0*
+set statusline+=%5.l/%L
 "}}}
 
 "mappings{{{
@@ -119,9 +118,9 @@ nnoremap <leader>ev :vs $MYVIMRC<CR><CR>
 "~/.tmux.confを縦スプリットで開く
 nnoremap <leader>tc :vs $TMUXCONF<CR><CR>
 "vimrcを再読み込みする
-nnoremap <F12> :source $MYVIMRC<CR>:call PhpSyntaxOverride()<CR>:call LightlineReload()<CR><CR>
+nnoremap <F12> :source $MYVIMRC<CR>:call PhpSyntaxOverride()<CR><CR>
 "mod_report.txtを縦スプリットで開く
-nnoremap <leader>mf :tabe $REPORTFILE<CR><CR>
+nnoremap <leader>mf :call system('tmux new-window')<CR><CR>
 "Tagbarトグル tagbar pop
 nnoremap tp :TagbarToggle<CR>
 "currenttagコピー
@@ -148,6 +147,7 @@ vnoremap p !sed 's/^/\//'<CR>
 nnoremap <leader>x cw<c-r>0
 "go to abs path file
 nnoremap gaf :<C-u>call GotoFileFromDocRoot()<CR>
+nnoremap gef :<C-u>call GotoEntFile()<CR>
 "var_dump($phpvariable);
 nnoremap vr :call VarDumpPhpVariable()<CR>
 "pre($phpvariable);
@@ -184,9 +184,11 @@ nnoremap <c-p> :Files<CR>
 nnoremap <c-h> :Hist<CR>
 " Use K to show documentation in preview window
 nnoremap <silent> K :call <SID>show_documentation()<CR>
-nnoremap <leader>gct :!ctags<CR>
+nnoremap <leader>gct :!/usr/local/bin/ctags -R --options=$HOME/.ctags<CR>
+
 nnoremap <leader>gpt :!php ~/phpctags/phpctags.phar -R --kinds=dficpmnt<CR>
 nnoremap <leader>fn :let @+=expand("%")<CR>
+nnoremap <leader>bk :call CopyToDesktop()<CR>
 
 "}}}
 
@@ -225,13 +227,14 @@ Plug 'junegunn/fzf.vim'
 Plug 'drewtempelmeyer/palenight.vim'
 Plug 'skreek/skeletor.vim'
 Plug 'neoclide/coc.nvim', {'branch': 'release', 'do': { -> coc#util#install()}}
-Plug 'itchyny/lightline.vim'
-Plug 'sainnhe/lightline_foobar.vim'
 Plug 'mhinz/vim-grepper'
 Plug 'triglav/vim-visual-increment'
 Plug 'vim-python/python-syntax'
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
+Plug 'sheerun/vim-polyglot'
+Plug 'scrooloose/nerdtree'
+Plug 'ryanoasis/vim-devicons'
 call plug#end()
 "}}}
 
@@ -360,7 +363,6 @@ let g:lightline.colorscheme = 'palenight_alter'
 " Grepper
 "-----------------------------------------
 let g:grepper = {}
-" let g:grepper.rg = { 'grepprg':'rg -- --ignore-file'.g:rgopts }
 let g:grepper.rg = {
     \'grepprg': 'rg --vimgrep --ignore-file $HOME/.rg/ignore',
     \ 'grepformat': '%f:%l:%m',
@@ -371,7 +373,9 @@ let g:grepper.tools = ['rg']
 let g:grepper.highlight = 1
 let g:grepper.jump = 0
 let g:grepper.prompt_text = '$t> '
+let g:grepper.prompt_quote = 1
 let g:grepper.switch = 0
+
 "-----------------------------------------
 " UltiSnips
 "-----------------------------------------
@@ -431,6 +435,18 @@ function! GotoFileFromDocRoot()
     let root_dir = getcwd() . "/"
     let filename = getline('.')
     let filepath = root_dir . filename
+    if filereadable(filepath)
+        execute 'edit ' . filepath
+    else
+        echohl ErrorMsg
+        echo 'ファイルが見つかりませんでした!  ---> ' . filename
+        echohl None
+    endif
+endfunction
+
+function! GotoEntFile()
+    let filename = getline('.')
+    let filepath = "/d/workspace/surala" . filename
     if filereadable(filepath)
         execute 'edit ' . filepath
     else
@@ -500,6 +516,7 @@ function! EnableStatusLineCurrentTag()
 	set statusline+=%r%w
 	set statusline+=%1*
 	set statusline+=%m
+  set statusline+=[%{grepper#statusline()}]
 	set statusline+=%0*
 	"right
 	set statusline+=%=
@@ -540,6 +557,12 @@ function! s:show_documentation()
   else
     call CocAction('doHover')
   endif
+endfunction
+
+function! CopyToDesktop()
+  let l:cmd = "cp ".expand("%")." /c/Users/kimura.AZET/Desktop/".expand("%:t").".bak.".strftime("%Y%m%d")
+  echo l:cmd
+  call system(l:cmd)
 endfunction
 "}}}
 
@@ -590,3 +613,5 @@ colorscheme palenight
 set foldmethod=marker
 
 nnoremap <Leader>F :FZF -q <C-R><C-W><CR>
+
+autocmd ColorScheme * highlight User1 guifg=#ffcb6b guibg=0 gui=bold

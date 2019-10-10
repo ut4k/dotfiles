@@ -24,15 +24,14 @@ fi
 alias ~='cd $HOME'
 alias wifi='sudo wifi-menu'
 alias ll='ls -l'
-alias work='(cd /d/workspace; tmux)'
 alias surala='cd /d/workspace/surala && vim'
 alias rc='source $HOME/.bashrc'
 alias vrc='vim $HOME/.bashrc'
 alias showpath="sed 's/:/\n/g' <<< \"$PATH\""
 alias mux='tmuxinator'
+alias work='tmuxinator start work'
 alias srans='~/srlscripts/answer.sh'
 alias srans2='~/srlscripts/answer2.sh'
-alias chromium="/usr/bin/chromium-browser --start-fullscreen --disable-session-crashed-bubble --disable-infobars"
 alias vi="nvim"
 alias vim="nvim"
 alias e="emacs -nw"
@@ -53,6 +52,7 @@ PERL_MM_OPT="INSTALL_BASE=/home/yuta/perl5"; export PERL_MM_OPT;
 
 pandochtml () {
     f=$1
-    pandoc -s --self-contained -t html5 --syntax-definition=/d/pandoc_style/hi/bash.xml -c /d/pandoc_style/markdown10.css --metadata title=' ' --highlight-style=tango $1 -o ${f::-3}.html
+    pandoc -s --self-contained -t html5 -c "$HOME/.config/pandoc/markdown-css-themes/markdown10.css" --metadata title=' ' --highlight-style=tango $1 -o ${f::-3}.html
+    # pandoc --include-in-header="$HOME/.config/pandoc/hljs.html" -t html5 -c "$HOME/.config/pandoc/markdown-css-themes/markdown10.css" --metadata title=' ' --no-highlight $1 -o ${f::-3}.html
 }
 

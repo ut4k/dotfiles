@@ -8,15 +8,6 @@ let g:winwd =   substitute(getcwd(), "^/mnt", "", "g")
 let g:on_ent_dir = 0
 if winwd == $SURALA.'/ent' | let g:on_ent_dir = 1 | endif
 
-"エントリー用設定
-if g:on_ent_dir == 1
-  let g:ctrlp_custom_ignore = '\v[\/]\.(git|svn|ico|swp|jpg|jpeg|png|gif|www|_www|opt)$'
-  "コア用設定
-else
-  let g:ctrlp_custom_ignore = '\v[\/]\.(git|svn|ico|swp|jpg|jpeg|png|gif|swf|uranai_lib/templates_c|opt)$'
-endif
-
-
 "コミットポップアップ
 noremap cm :call SvnCommitSrl()<CR>
 "ライブラリを開く openlib
