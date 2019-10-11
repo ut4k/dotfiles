@@ -1,4 +1,7 @@
 "basic{{{
+autocmd ColorScheme * highlight User1 guifg=#ffcb6b guibg=0 gui=bold
+autocmd ColorScheme * highlight User2 guifg=#c792ea guibg=0
+
 scriptencoding utf-8
 set encoding=utf-8
 
@@ -9,11 +12,21 @@ set ttyfast
 set updatetime=300
 set shortmess+=c
 set signcolumn=yes
+" 保存されていないファイルがあるときでも別のファイルを開くことが出来る
+set hidden
+"global substitute by default ( /g )
+set gdefault
 
 set ignorecase
+set smartcase
 set list
 set listchars=tab:»\ ,precedes:«,extends:»,eol:↲
 set ambiwidth=double
+"行間をでシームレスに移動する
+set whichwrap+=h,l,<,>,[,],b,s
+
+"カーソルを常に画面の中央に表示させる
+" set scrolloff=999
 
 set mouse=a
 set ttimeoutlen=10
@@ -22,10 +35,10 @@ set clipboard=unnamed
 
 set autoread
 set cursorline
-" set foldlevel=99
+set foldlevel=99
 set hlsearch
 set laststatus=2
-" set lazyredraw
+set lazyredraw
 set nobackup
 set noruler
 set noswapfile
@@ -43,6 +56,10 @@ set tabstop=2
 set title
 set titlestring=%{expand('%:p')}
 set tags=tags
+
+"todo
+" syntax sync minlines=20000
+set redrawtime=4000
 
 "ワイルドカードで検索除外
 set wildignore+=*\\.git\\*,*\\.hg\\*,*\\.svn\\*
@@ -69,6 +86,7 @@ let $PRJCONF = "$HOME/.vim/config/prj.vim"
 let $MYVIMRC2 = "$HOME/.vim/config/local.vim"
 let $TMUXCONF = "$HOME/.tmux.conf"
 let $REPORTFILE = "$HOME/notes/mod_report.txt"
+let $SNIPPETDIR = "$HOME/.vim/config/snippets/"
 
 if executable("rg")
   let &grepprg='rg --vimgrep -H --no-heading --ignore-file $HOME/.rg/ignore'
@@ -77,15 +95,23 @@ endif
 
 "status line{{{
 set statusline=
+set statusline+=%2*
 set statusline+=%t
+set statusline+=%0*
 set statusline+=%r%w
 set statusline+=%1*
 set statusline+=%m
+"readonly?
+set statusline+=%r
+"help?
+set statusline+=%h
 set statusline+=%0*
 
 set statusline+=%=
 set statusline+=%0*
 set statusline+=%1*
+set statusline+=%{grepper#statusline()}
+"set statusline+=%{tagbar#currenttag('%s','')}
 set statusline+=%0*
 set statusline+=[%{&fileencoding}]
 set statusline+=[%{&ff=='mac'?'CR':&ff=='unix'?'LF':'CRLF'}]
@@ -100,7 +126,8 @@ let mapleader = ';' "Leader
 nnoremap <leader>s :w<CR>
 "xで削除したらブラッホールにぶちこむ
 nnoremap x "_x
-nnoremap gR :Grepper-cword<CR>
+nnoremap gR :Grepper-query<CR>
+" nnoremap gR :Grepper-query expand("<cword>")
 "次のバッファ
 nnoremap <silent> ]b :bnext<CR>
 "前のバッファ
@@ -235,6 +262,7 @@ Plug 'honza/vim-snippets'
 Plug 'sheerun/vim-polyglot'
 Plug 'scrooloose/nerdtree'
 Plug 'ryanoasis/vim-devicons'
+Plug 'markonm/traces.vim'
 call plug#end()
 "}}}
 
@@ -268,7 +296,7 @@ let g:tagbar_autopreview = 0
 let g:tagbar_iconchars = ['▸', '▾']
 let g:tagbar_silent = 1
 let g:tagbar_left = 0
-let g:tagbar_width = 30
+let g:tagbar_width = 36
 let g:tagbar_type_php  = {
     \ 'kinds'     : [
         \ 'i:interfaces',
@@ -372,8 +400,8 @@ let g:grepper.rg = {
 let g:grepper.tools = ['rg']
 let g:grepper.highlight = 1
 let g:grepper.jump = 0
-let g:grepper.prompt_text = '$t> '
-let g:grepper.prompt_quote = 1
+let g:grepper.prompt_text = '$c> '
+let g:grepper.prompt_quote = 0
 let g:grepper.switch = 0
 
 "-----------------------------------------
@@ -509,28 +537,6 @@ function! LinterStatus() abort
     \)
 endfunction
 
-function! EnableStatusLineCurrentTag()
-	"left
-	set statusline=
-	set statusline+=%t
-	set statusline+=%r%w
-	set statusline+=%1*
-	set statusline+=%m
-  set statusline+=[%{grepper#statusline()}]
-	set statusline+=%0*
-	"right
-	set statusline+=%=
-	set statusline+=%0*
-	set statusline+=%1*
-	set statusline+=%{tagbar#currenttag('%s','')}
-	set statusline+=%0*
-	set statusline+=[%{&fileencoding}]
-	set statusline+=[%{&ff=='mac'?'CR':&ff=='unix'?'LF':'CRLF'}]
-	set statusline+=%1*
-	set statusline+=%0*
-	set statusline+=%5.l/%L
-endfunction
-
 command! LightlineReload call LightlineReload()
 
 function! LightlineReload()
@@ -564,6 +570,13 @@ function! CopyToDesktop()
   echo l:cmd
   call system(l:cmd)
 endfunction
+
+function! FJumpUp()
+ normal [[
+ call histdel("/")
+ " call histdel("search", -1)
+endfunction
+
 "}}}
 
 "auto command {{{
@@ -611,7 +624,7 @@ if filereadable(expand($MYVIMRC2)) | source $MYVIMRC2 | endif
 
 colorscheme palenight
 set foldmethod=marker
+"auto open folds
+autocmd FileType php normal zR
 
 nnoremap <Leader>F :FZF -q <C-R><C-W><CR>
-
-autocmd ColorScheme * highlight User1 guifg=#ffcb6b guibg=0 gui=bold
