@@ -16,7 +16,6 @@ set signcolumn=yes
 set hidden
 "global substitute by default ( /g )
 set gdefault
-
 set ignorecase
 set smartcase
 set list
@@ -24,9 +23,6 @@ set listchars=tab:»\ ,precedes:«,extends:»,eol:↲
 set ambiwidth=double
 "行間をでシームレスに移動する
 set whichwrap+=h,l,<,>,[,],b,s
-
-"カーソルを常に画面の中央に表示させる
-" set scrolloff=999
 
 set mouse=a
 set ttimeoutlen=10
@@ -96,7 +92,7 @@ endif
 "status line{{{
 set statusline=
 set statusline+=%2*
-set statusline+=%t
+set statusline+=%{expand('%:.')}
 set statusline+=%0*
 set statusline+=%r%w
 set statusline+=%1*
@@ -212,8 +208,6 @@ nnoremap <c-h> :Hist<CR>
 " Use K to show documentation in preview window
 nnoremap <silent> K :call <SID>show_documentation()<CR>
 nnoremap <leader>gct :!/usr/local/bin/ctags -R --options=$HOME/.ctags<CR>
-
-nnoremap <leader>gpt :!php ~/phpctags/phpctags.phar -R --kinds=dficpmnt<CR>
 nnoremap <leader>fn :let @+=expand("%")<CR>
 nnoremap <leader>bk :call CopyToDesktop()<CR>
 
@@ -226,11 +220,6 @@ ia hsc <c-r>="htmlspecialchars("<CR>
 ia vd <c-r>="var_dump("<CR>
 "current date
 ia cdt <c-r>=strftime("%Y/%m/%d")<CR>
-"c basic header files
-ia chdr <c-r>="#include <stdio.h>\n\nint main(int argc, char *argv[]){\n}"<CR>
-ia hlw <c-r>="hello,world!"<CR>
-ia jvz <c-r>="javascript:void(0);"<CR>
-ia shb <c-r>="#!/bin/bash"<CR>
 "abbrevations}}}
 
 "vim-plug{{{
@@ -354,39 +343,10 @@ let g:ale_lint_on_filetype_changed = 0
 " tagbar-phpctags
 "---------------------------------------
 let g:tagbar_phpctags_bin = '~/phpctags/phpctags.phar'
-"----------------------------------------
-" phpcomplete
-"---------------------------------------
-let g:phpcomplete_complete_for_unknown_classes = 0
 "-----------------------------------------
 " sorround
 "-----------------------------------------
 let g:surround_{char2nr('q')} = "\\\"\r\\\""
-"-----------------------------------------
-" lightline
-"-----------------------------------------
-function! GrepperStatus()
- return grepper#statusline()
-endfunction
-
-let g:lightline = {
-      \ 'colorscheme': 'wombat',
-      \ 'active': {
-      \   'right': [ [ 'mylineinfo' ], [ 'grepperstatus', 'myfileformatinfo', 'fileencoding', 'filetype' ] ],
-      \ },
-      \ 'component_function': {
-      \   'myfileformatinfo': "MyFileformatInfo",
-      \   'mylineinfo': "MyLineinfo",
-      \   'currentfunction': 'CocCurrentFunction',
-      \   'grepperstatus': 'GrepperStatus'
-      \ },
-      \ 'separator': { 'left': "\ue0b0", 'right': "" },
-      \ 'subseparator': { 'left': "\ue0b1", 'right': "\ue0b3" }
-      \ }
-"-----------------------------------------
-" lightline_foobar
-"-----------------------------------------
-let g:lightline.colorscheme = 'palenight_alter'
 "-----------------------------------------
 " Grepper
 "-----------------------------------------
@@ -403,7 +363,6 @@ let g:grepper.jump = 0
 let g:grepper.prompt_text = '$c> '
 let g:grepper.prompt_quote = 0
 let g:grepper.switch = 0
-
 "-----------------------------------------
 " UltiSnips
 "-----------------------------------------
@@ -626,12 +585,3 @@ colorscheme palenight
 set foldmethod=marker
 "auto open folds
 autocmd FileType php normal zR
-
-nnoremap <Leader>F :FZF -q <C-R><C-W><CR>
-
-"TODO
-" let g:loaded_python_provider = 1
-" let g:python_host_skip_check=1
-" let g:python_host_prog = '/usr/local/bin/python'
-" let g:python3_host_skip_check=1
-" let g:python3_host_prog = '/usr/local/bin/python3'
