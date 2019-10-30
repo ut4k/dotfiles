@@ -77,3 +77,23 @@ endsnippet
 snippet jvz
 javascript:void(0);
 endsnippet
+
+snippet cdt "current date"
+`date +%Y/%m/%d`
+endsnippet
+
+snippet ft "fetch"
+if ($result = $cdb->query($sql)) {
+	while ($list = $cdb->fetch_assoc($result)) {
+
+	}
+}
+endsnippet
+
+snippet vd "var_dump"
+var_dump(\$variable);
+endsnippet
+
+snippet hsc "htmlspecialchars"
+htmlspecialchars(${VISUAL:\$variable});
+endsnippet

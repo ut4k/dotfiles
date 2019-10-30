@@ -29,7 +29,8 @@ alias e="emacs -nw"
 alias emacs="emacs -nw"
 alias playcd="sudo mplayer -cdrom-device /dev/sr0 cdda://"
 alias ctags="/usr/local/bin/ctags -R --options=$HOME/.ctags"
-alias browse="w3m duckduckgo.com"
+alias ddg="w3m duckduckgo.com"
+alias yahoo="w3m yahoo.co.jp"
 
 #run weasel-pageant on WSL
 if [[ $(uname -r) =~ Microsoft$ ]]; then eval $(/c/weasel-pageant/weasel-pageant -rq); fi

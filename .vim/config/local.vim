@@ -1,4 +1,4 @@
-let $DESKTOP   = "C:/Users/kimura.AZET/Desktop"
+let $DESKTOP   = "/c/Users/kimura.AZET/Desktop"
 let $WORKSPACE = "/d/workspace"
 let $SURALA    = "/d/workspace/surala"
 
@@ -26,7 +26,9 @@ nnoremap <leader>et :let @t = strftime("%Y\\/%m\\/%d")<CR>/<C-R>t<CR>
 nnoremap <leader>ey :let @t = strftime("%Y\\/%m\\/%d", localtime() - (60*60*24))<CR>/<C-R>t<CR>
 
 function! SvnCommitSrl()
-  call system("TortoiseProc.exe /command:commit /logmsg:'".g:worker."' /path:'D:/workspace/surala' /closeonend:3")
+  let l:repopath =   substitute(getcwd(), "^/mnt", "", "g")
+  let l:repopath =   substitute(l:repopath, "/d/", "D:/", "g")
+  call system("TortoiseProc.exe /command:commit /logmsg:'".g:worker."' /path:'".l:repopath."' /closeonend:3")
 endfunction
 
 "ライブラリ側を開く
