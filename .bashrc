@@ -19,8 +19,12 @@ alias surala='cd /d/workspace/surala && vim'
 alias rc='source $HOME/.bashrc'
 alias vrc='vim $HOME/.bashrc'
 alias showpath="sed 's/:/\n/g' <<< \"$PATH\""
+
 alias mux='tmuxinator'
 alias work='tmuxinator start work'
+alias ent='tmuxinator start ent'
+alias rene='tmuxinator start renewal'
+
 alias srans='~/srlscripts/answer.sh'
 alias srans2='~/srlscripts/answer2.sh'
 alias vi="nvim"
@@ -45,7 +49,7 @@ PERL_MM_OPT="INSTALL_BASE=/home/yuta/perl5"; export PERL_MM_OPT;
 
 pandochtml () {
     f=$1
-    pandoc -s --self-contained -t html5 -c "$HOME/.config/pandoc/markdown-css-themes/markdown10.css" --metadata title=' ' --highlight-style=tango $1 -o ${f::-3}.html
+    pandoc -s --toc --self-contained -t html5 -c "$HOME/.config/pandoc/markdown-css-themes/markdown10.css" --metadata title=' ' --highlight-style=tango $1 -o ${f::-3}.html
     # pandoc --include-in-header="$HOME/.config/pandoc/hljs.html" -t html5 -c "$HOME/.config/pandoc/markdown-css-themes/markdown10.css" --metadata title=' ' --no-highlight $1 -o ${f::-3}.html
 }
 

@@ -52,6 +52,8 @@ set tabstop=2
 set title
 set titlestring=%{expand('%:p')}
 set tags=tags
+".bashrcをロードする
+let $BASH_ENV = "~/.bashrc"
 
 "todo
 " syntax sync minlines=20000
@@ -107,7 +109,7 @@ set statusline+=%=
 set statusline+=%0*
 set statusline+=%1*
 set statusline+=%{grepper#statusline()}
-"set statusline+=%{tagbar#currenttag('%s','')}
+set statusline+=%{NearestMethodOrFunction()}\  
 set statusline+=%0*
 set statusline+=[%{&fileencoding}]
 set statusline+=[%{&ff=='mac'?'CR':&ff=='unix'?'LF':'CRLF'}]
@@ -144,12 +146,11 @@ nnoremap <leader>tc :vs $TMUXCONF<CR><CR>
 nnoremap <F12> :source $MYVIMRC<CR>:call PhpSyntaxOverride()<CR><CR>
 "mod_report.txtを縦スプリットで開く
 nnoremap <leader>mf :call system('tmux new-window')<CR><CR>
-"Tagbarトグル tagbar pop
-nnoremap tp :TagbarToggle<CR>
-"currenttagコピー
-nnoremap <leader>ct :let @+=expand(tagbar#currenttag('%s',''))<CR>
-"statuslineにcurrenttag表示
-nnoremap <leader>tt :call EnableStatusLineCurrentTag()<CR>
+"tag list pop
+nnoremap tp :Vista!!<CR>
+"NERDTree pop
+nnoremap <leader>nd :NERDTree<CR>
+nnoremap <leader>nf :NERDTreeFocus<CR>
 "currenttagのファンクション名でgrep look-functionとか?...
 nnoremap <leader>lf :call GrepCurrentFunc()<CR>
 "ファイル名をクリップボードにコピー
@@ -194,9 +195,9 @@ nnoremap <S-h> :vert resize +15<CR>
 "- buffer vertically
 nnoremap <S-l> :vert resize -15<CR>
 nnoremap <F5> :cnext<CR>
-nnoremap <S-F5> :cprevious<CR>
+nnoremap <F6> :cprevious<CR>
 "search by register "
-nnoremap <F6> /<c-r>"<CR>
+nnoremap <leader>w /<c-r>"<CR>
 "identify hilight under cursor
 nnoremap <F10> :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<'
 \ . synIDattr(synID(line("."),col("."),0),"name") . "> lo<"
@@ -218,7 +219,6 @@ call plug#begin('~/.local/share/nvim/plugged')
 Plug 'StanAngeloff/php.vim'
 Plug 'heavenshell/vim-jsdoc'
 Plug 'junegunn/vim-easy-align'
-Plug 'majutsushi/tagbar'
 Plug 'mattn/emmet-vim'
 Plug 'pangloss/vim-javascript'
 Plug 'tpope/vim-commentary'
@@ -226,13 +226,11 @@ Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-surround'
 Plug 'vim-scripts/PDV--phpDocumentor-for-Vim'
 Plug 'vim-scripts/httplog' "usage: setf httplog
-Plug 'vim-scripts/tagbar-phpctags'
 Plug 'w0rp/ale'
 Plug 'will133/vim-dirdiff'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 Plug 'drewtempelmeyer/palenight.vim'
-Plug 'skreek/skeletor.vim'
 Plug 'neoclide/coc.nvim', {'branch': 'release', 'do': { -> coc#util#install()}}
 Plug 'mhinz/vim-grepper'
 Plug 'triglav/vim-visual-increment'
@@ -243,6 +241,10 @@ Plug 'sheerun/vim-polyglot'
 Plug 'scrooloose/nerdtree'
 Plug 'ryanoasis/vim-devicons'
 Plug 'markonm/traces.vim'
+Plug 'liuchengxu/vista.vim'
+"colorscheme
+Plug 'skreek/skeletor.vim'
+Plug 'liuchengxu/space-vim-dark'
 call plug#end()
 "}}}
 
@@ -264,26 +266,6 @@ let g:user_emmet_settings = {
 xmap ga <Plug>(EasyAlign)
 " ignore nothing
 let g:easy_align_ignore_groups = []
-"----------------------------------------
-" Tagbar
-"----------------------------------------
-let g:tagbar_autofocus = 0
-let g:tagbar_compact = 0
-let g:tagbar_singleclick = 1
-let g:tagbar_sort = 0
-let g:tagbar_indent = 0
-let g:tagbar_autopreview = 0
-let g:tagbar_iconchars = ['▸', '▾']
-let g:tagbar_silent = 1
-let g:tagbar_left = 0
-let g:tagbar_width = 36
-let g:tagbar_type_php  = {
-    \ 'kinds'     : [
-        \ 'i:interfaces',
-        \ 'c:classes',
-        \ 'f:functions',
-   \ ]
-  \ }
 "----------------------------------------
 " pdv
 "----------------------------------------
@@ -365,6 +347,18 @@ let g:UltiSnipsJumpBackwardTrigger="<c-z>"
 let g:UltiSnipsEditSplit="vertical"
 let g:UltiSnipsSnippetDirectories=[$HOME . '/.vim/config/snippets']
 "-----------------------------------------
+" Vista
+" Tagbarから乗り換え
+"-----------------------------------------
+" let g:vista_default_executive = "coc"
+let g:vista_default_executive = "ctags"
+let g:vista_ignore_kinds = ['Variable', 'variable']
+"let g:vista_cursor_delay = 400 "defualt
+ let g:vista_cursor_delay = 100
+"-----------------------------------------
+" NERDTree
+"-----------------------------------------
+let g:NERDTreeWinPos = "right"
 "}}}
 
 "functions{{{
@@ -527,6 +521,9 @@ function! FJumpUp()
  " call histdel("search", -1)
 endfunction
 
+function! NearestMethodOrFunction() abort
+  return get(b:, 'vista_nearest_method_or_function', '')
+endfunction
 "}}}
 
 "auto command {{{
@@ -565,6 +562,11 @@ if system('uname -a | grep Microsoft') != ''
     autocmd TextYankPost * :call system('clip.exe', @")
   augroup END
 endif
+
+augroup autoConvertHtml
+    autocmd!
+    autocmd BufWritePost suralanote.md | :call system("pandochtml ".expand("%"))
+augroup END
 "}}}
 
 "read external files {{{
@@ -576,6 +578,8 @@ colorscheme palenight
 set foldmethod=marker
 "auto open folds
 autocmd FileType php normal zR
+
+autocmd VimEnter * call vista#RunForNearestMethodOrFunction()
 
 if has('nvim')
   " Terminal mode:
@@ -599,3 +603,5 @@ if has('nvim')
   nnoremap <M-k> <c-w>k
   nnoremap <M-l> <c-w>l
 endif
+
+"experimental
