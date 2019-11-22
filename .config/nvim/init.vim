@@ -67,7 +67,7 @@ set wildignore+=*/.git/*,*/tmp/*,*.swp
 "html output
 let g:html_number_lines = 0
 let g:html_ignore_folding = 1
-let g:html_font = "Consolas"
+let g:html_font = "Terminus"
 
 "to enable termiguicolors in tmux
 let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
@@ -85,10 +85,6 @@ let $MYVIMRC2 = "$HOME/.vim/config/local.vim"
 let $TMUXCONF = "$HOME/.tmux.conf"
 let $REPORTFILE = "$HOME/notes/mod_report.txt"
 let $SNIPPETDIR = "$HOME/.vim/config/snippets/"
-
-if executable("rg")
-  let &grepprg='rg --vimgrep -H --no-heading --ignore-file $HOME/.rg/ignore'
-endif
 "}}}
 
 "status line{{{
@@ -148,13 +144,14 @@ nnoremap <F12> :source $MYVIMRC<CR>:call PhpSyntaxOverride()<CR><CR>
 nnoremap <leader>mf :call system('tmux new-window')<CR><CR>
 "tag list pop
 nnoremap tp :Vista!!<CR>
-"NERDTree pop
-nnoremap <leader>nd :NERDTree<CR>
-nnoremap <leader>nf :NERDTreeFocus<CR>
-"currenttagのファンクション名でgrep look-functionとか?...
-nnoremap <leader>lf :call GrepCurrentFunc()<CR>
+"tree focus
+nnoremap tf :NERDTreeFocusToggle<CR>
+"file tree view
+nnoremap ft :NERDTree<CR>
 "ファイル名をクリップボードにコピー
 nnoremap <leader>cn :let @+ = expand('%')<CR>
+"ファンクション名をクリップボードにコピー
+nnoremap <leader>ccf :call CopyCurrentFunctionName()<CR>
 "gs : gf縦分割バージョン
 nnoremap gs :vertical wincmd f<CR>
 "sort u
@@ -239,12 +236,15 @@ Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
 Plug 'sheerun/vim-polyglot'
 Plug 'scrooloose/nerdtree'
-Plug 'ryanoasis/vim-devicons'
+" Plug 'ryanoasis/vim-devicons'
 Plug 'markonm/traces.vim'
 Plug 'liuchengxu/vista.vim'
+Plug 'jistr/vim-nerdtree-tabs'
 "colorscheme
 Plug 'skreek/skeletor.vim'
 Plug 'liuchengxu/space-vim-dark'
+Plug 'artanikin/vim-synthwave84'
+Plug 'challenger-deep-theme/vim', { 'as': 'challenger-deep' }
 call plug#end()
 "}}}
 
@@ -325,7 +325,7 @@ let g:surround_{char2nr('q')} = "\\\"\r\\\""
 "-----------------------------------------
 let g:grepper = {}
 let g:grepper.rg = {
-    \'grepprg': 'rg --vimgrep --ignore-file $HOME/.rg/ignore',
+    \'grepprg': 'rg --vimgrep --line-number --ignore-case --ignore-file $HOME/.rg/ignore',
     \ 'grepformat': '%f:%l:%m',
     \ 'escape':     '\^$.*[]',
     \ }
@@ -334,7 +334,7 @@ let g:grepper.tools = ['rg']
 let g:grepper.highlight = 1
 let g:grepper.jump = 0
 let g:grepper.prompt_text = '$c> '
-let g:grepper.prompt_quote = 0
+let g:grepper.prompt_quote = 1  "自動でクオーティングしたことにする
 let g:grepper.switch = 0
 "-----------------------------------------
 " UltiSnips
@@ -353,21 +353,17 @@ let g:UltiSnipsSnippetDirectories=[$HOME . '/.vim/config/snippets']
 " let g:vista_default_executive = "coc"
 let g:vista_default_executive = "ctags"
 let g:vista_ignore_kinds = ['Variable', 'variable']
-"let g:vista_cursor_delay = 400 "defualt
- let g:vista_cursor_delay = 100
+let g:vista_cursor_delay = 200
+let g:vista_sidebar_width = 55
 "-----------------------------------------
 " NERDTree
 "-----------------------------------------
 let g:NERDTreeWinPos = "right"
+let g:NERDTreeDirArrowExpandable="+"
+let g:NERDTreeDirArrowCollapsible="~"
 "}}}
 
 "functions{{{
-"今いるファンクション名でgrep
-function! GrepCurrentFunc()
-	let l:func_name= expand(tagbar#currenttag('%s',''))
-	execute 'Grepper-query "'.l:func_name.'"'
-endfunction
-
 "全角スペースをハイライト表示
 function! ZenkakuSpace()
     highlight ZenkakuSpace guibg=purple
@@ -489,8 +485,9 @@ function! LightlineReload()
   call lightline#update()
 endfunction
 
-function! CocCurrentFunction()
-    return get(b:, 'coc_current_function', '')
+function! CopyCurrentFunctionName()
+  let @* = NearestMethodOrFunction()
+  :call system('clip.exe', @*)
 endfunction
 
 function! MyLineinfo()
@@ -559,13 +556,20 @@ autocmd FileType php :setlocal iskeyword+=$
 if system('uname -a | grep Microsoft') != ''
   augroup myYank
     autocmd!
-    autocmd TextYankPost * :call system('clip.exe', @")
+    " autocmd TextYankPost * :call system('clip.exe', @")
+    autocmd TextYankPost * :call CopyToClipBordInSJIS()
   augroup END
 endif
 
+function! CopyToClipBordInSJIS()
+    " 全文字対応できない!たまにバグっちゃう無理！
+    let l:x = system("echo \"".@"."\" | sed 's/$//' | iconv -f UTF-8 -t CP932")
+    call system('clip.exe', l:x)
+endfunction
+
 augroup autoConvertHtml
     autocmd!
-    autocmd BufWritePost suralanote.md | :call system("pandochtml ".expand("%"))
+    autocmd BufWritePost suralanote.md | silent! call system("pandochtml ".expand("%")." > /dev/null")
 augroup END
 "}}}
 
