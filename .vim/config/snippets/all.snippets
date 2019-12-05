@@ -91,9 +91,9 @@ if ($result = $cdb->query($sql)) {
 endsnippet
 
 snippet vd "var_dump"
-var_dump(\$variable);
+var_dump(\$${1:variable});
 endsnippet
 
 snippet hsc "htmlspecialchars"
-htmlspecialchars(${VISUAL:\$variable});
+htmlspecialchars(\$${1:variable});
 endsnippet

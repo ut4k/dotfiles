@@ -245,6 +245,8 @@ Plug 'skreek/skeletor.vim'
 Plug 'liuchengxu/space-vim-dark'
 Plug 'artanikin/vim-synthwave84'
 Plug 'challenger-deep-theme/vim', { 'as': 'challenger-deep' }
+Plug 'blueyed/smarty.vim'
+Plug 'simeji/winresizer'
 call plug#end()
 "}}}
 
@@ -361,6 +363,9 @@ let g:vista_sidebar_width = 55
 let g:NERDTreeWinPos = "right"
 let g:NERDTreeDirArrowExpandable="+"
 let g:NERDTreeDirArrowCollapsible="~"
+let g:NERDTreeMinimalMenu=1
+let g:NERDTreeMinimalUI=1
+let g:NERDTreeWinSize=64
 "}}}
 
 "functions{{{
@@ -521,6 +526,17 @@ endfunction
 function! NearestMethodOrFunction() abort
   return get(b:, 'vista_nearest_method_or_function', '')
 endfunction
+
+function! ReadAsCP932()
+  :e ++enc=cp932
+endfunction
+
+function! WinExplorer()
+  let l:wpath = system("wslpath -w " .expand("%:p"))
+  let l:cmd = "!/mnt/c/Windows/explorer.exe /select," . l:wpath
+  echo l:cmd
+  call system(l:cmd)
+endfunction
 "}}}
 
 "auto command {{{
@@ -556,8 +572,8 @@ autocmd FileType php :setlocal iskeyword+=$
 if system('uname -a | grep Microsoft') != ''
   augroup myYank
     autocmd!
-    " autocmd TextYankPost * :call system('clip.exe', @")
-    autocmd TextYankPost * :call CopyToClipBordInSJIS()
+    autocmd TextYankPost * :call system('clip.exe', @")
+    " autocmd TextYankPost * :call CopyToClipBordInSJIS()
   augroup END
 endif
 

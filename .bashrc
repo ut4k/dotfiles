@@ -21,8 +21,6 @@ alias vrc='vim $HOME/.bashrc'
 alias showpath="sed 's/:/\n/g' <<< \"$PATH\""
 
 alias mux='tmuxinator'
-alias work='tmuxinator start work'
-alias ent='tmuxinator start ent'
 alias rene='tmuxinator start renewal'
 
 alias srans='~/srlscripts/answer.sh'
