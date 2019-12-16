@@ -28,7 +28,8 @@ nnoremap <leader>ey :let @t = strftime("%Y\\/%m\\/%d", localtime() - (60*60*24))
 function! SvnCommitSrl()
   let l:repopath =   substitute(getcwd(), "^/mnt", "", "g")
   let l:repopath =   substitute(l:repopath, "/d/", "D:/", "g")
-  call system("TortoiseProc.exe /command:commit /logmsg:'".g:worker."' /path:'".l:repopath."' /closeonend:3")
+  " call system("TortoiseProc.exe /command:commit /logmsg:'".g:worker."' /path:'".l:repopath."' /closeonend:3")
+  call system("cmd.exe /c TortoiseProc.exe /command:commit /logmsg:'".g:worker."' /path:'".l:repopath."' /closeonend:3")
 endfunction
 
 "ライブラリ側を開く

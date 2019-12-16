@@ -146,14 +146,18 @@ nnoremap <leader>mf :call system('tmux new-window')<CR><CR>
 nnoremap tp :Vista!!<CR>
 "tree focus
 nnoremap tf :NERDTreeFocusToggle<CR>
-"file tree view
-nnoremap ft :NERDTree<CR>
+"tree toggle
+nnoremap tt :NERDTreeToggle<CR>
+"tree bookmark
+nnoremap tb :NERDTreeFind<CR>:Bookmark<CR>
+"nerdtree find
+nnoremap Nf :NERDTreeFind<CR>
 "ファイル名をクリップボードにコピー
 nnoremap <leader>cn :let @+ = expand('%')<CR>
 "ファンクション名をクリップボードにコピー
 nnoremap <leader>ccf :call CopyCurrentFunctionName()<CR>
 "gs : gf縦分割バージョン
-nnoremap gs :vertical wincmd f<CR>
+" nnoremap gs :vertical wincmd f<CR>
 "sort u
 vnoremap <leader>s :sort u<CR>
 "run script
@@ -179,10 +183,6 @@ nnoremap cv :call ClogVar()<CR>
 nmap <F1> :echo<CR>
 imap <F1> <C-o>:echo<CR>
 "}}}
-"ale previous
-nmap <silent> <C-k> <Plug>(ale_previous_wrap)
-"ale next
-nmap <silent> <C-j> <Plug>(ale_next_wrap)
 "compile c and run the bin
 nnoremap <F9> :call RunC()<CR>
 "prepare grep command
@@ -195,6 +195,8 @@ nnoremap <F5> :cnext<CR>
 nnoremap <F6> :cprevious<CR>
 "search by register "
 nnoremap <leader>w /<c-r>"<CR>
+"open in windows explorer
+nnoremap <leader>ow :call WinExplorer()<CR>
 "identify hilight under cursor
 nnoremap <F10> :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<'
 \ . synIDattr(synID(line("."),col("."),0),"name") . "> lo<"
@@ -206,9 +208,19 @@ nnoremap <c-h> :Hist<CR>
 " Use K to show documentation in preview window
 nnoremap <silent> K :call <SID>show_documentation()<CR>
 nnoremap <leader>gct :!/usr/local/bin/ctags -R --options=$HOME/.ctags<CR>
-nnoremap <leader>fn :let @+=expand("%")<CR>
+nnoremap <leader>fn :call FileNameToReg()<CR>
+nnoremap gF :call GrepByFileName()<CR>
 nnoremap <leader>bk :call CopyToDesktop()<CR>
-
+"Grepper-stop
+nnoremap gS :Grepper-stop<CR>
+"coc
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gr <Plug>(coc-references)
+nmap <silent> [g <Plug>(coc-diagnostic-prev)
+nmap <silent> ]g <Plug>(coc-diagnostic-next)
+"double click to jump function definition "termでもうごく
+nmap <2-LeftMouse> :exe "tag ". expand("<cword>")<CR>
+" nmap <c-]> g<c-]>
 "}}}
 
 "vim-plug{{{
@@ -223,7 +235,6 @@ Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-surround'
 Plug 'vim-scripts/PDV--phpDocumentor-for-Vim'
 Plug 'vim-scripts/httplog' "usage: setf httplog
-Plug 'w0rp/ale'
 Plug 'will133/vim-dirdiff'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
@@ -236,17 +247,24 @@ Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
 Plug 'sheerun/vim-polyglot'
 Plug 'scrooloose/nerdtree'
-" Plug 'ryanoasis/vim-devicons'
 Plug 'markonm/traces.vim'
 Plug 'liuchengxu/vista.vim'
 Plug 'jistr/vim-nerdtree-tabs'
+" Plug 'ryanoasis/vim-devicons' "font依存なのでやめた
+" Plug 'w0rp/ale' "coc.nvimに移行
+Plug 'shawncplus/phpcomplete.vim'
+Plug 'simeji/winresizer'
+Plug 'xolox/vim-misc' "vim-colorscheme-switcher dependency
+Plug 'xolox/vim-colorscheme-switcher'
+Plug 'blueyed/smarty.vim'
+Plug 'tlhr/anderson.vim'
+
 "colorscheme
 Plug 'skreek/skeletor.vim'
 Plug 'liuchengxu/space-vim-dark'
 Plug 'artanikin/vim-synthwave84'
 Plug 'challenger-deep-theme/vim', { 'as': 'challenger-deep' }
-Plug 'blueyed/smarty.vim'
-Plug 'simeji/winresizer'
+Plug 'arzg/vim-colors-xcode'
 call plug#end()
 "}}}
 
@@ -300,21 +318,6 @@ let g:php_sql_nowdoc = 0
 " commentary
 "----------------------------------------
 autocmd FileType php setlocal commentstring=//\ %s
-"----------------------------------------
-" ALE
-"----------------------------------------
-let g:ale_linters = {'php': ['phpmd','php'], 'javascript': ['jshint'] , 'haskell' : []}
-let g:ale_php_phpmd_use_global = 1
-let g:ale_php_phpmd_ruleset = 'unusedcode'
-let g:ale_php_phan_use_global = 1
-let g:ale_sign_column_always = 0
-let g:ale_lint_on_save = 1
-let g:ale_lint_on_insert_leave = 1
-let g:ale_set_balloons = 1
-let g:ale_lint_on_enter = 0
-let g:ale_lint_on_text_changed = 1
-let g:ale_lint_on_filetype_changed = 0
-"----------------------------------------
 " tagbar-phpctags
 "---------------------------------------
 let g:tagbar_phpctags_bin = '~/phpctags/phpctags.phar'
@@ -334,8 +337,8 @@ let g:grepper.rg = {
 
 let g:grepper.tools = ['rg']
 let g:grepper.highlight = 1
-let g:grepper.jump = 0
-let g:grepper.prompt_text = '$c> '
+let g:grepper.jump = 1
+let g:grepper.prompt_text = '$t> '
 let g:grepper.prompt_quote = 1  "自動でクオーティングしたことにする
 let g:grepper.switch = 0
 "-----------------------------------------
@@ -366,6 +369,12 @@ let g:NERDTreeDirArrowCollapsible="~"
 let g:NERDTreeMinimalMenu=1
 let g:NERDTreeMinimalUI=1
 let g:NERDTreeWinSize=64
+let g:NERDTreeShowBookmarks=1
+let g:NERDTreeIgnore = ['tags']
+" -----------------------------------------
+" vim-colorscheme-switcher
+" -----------------------------------------
+let g:colorscheme_switcher_exclude_builtins=1
 "}}}
 
 "functions{{{
@@ -457,11 +466,6 @@ function! RunC()
   endif
 endfunction
 
-
-function! OpenWinExplorer()
-  call system('explorer.exe .')
-endfunction
-
 function! CopyIntoOrgDir(newName)
 	let l:cmd = 'cp ' . expand('%') . ' ' . expand('%:h') . '/'. a:newName
 	echo l:cmd
@@ -532,11 +536,28 @@ function! ReadAsCP932()
 endfunction
 
 function! WinExplorer()
-  let l:wpath = system("wslpath -w " .expand("%:p"))
-  let l:cmd = "!/mnt/c/Windows/explorer.exe /select," . l:wpath
-  echo l:cmd
+  let l:wpath = trim(system("wslpath -w " .expand("%:p")))
+  let l:cmd = "/mnt/c/Windows/explorer.exe /select,\"" . l:wpath . "\""
+  echo "opening ".l:wpath." ..."
   call system(l:cmd)
 endfunction
+
+function! FileNameToReg()
+  let l:path = expand("%")
+  if g:on_ent_dir == 1
+    let l:path = "/ent/" . l:path
+  endif
+  let @+=l:path
+endfunction
+
+function! GrepByFileName()
+  let l:current_file_name = expand("%:t") "tail modifier
+  execute "Grepper -noprompt -query " . l:current_file_name
+endfunction
+"}}}
+
+"custom command {{{
+command! ReadAsCP932 :call ReadAsCP932()
 "}}}
 
 "auto command {{{
@@ -561,9 +582,12 @@ augroup END
 " push quickfix window always to the bottom
 autocmd FileType qf wincmd J
 
+"tab or space
 autocmd FileType haskell set tabstop=4|set shiftwidth=4|set expandtab
 autocmd FileType vim set tabstop=2|set shiftwidth=2|set expandtab
 autocmd FileType php set noexpandtab
+autocmd FileType json set tabstop=2|set shiftwidth=2|set expandtab
+autocmd FileType sql set tabstop=4|set shiftwidth=2|set noexpandtab|set smarttab
 
 "phpは$をキーワードとしてあつかう wで $variable 全体がとれるように
 autocmd FileType php :setlocal iskeyword+=$
@@ -625,3 +649,9 @@ if has('nvim')
 endif
 
 "experimental
+let g:phpcomplete_mappings = {
+   \ 'jump_to_def': '<C-]>',
+   \ 'jump_to_def_split': '<C-W><C-]>',
+   \ 'jump_to_def_vsplit': '<C-W><C-\>',
+   \ 'jump_to_def_tabnew': '<C-W><C-[>',
+   \}

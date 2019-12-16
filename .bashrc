@@ -51,3 +51,9 @@ pandochtml () {
     # pandoc --include-in-header="$HOME/.config/pandoc/hljs.html" -t html5 -c "$HOME/.config/pandoc/markdown-css-themes/markdown10.css" --metadata title=' ' --no-highlight $1 -o ${f::-3}.html
 }
 
+pandochtml2 () {
+    f=$1
+    pandoc -s -t html5 -c "$HOME/.config/pandoc/markdown-css-themes/markdown10.css" --metadata title=' ' --highlight-style=tango $1 -o ${f::-3}.html
+    # pandoc --include-in-header="$HOME/.config/pandoc/hljs.html" -t html5 -c "$HOME/.config/pandoc/markdown-css-themes/markdown10.css" --metadata title=' ' --no-highlight $1 -o ${f::-3}.html
+}
+
