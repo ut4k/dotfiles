@@ -69,10 +69,6 @@ let g:html_font = "Terminus"
 let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
 let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
 
-"diff setting
-if &diff                             " only for diff mode/vimdiff
-  set diffopt=filler,context:1000000 " filler is default and inserts empty lines for sync
-endif
 "}}}
 
 "variable {{{
@@ -99,8 +95,8 @@ set statusline+=%0*
 
 set statusline+=%=
 set statusline+=%0*
+set statusline+=%{MyGrepperStatus()}
 set statusline+=%1*
-set statusline+=%{grepper#statusline()}
 set statusline+=%{NearestMethodOrFunction()}\  
 set statusline+=%0*
 set statusline+=[%{&fileencoding}]
@@ -194,6 +190,7 @@ nnoremap <c-space> :Buffers<CR>
 nnoremap <c-h> :Hist<CR>
 "pass cursor word as fzf query
 nnoremap <c-q> :call fzf#vim#files('.', {'options':'--query '.expand('<cword>')})<CR>
+nnoremap <c-z> :call fzf#vim#files('.', {'options':'--query '.expand('%:t')})<CR>
 " Use K to show documentation in preview window
 nnoremap <silent> K :call <SID>show_documentation()<CR>
 nnoremap <leader>gct :!/usr/local/bin/ctags -R --options=$HOME/.ctags<CR>
@@ -272,6 +269,7 @@ Plug 'drewtempelmeyer/palenight.vim'
 Plug 'skreek/skeletor.vim'
 Plug 'liuchengxu/space-vim-dark'
 Plug 'kjssad/quantum.vim'
+Plug 'kshenoy/vim-sol'
 call plug#end()
 "}}}
 
@@ -660,6 +658,26 @@ autocmd FileType php normal zR
 
 autocmd VimEnter * call vista#RunForNearestMethodOrFunction()
 
+"diff setting
+if &diff                             " only for diff mode/vimdiff
+  set diffopt=filler,context:1000000 " filler is default and inserts empty lines for sync
+  colo sol
+endif
+
 "===========================================
 "experimental
 "===========================================
+let g:fzf_prefer_tmux = 0
+
+function! MyGrepperStatus()
+  let l:stat = grepper#statusline()
+  let l:query = ""
+
+  if l:stat != ""
+    let l:cmd_arr = split(l:stat, " ")
+    let l:lastidx = len(l:cmd_arr)-1
+    let l:query = l:cmd_arr[l:lastidx]
+  endif
+  echo l:query
+  return l:query
+endfunction
