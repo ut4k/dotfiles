@@ -12,17 +12,14 @@ set ttyfast
 set updatetime=300
 set shortmess+=c
 set signcolumn=yes
-" 保存されていないファイルがあるときでも別のファイルを開くことが出来る
-set hidden
-"global substitute by default ( /g )
-set gdefault
+set hidden " 保存されていないファイルがあるときでも別のファイルを開くことが出来る
+set gdefault "global substitute by default /g option
 set ignorecase
 set smartcase
 set list
 set listchars=tab:»\ ,precedes:«,extends:»,eol:↲
 set ambiwidth=double
-"行間をでシームレスに移動する
-set whichwrap+=h,l,<,>,[,],b,s
+set whichwrap+=h,l,<,>,[,],b,s "行間をでシームレスに移動する
 
 set mouse=a
 set ttimeoutlen=10
@@ -52,8 +49,7 @@ set tabstop=2
 set title
 set titlestring=%{expand('%:p')}
 set tags=tags
-".bashrcをロードする
-let $BASH_ENV = "~/.bashrc"
+let $BASH_ENV = "~/.bashrc" "load bash config
 
 "todo
 " syntax sync minlines=20000
@@ -120,8 +116,6 @@ let mapleader = ';' "Leader
 nnoremap <leader>s :w<CR>
 "xで削除したらブラッホールにぶちこむ
 nnoremap x "_x
-nnoremap gR :Grepper-query<CR>
-" nnoremap gR :Grepper-query expand("<cword>")
 "次のバッファ
 nnoremap <silent> ]b :bnext<CR>
 "前のバッファ
@@ -144,14 +138,6 @@ nnoremap <F12> :source $MYVIMRC<CR>:call PhpSyntaxOverride()<CR><CR>
 nnoremap <leader>mf :call system('tmux new-window')<CR><CR>
 "tag list pop
 nnoremap tp :Vista!!<CR>
-"tree focus
-nnoremap tf :NERDTreeFocusToggle<CR>
-"tree toggle
-nnoremap tt :NERDTreeToggle<CR>
-"tree bookmark
-nnoremap tb :NERDTreeFind<CR>:Bookmark<CR>
-"nerdtree find
-nnoremap Nf :NERDTreeFind<CR>
 "ファイル名をクリップボードにコピー
 nnoremap <leader>cn :let @+ = expand('%')<CR>
 "ファンクション名をクリップボードにコピー
@@ -162,6 +148,7 @@ nnoremap <leader>ccf :call CopyCurrentFunctionName()<CR>
 vnoremap <leader>s :sort u<CR>
 "run script
 nnoremap <leader>rs :call RunScript()<CR><CR>
+nnoremap <leader>ts :call RunInTmux()<CR><CR>
 "align docs
 vnoremap ad :!column -t -s " " \| sed 's/^/ /'<CR><CR>
 "phpdoc
@@ -202,69 +189,89 @@ nnoremap <F10> :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> 
 \ . synIDattr(synID(line("."),col("."),0),"name") . "> lo<"
 \ . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">"<CR>
 "fzf
-nnoremap <c-space> :Buffers<CR>
 nnoremap <c-p> :Files<CR>
+nnoremap <c-space> :Buffers<CR>
 nnoremap <c-h> :Hist<CR>
+"pass cursor word as fzf query
+nnoremap <c-q> :call fzf#vim#files('.', {'options':'--query '.expand('<cword>')})<CR>
 " Use K to show documentation in preview window
 nnoremap <silent> K :call <SID>show_documentation()<CR>
 nnoremap <leader>gct :!/usr/local/bin/ctags -R --options=$HOME/.ctags<CR>
 nnoremap <leader>fn :call FileNameToReg()<CR>
+nnoremap <leader>am :call AddtoModFileList()<CR>
+
+"exec grepper with file name as a query
 nnoremap gF :call GrepByFileName()<CR>
-nnoremap <leader>bk :call CopyToDesktop()<CR>
+"exec grepper with cursor word as a query
+nnoremap gR :call GrepByCword()<CR>
 "Grepper-stop
 nnoremap gS :Grepper-stop<CR>
+
+nnoremap <leader>bk :call CopyToDesktop()<CR>
 "coc
-nmap <silent> gd <Plug>(coc-definition)
-nmap <silent> gr <Plug>(coc-references)
 nmap <silent> [g <Plug>(coc-diagnostic-prev)
 nmap <silent> ]g <Plug>(coc-diagnostic-next)
+"定義もとへ go definition
+nmap <silent> gd <Plug>(coc-definition)
+"使用箇所一覧を出す ごちゃごちゃするので未使用
+" nmap <silent> gr <Plug>(coc-references)
+
 "double click to jump function definition "termでもうごく
 nmap <2-LeftMouse> :exe "tag ". expand("<cword>")<CR>
 " nmap <c-]> g<c-]>
+
+"バッファ状態をsessionに保存
+nnoremap <leader>ms :mksession! ~/.vim_session <CR>
+nnoremap <leader>lo :source ~/.vim_session <CR>
+
+nnoremap <M-Up> :wincmd k<CR>
+nnoremap <M-Down> :wincmd j<CR>
+nnoremap <M-Left> :wincmd h<CR>
+nnoremap <M-Right> :wincmd l<CR>
+
+nnoremap <leader>ph :call PhpSyntaxOverride()<CR>
+
+nnoremap <F8> :NextColorScheme<CR>:call PhpSyntaxOverride()<CR>
 "}}}
 
 "vim-plug{{{
 call plug#begin('~/.local/share/nvim/plugged')
-Plug 'StanAngeloff/php.vim'
-Plug 'heavenshell/vim-jsdoc'
 Plug 'junegunn/vim-easy-align'
 Plug 'mattn/emmet-vim'
-Plug 'pangloss/vim-javascript'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-surround'
-Plug 'vim-scripts/PDV--phpDocumentor-for-Vim'
 Plug 'vim-scripts/httplog' "usage: setf httplog
 Plug 'will133/vim-dirdiff'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
-Plug 'drewtempelmeyer/palenight.vim'
 Plug 'neoclide/coc.nvim', {'branch': 'release', 'do': { -> coc#util#install()}}
 Plug 'mhinz/vim-grepper'
 Plug 'triglav/vim-visual-increment'
-Plug 'vim-python/python-syntax'
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
-Plug 'sheerun/vim-polyglot'
-Plug 'scrooloose/nerdtree'
-Plug 'markonm/traces.vim'
+Plug 'sheerun/vim-polyglot' "language pack
+Plug 'markonm/traces.vim' "substitute
 Plug 'liuchengxu/vista.vim'
-Plug 'jistr/vim-nerdtree-tabs'
-" Plug 'ryanoasis/vim-devicons' "font依存なのでやめた
-" Plug 'w0rp/ale' "coc.nvimに移行
-Plug 'shawncplus/phpcomplete.vim'
-Plug 'simeji/winresizer'
+Plug 'wesQ3/vim-windowswap'
 Plug 'xolox/vim-misc' "vim-colorscheme-switcher dependency
 Plug 'xolox/vim-colorscheme-switcher'
 Plug 'blueyed/smarty.vim'
-Plug 'tlhr/anderson.vim'
-
+Plug 'justinmk/vim-dirvish'
+"php
+Plug 'StanAngeloff/php.vim'
+Plug 'shawncplus/phpcomplete.vim'
+Plug 'vim-scripts/PDV--phpDocumentor-for-Vim'
+"javascript
+Plug 'heavenshell/vim-jsdoc'
+Plug 'pangloss/vim-javascript'
+"python
+Plug 'vim-python/python-syntax'
 "colorscheme
+Plug 'drewtempelmeyer/palenight.vim'
 Plug 'skreek/skeletor.vim'
 Plug 'liuchengxu/space-vim-dark'
-Plug 'artanikin/vim-synthwave84'
-Plug 'challenger-deep-theme/vim', { 'as': 'challenger-deep' }
-Plug 'arzg/vim-colors-xcode'
+Plug 'kjssad/quantum.vim'
 call plug#end()
 "}}}
 
@@ -340,7 +347,7 @@ let g:grepper.highlight = 1
 let g:grepper.jump = 1
 let g:grepper.prompt_text = '$t> '
 let g:grepper.prompt_quote = 1  "自動でクオーティングしたことにする
-let g:grepper.switch = 0
+let g:grepper.switch = 1
 "-----------------------------------------
 " UltiSnips
 "-----------------------------------------
@@ -360,21 +367,14 @@ let g:vista_default_executive = "ctags"
 let g:vista_ignore_kinds = ['Variable', 'variable']
 let g:vista_cursor_delay = 200
 let g:vista_sidebar_width = 55
-"-----------------------------------------
-" NERDTree
-"-----------------------------------------
-let g:NERDTreeWinPos = "right"
-let g:NERDTreeDirArrowExpandable="+"
-let g:NERDTreeDirArrowCollapsible="~"
-let g:NERDTreeMinimalMenu=1
-let g:NERDTreeMinimalUI=1
-let g:NERDTreeWinSize=64
-let g:NERDTreeShowBookmarks=1
-let g:NERDTreeIgnore = ['tags']
 " -----------------------------------------
 " vim-colorscheme-switcher
 " -----------------------------------------
 let g:colorscheme_switcher_exclude_builtins=1
+" -----------------------------------------
+" phpcomplete
+" -----------------------------------------
+let g:phpcomplete_mappings = { 'jump_to_def':'<C-]>' }
 "}}}
 
 "functions{{{
@@ -405,11 +405,33 @@ function! RunScript()
 	execute ':vnew | 0read ! '. l:bin .' #'
 endfunction
 
+"現在のファイルをインタプリタで実行
+function! RunInTmux()
+	"haskellならghcのインタプリタ
+	if expand('%:e') == "hs"
+		let l:bin = "runghc"
+	else
+	"それ以外なら拡張子そのままをコマンド
+		let l:bin = expand('%:e') 
+	endif
+	let l:file = expand('%')
+	execute '!tmux send-keys -t 1 "'.l:bin.' '.l:file.'" Enter'
+endfunction
+
+
 function! PhpSyntaxOverride()
-  hi! phpVarSelector guifg=#ffcb6b guibg=#1E1E28 cterm=NONE
-  hi! link phpIdentifier phpVarSelector
+  " hi! phpVarSelector guifg=#ffcb6b guibg=#1E1E28 cterm=NONE
+  hi! link phpVarSelector SpecialChar
+  hi! link phpIdentifier Identifier
+
   hi! link phpDocTags phpDefine
   hi! link phpDocParam phpType
+
+  hi! link phpFunction Function
+  hi! link phpFunctions Function
+  hi! link phpMethod Function
+
+  hi! link phpRegion phpClasses
 endfunction
 
 "docrootからのパスで開く
@@ -554,6 +576,22 @@ function! GrepByFileName()
   let l:current_file_name = expand("%:t") "tail modifier
   execute "Grepper -noprompt -query " . l:current_file_name
 endfunction
+
+function! GrepByCword()
+  let l:cword = expand("<cword>")
+  execute "Grepper -noprompt -query " . l:cword
+endfunction
+
+"変更ファイルのメモに今のファイルパス加える
+"tmuxペイン0にvimが開いている必要あり
+function! AddtoModFileList()
+  let l:path = expand("%")
+  if g:on_ent_dir == 1
+    let l:path = "/ent/" . l:path
+  endif
+  call system("echo ".l:path." >> /mnt/d/notes/mod_report.txt")
+  call system("tmux send-keys -t 0 :e! Enter S-g zz")
+endfunction
 "}}}
 
 "custom command {{{
@@ -597,15 +635,8 @@ if system('uname -a | grep Microsoft') != ''
   augroup myYank
     autocmd!
     autocmd TextYankPost * :call system('clip.exe', @")
-    " autocmd TextYankPost * :call CopyToClipBordInSJIS()
   augroup END
 endif
-
-function! CopyToClipBordInSJIS()
-    " 全文字対応できない!たまにバグっちゃう無理！
-    let l:x = system("echo \"".@"."\" | sed 's/$//' | iconv -f UTF-8 -t CP932")
-    call system('clip.exe', l:x)
-endfunction
 
 augroup autoConvertHtml
     autocmd!
@@ -618,40 +649,17 @@ if filereadable(expand($PRJCONF)) | source $PRJCONF | endif
 if filereadable(expand($MYVIMRC2)) | source $MYVIMRC2 | endif
 "}}}
 
-colorscheme palenight
+"colorscheme
+" colorscheme palenight
+" colorscheme xcodedark
+colorscheme quantum
 set foldmethod=marker
+
 "auto open folds
 autocmd FileType php normal zR
 
 autocmd VimEnter * call vista#RunForNearestMethodOrFunction()
 
-if has('nvim')
-  " Terminal mode:
-  tnoremap <M-h> <c-\><c-n><c-w>h
-  tnoremap <M-j> <c-\><c-n><c-w>j
-  tnoremap <M-k> <c-\><c-n><c-w>k
-  tnoremap <M-l> <c-\><c-n><c-w>l
-  " Insert mode:
-  inoremap <M-h> <Esc><c-w>h
-  inoremap <M-j> <Esc><c-w>j
-  inoremap <M-k> <Esc><c-w>k
-  inoremap <M-l> <Esc><c-w>l
-  " Visual mode:
-  vnoremap <M-h> <Esc><c-w>h
-  vnoremap <M-j> <Esc><c-w>j
-  vnoremap <M-k> <Esc><c-w>k
-  vnoremap <M-l> <Esc><c-w>l
-  " Normal mode:
-  nnoremap <M-h> <c-w>h
-  nnoremap <M-j> <c-w>j
-  nnoremap <M-k> <c-w>k
-  nnoremap <M-l> <c-w>l
-endif
-
+"===========================================
 "experimental
-let g:phpcomplete_mappings = {
-   \ 'jump_to_def': '<C-]>',
-   \ 'jump_to_def_split': '<C-W><C-]>',
-   \ 'jump_to_def_vsplit': '<C-W><C-\>',
-   \ 'jump_to_def_tabnew': '<C-W><C-[>',
-   \}
+"===========================================

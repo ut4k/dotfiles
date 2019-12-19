@@ -11,6 +11,7 @@ export TMUX_TMPDIR=/tmp/tmp.tmux
 if [ -f /usr/bin/fd ]; then
 	export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git --exclude google-api-php-client --exclude *.min.js --exclude tags --exclude .svn'
 fi
+export DT='/c/Users/kimura.AZET/Desktop/'
 
 alias ~='cd $HOME'
 alias wifi='sudo wifi-menu'
