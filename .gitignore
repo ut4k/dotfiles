@@ -1,9 +1,6 @@
 /*
 !/.vimrc
 !/.vim
-!/.xinitrc
-!/.xprofile
-!/.xbindkeysrc
 /.vim/plugged/*
 !/.vim/config/*
 /.vim/config/prj.vim
