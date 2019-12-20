@@ -1,3 +1,13 @@
+"run auto-intall script {{{
+if filereadable($HOME . "/scripts/vim-setup.sh")
+  let g:install_script_ret = system($HOME . "/scripts/vim-setup.sh")
+  if g:install_script_ret != ""
+    echo g:install_script_ret
+    sleep 2 
+  endif
+endif
+"}}}
+
 "basic{{{
 autocmd ColorScheme * highlight User1 guifg=#ffcb6b guibg=0 gui=bold
 autocmd ColorScheme * highlight User2 guifg=#c792ea guibg=0
@@ -129,7 +139,7 @@ nnoremap <leader>ev :vs $MYVIMRC<CR><CR>
 "~/.tmux.confを縦スプリットで開く
 nnoremap <leader>tc :vs $TMUXCONF<CR><CR>
 "vimrcを再読み込みする
-nnoremap <F12> :source $MYVIMRC<CR>:call PhpSyntaxOverride()<CR><CR>
+nnoremap <silent> <F12> :source $MYVIMRC<CR>:call PhpSyntaxOverride()<CR><CR>
 "mod_report.txtを縦スプリットで開く
 nnoremap <leader>mf :call system('tmux new-window')<CR><CR>
 "tag list pop
@@ -418,7 +428,7 @@ endfunction
 
 
 function! PhpSyntaxOverride()
-  " hi! phpVarSelector guifg=#ffcb6b guibg=#1E1E28 cterm=NONE
+  " return
   hi! link phpVarSelector SpecialChar
   hi! link phpIdentifier Identifier
 
@@ -678,6 +688,5 @@ function! MyGrepperStatus()
     let l:lastidx = len(l:cmd_arr)-1
     let l:query = l:cmd_arr[l:lastidx]
   endif
-  echo l:query
   return l:query
 endfunction
