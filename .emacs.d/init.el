@@ -49,7 +49,7 @@ There are two things you can do about this warning:
     ("bffa9739ce0752a37d9b1eee78fc00ba159748f50dc328af4be661484848e476" "2540689fd0bc5d74c4682764ff6c94057ba8061a98be5dd21116bf7bf301acfb" default)))
  '(package-selected-packages
    (quote
-    (auto-complete shell-pop spacemacs-theme afternoon-theme rainbow-identifiers slime htmlize helm))))
+    (evil php-mode auto-complete shell-pop spacemacs-theme afternoon-theme rainbow-identifiers slime htmlize helm))))
  '(fci-rule-color "#121212")
  '(package-selected-packages
    (quote

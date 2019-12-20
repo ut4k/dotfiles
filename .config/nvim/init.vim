@@ -239,6 +239,11 @@ nnoremap <M-Right> :wincmd l<CR>
 nnoremap <leader>ph :call PhpSyntaxOverride()<CR>
 
 nnoremap <F8> :NextColorScheme<CR>:call PhpSyntaxOverride()<CR>
+
+"type javascript
+nnoremap <leader>tj :set filetype=javascript<CR>
+"type html
+nnoremap <leader>th :set filetype=html<CR>
 "}}}
 
 "vim-plug{{{
