@@ -26,6 +26,7 @@ alias e="emacs -nw"
 alias emacs="emacs -nw"
 alias ctags="/usr/local/bin/ctags -R --options=$HOME/.ctags"
 alias yahoo="w3m yahoo.co.jp"
+alias ml="tmuxinator list"
 
 #run weasel-pageant on WSL
 if [[ $(uname -r) =~ Microsoft$ ]]; then eval $(/c/weasel-pageant/weasel-pageant -rq); fi
@@ -48,3 +49,4 @@ pandochtml2 () {
     pandoc -s -t html5 -c "$HOME/.config/pandoc/markdown-css-themes/markdown10.css" --metadata title=' ' --highlight-style=tango $1 -o ${f::-3}.html
 }
 
+export DISPLAY=localhost:0.0

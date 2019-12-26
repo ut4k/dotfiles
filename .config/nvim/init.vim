@@ -29,7 +29,7 @@ set smartcase
 set list
 set listchars=tab:»\ ,precedes:«,extends:»,eol:↲
 set ambiwidth=double
-set whichwrap+=h,l,<,>,[,],b,s "行間をでシームレスに移動する
+" set whichwrap+=h,l,<,>,[,],b,s "行間をでシームレスに移動する
 
 set mouse=a
 set ttimeoutlen=10
@@ -59,7 +59,7 @@ set tabstop=2
 set title
 set titlestring=%{expand('%:p')}
 set tags=tags
-let $BASH_ENV = "~/.bashrc" "load bash config
+let $BASH_ENV = expand("$HOME/.bashrc") "load bash config
 
 "todo
 " syntax sync minlines=20000
@@ -224,7 +224,10 @@ nmap <silent> gd <Plug>(coc-definition)
 " nmap <silent> gr <Plug>(coc-references)
 
 "double click to jump function definition "termでもうごく
-nmap <2-LeftMouse> :exe "tag ". expand("<cword>")<CR>
+" nmap <2-LeftMouse> :exe "tag ". expand("<cword>")<CR>
+
+"ダブルクリックでワードコピー
+nnoremap <silent> <2-LeftMouse> :call system('clip.exe', expand('<cword>'))<CR>:let @/=expand('<cword>')<CR>:set hls<CR>
 " nmap <c-]> g<c-]>
 
 "バッファ状態をsessionに保存
@@ -244,6 +247,8 @@ nnoremap <F8> :NextColorScheme<CR>:call PhpSyntaxOverride()<CR>
 nnoremap <leader>tj :set filetype=javascript<CR>
 "type html
 nnoremap <leader>th :set filetype=html<CR>
+"Meta-e カレントバッファのphpコードを実行してvsplitで開く
+nnoremap <M-e> :call EvalVnew('php')<CR>
 "}}}
 
 "vim-plug{{{
@@ -691,7 +696,18 @@ function! MyGrepperStatus()
   if l:stat != ""
     let l:cmd_arr = split(l:stat, " ")
     let l:lastidx = len(l:cmd_arr)-1
-    let l:query = l:cmd_arr[l:lastidx]
+    let l:query = 'rg:'.l:cmd_arr[l:lastidx]
   endif
   return l:query
+endfunction
+
+augroup filetypedetect
+  au BufRead,BufNewFile *.md :syntax off
+augroup END
+
+function! EvalVnew(bin_name)
+  let l:answer = confirm('Do eval?', "&Yes\n&No", 1)
+  if l:answer == 1
+    :silent :%y z|vnew|silent 0put=@z|silent execute "%!".a:bin_name
+  endif
 endfunction

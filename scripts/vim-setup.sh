@@ -1,5 +1,4 @@
 #!/bin/bash
-touch /mnt/c/Users/kimura.AZET/Desktop/aaa.txt
 
 #########################################
 # plug.vim
