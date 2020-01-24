@@ -69,3 +69,8 @@ augroup hiAsJs
   autocmd!
   autocmd BufRead *_js.tpl set ft=javascript 
 augroup END
+
+augroup Nohi
+  autocmd!
+  autocmd BufRead *md syn off
+augroup END

@@ -30,6 +30,11 @@ set list
 set listchars=tab:»\ ,precedes:«,extends:»,eol:↲
 set ambiwidth=double
 " set whichwrap+=h,l,<,>,[,],b,s "行間をでシームレスに移動する
+"
+" ファイルが変更されたら自動で再読み込み
+set autoread
+" neovim用fix
+autocmd FocusGained * silent! checktime
 
 set mouse=a
 set ttimeoutlen=10
@@ -85,7 +90,6 @@ let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
 let $PRJCONF = "$HOME/.vim/config/prj.vim"
 let $MYVIMRC2 = "$HOME/.vim/config/local.vim"
 let $TMUXCONF = "$HOME/.tmux.conf"
-let $REPORTFILE = "$HOME/notes/mod_report.txt"
 let $SNIPPETDIR = "$HOME/.vim/config/snippets/"
 "}}}
 
@@ -104,7 +108,7 @@ set statusline+=%h
 set statusline+=%0*
 
 set statusline+=%=
-set statusline+=%0*
+set statusline+=%1*
 set statusline+=%{MyGrepperStatus()}
 set statusline+=%1*
 set statusline+=%{NearestMethodOrFunction()}\  
@@ -275,6 +279,7 @@ Plug 'xolox/vim-misc' "vim-colorscheme-switcher dependency
 Plug 'xolox/vim-colorscheme-switcher'
 Plug 'blueyed/smarty.vim'
 Plug 'justinmk/vim-dirvish'
+Plug 'junegunn/goyo.vim'
 "php
 Plug 'StanAngeloff/php.vim'
 Plug 'shawncplus/phpcomplete.vim'
@@ -290,6 +295,15 @@ Plug 'skreek/skeletor.vim'
 Plug 'liuchengxu/space-vim-dark'
 Plug 'kjssad/quantum.vim'
 Plug 'kshenoy/vim-sol'
+Plug 'mhartington/oceanic-next'
+Plug 'nightsense/cosmic_latte'
+Plug 'kadekillary/Turtles'
+Plug 'wadackel/vim-dogrun'
+Plug 'Badacadabra/vim-archery'
+Plug 'Wutzara/vim-materialtheme'
+Plug 'eemed/sitruuna.vim'
+Plug 'Junza/Spink'
+Plug 'duythinht/vim-coffee'
 call plug#end()
 "}}}
 
@@ -588,6 +602,7 @@ function! FileNameToReg()
     let l:path = "/ent/" . l:path
   endif
   let @+=l:path
+   :call system('clip.exe', @+)
 endfunction
 
 function! GrepByFileName()
@@ -601,14 +616,15 @@ function! GrepByCword()
 endfunction
 
 "変更ファイルのメモに今のファイルパス加える
-"tmuxペイン0にvimが開いている必要あり
 function! AddtoModFileList()
   let l:path = expand("%")
+  let l:dt = strftime("%Y%m%d")
   if g:on_ent_dir == 1
     let l:path = "/ent/" . l:path
   endif
-  call system("echo ".l:path." >> /mnt/d/notes/mod_report.txt")
-  call system("tmux send-keys -t 0 :e! Enter S-g zz")
+  call system("echo ".l:path." >> /mnt/d/notes/reports/".l:dt.".txt")
+  call system("tmux send-keys -t report :e! Enter")
+  echo "Added to > ".l:dt.".txt"
 endfunction
 "}}}
 
@@ -670,7 +686,8 @@ if filereadable(expand($MYVIMRC2)) | source $MYVIMRC2 | endif
 "colorscheme
 " colorscheme palenight
 " colorscheme xcodedark
-colorscheme quantum
+" colorscheme quantum
+colorscheme dogrun
 set foldmethod=marker
 
 "auto open folds

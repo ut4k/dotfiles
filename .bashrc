@@ -49,4 +49,9 @@ pandochtml2 () {
     pandoc -s -t html5 -c "$HOME/.config/pandoc/markdown-css-themes/markdown10.css" --metadata title=' ' --highlight-style=tango $1 -o ${f::-3}.html
 }
 
-export DISPLAY=localhost:0.0
+mdtoh () {
+    f=$1
+    pandoc -s --self-contained -t html5 -c "$HOME/.config/pandoc/markdown-css-themes/markdown$2.css" --metadata title=' ' --highlight-style=tango $1 -o ${f::-3}.html
+}
+
+# export DISPLAY=localhost:0.0
