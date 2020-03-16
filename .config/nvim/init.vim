@@ -7,6 +7,16 @@ if filereadable($HOME . "/scripts/vim-setup.sh")
   endif
 endif
 "}}}
+"
+"global variable {{{
+let $PRJCONF = "$HOME/.vim/config/prj.vim"
+let $TMUXCONF = "$HOME/.tmux.conf"
+let $SNIPPETDIR = "$HOME/.vim/config/snippets/"
+"}}}
+
+"read external files {{{
+if filereadable(expand($PRJCONF)) | source $PRJCONF | endif
+"}}}
 
 "basic{{{
 autocmd ColorScheme * highlight User1 guifg=#ffcb6b guibg=0 gui=bold
@@ -86,13 +96,6 @@ let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
 
 "}}}
 
-"variable {{{
-let $PRJCONF = "$HOME/.vim/config/prj.vim"
-let $MYVIMRC2 = "$HOME/.vim/config/local.vim"
-let $TMUXCONF = "$HOME/.tmux.conf"
-let $SNIPPETDIR = "$HOME/.vim/config/snippets/"
-"}}}
-
 "status line{{{
 set statusline=
 set statusline+=%2*
@@ -108,8 +111,8 @@ set statusline+=%h
 set statusline+=%0*
 
 set statusline+=%=
-set statusline+=%1*
-set statusline+=%{MyGrepperStatus()}
+set statusline+=%2*
+" set statusline+=%{MyGrepperStatus()}
 set statusline+=%1*
 set statusline+=%{NearestMethodOrFunction()}\  
 set statusline+=%0*
@@ -140,12 +143,11 @@ nnoremap <leader>ee :call QFixToggle()<CR>:wincmd=<CR><CR>
 nnoremap <F3> :noh<CR><CR>
 "vimrcを縦スプリットで開く
 nnoremap <leader>ev :vs $MYVIMRC<CR><CR>
+nnoremap <leader>epr :vs $PRJCONF<CR><CR>
 "~/.tmux.confを縦スプリットで開く
 nnoremap <leader>tc :vs $TMUXCONF<CR><CR>
 "vimrcを再読み込みする
 nnoremap <silent> <F12> :source $MYVIMRC<CR>:call PhpSyntaxOverride()<CR><CR>
-"mod_report.txtを縦スプリットで開く
-nnoremap <leader>mf :call system('tmux new-window')<CR><CR>
 "tag list pop
 nnoremap tp :Vista!!<CR>
 "ファイル名をクリップボードにコピー
@@ -224,35 +226,38 @@ nmap <silent> [g <Plug>(coc-diagnostic-prev)
 nmap <silent> ]g <Plug>(coc-diagnostic-next)
 "定義もとへ go definition
 nmap <silent> gd <Plug>(coc-definition)
-"使用箇所一覧を出す ごちゃごちゃするので未使用
-" nmap <silent> gr <Plug>(coc-references)
-
-"double click to jump function definition "termでもうごく
-" nmap <2-LeftMouse> :exe "tag ". expand("<cword>")<CR>
-
 "ダブルクリックでワードコピー
 nnoremap <silent> <2-LeftMouse> :call system('clip.exe', expand('<cword>'))<CR>:let @/=expand('<cword>')<CR>:set hls<CR>
-" nmap <c-]> g<c-]>
-
-"バッファ状態をsessionに保存
-nnoremap <leader>ms :mksession! ~/.vim_session <CR>
-nnoremap <leader>lo :source ~/.vim_session <CR>
-
+"tagjumpをつねにgつきに
+nmap <c-]> g<c-]>
 nnoremap <M-Up> :wincmd k<CR>
 nnoremap <M-Down> :wincmd j<CR>
 nnoremap <M-Left> :wincmd h<CR>
 nnoremap <M-Right> :wincmd l<CR>
-
 nnoremap <leader>ph :call PhpSyntaxOverride()<CR>
-
 nnoremap <F8> :NextColorScheme<CR>:call PhpSyntaxOverride()<CR>
-
 "type javascript
 nnoremap <leader>tj :set filetype=javascript<CR>
 "type html
 nnoremap <leader>th :set filetype=html<CR>
 "Meta-e カレントバッファのphpコードを実行してvsplitで開く
 nnoremap <M-e> :call EvalVnew('php')<CR>
+"コミットポップアップ
+nnoremap cm :call SvnCommitSrl()<CR>
+"ライブラリを開く openlib
+nnoremap <leader>ol :call OpenLibSrl()<CR>
+"入り口プログラムを開く openentry
+nnoremap <leader>oe :call OpenEntrySrl()<CR>
+"TODOをgrep
+ nnoremap <leader>gtd :GrepperRg "(debug\|TODO).*kimura"<CR>
+"fin debug comments
+nnoremap <leader>fd /debug\\|TODO\s*\(start\\|end\)*\s*kimura<CR>
+"find my comments
+nnoremap <leader>fm /\(add\\|update\\|del\\|debug\\|TODO\)\s*\(start\\|end\)*\s*kimura<CR>
+"et edited today 今日の編集コメントを検索
+nnoremap <leader>et :let @t = strftime("%Y\\/%m\\/%d")<CR>/<C-R>t<CR>
+"et edited yesterday 昨日の編集コメントを検索
+nnoremap <leader>ey :let @t = strftime("%Y\\/%m\\/%d", localtime() - (60*60*24))<CR>/<C-R>t<CR>
 "}}}
 
 "vim-plug{{{
@@ -368,11 +373,18 @@ let g:surround_{char2nr('q')} = "\\\"\r\\\""
 " Grepper
 "-----------------------------------------
 let g:grepper = {}
-let g:grepper.rg = {
-    \'grepprg': 'rg --vimgrep --line-number --ignore-case --ignore-file $HOME/.rg/ignore',
-    \ 'grepformat': '%f:%l:%m',
-    \ 'escape':     '\^$.*[]',
-    \ }
+let g:grepper.rg = { 'grepformat':'%f:%l:%m', 'escape':'\^$.*[]' }
+" if g:on_ent_dir == 1
+if 1 == 1
+  let g:grepper.rg = {
+        \'grepprg': 'rg --vimgrep --line-number --ignore-case --ignore-file $HOME/.rg/ignore_entry',
+        \ }
+elseif 0 == 0
+  let g:grepper.rg = {
+        \'grepprg': 'rg --vimgrep --line-number --ignore-case --ignore-file $HOME/.rg/ignore',
+        \ }
+endif
+
 
 let g:grepper.tools = ['rg']
 let g:grepper.highlight = 1
@@ -394,8 +406,8 @@ let g:UltiSnipsSnippetDirectories=[$HOME . '/.vim/config/snippets']
 " Vista
 " Tagbarから乗り換え
 "-----------------------------------------
-" let g:vista_default_executive = "coc"
-let g:vista_default_executive = "ctags"
+let g:vista_default_executive = "coc"
+"let g:vista_default_executive = "ctags"
 let g:vista_ignore_kinds = ['Variable', 'variable']
 let g:vista_cursor_delay = 200
 let g:vista_sidebar_width = 55
@@ -406,7 +418,7 @@ let g:colorscheme_switcher_exclude_builtins=1
 " -----------------------------------------
 " phpcomplete
 " -----------------------------------------
-let g:phpcomplete_mappings = { 'jump_to_def':'<C-]>' }
+" let g:phpcomplete_mappings = { 'jump_to_def':'<C-]>' }
 "}}}
 
 "functions{{{
@@ -665,22 +677,17 @@ autocmd FileType sql set tabstop=4|set shiftwidth=2|set noexpandtab|set smarttab
 autocmd FileType php :setlocal iskeyword+=$
 
 " WSL ヤンクでクリップボードにコピー
-if system('uname -a | grep Microsoft') != ''
-  augroup myYank
-    autocmd!
-    autocmd TextYankPost * :call system('clip.exe', @")
-  augroup END
-endif
+" if system('uname -a | grep Microsoft') != ''
+"   augroup myYank
+"     autocmd!
+"     autocmd TextYankPost * :call system('clip.exe', @")
+"   augroup END
+" endif
 
 augroup autoConvertHtml
     autocmd!
     autocmd BufWritePost suralanote.md | silent! call system("pandochtml ".expand("%")." > /dev/null")
 augroup END
-"}}}
-
-"read external files {{{
-if filereadable(expand($PRJCONF)) | source $PRJCONF | endif
-if filereadable(expand($MYVIMRC2)) | source $MYVIMRC2 | endif
 "}}}
 
 "colorscheme
@@ -718,7 +725,7 @@ function! MyGrepperStatus()
   return l:query
 endfunction
 
-augroup filetypedetect
+augroup nosynmd
   au BufRead,BufNewFile *.md :syntax off
 augroup END
 

@@ -10,6 +10,10 @@ snippet ad
 //add `!v g:worker` `date +%Y/%m/%d` `!v g:current_project`
 endsnippet
 
+snippet adc "add for css"
+/* add `!v g:worker` `date +%Y/%m/%d` `!v g:current_project` */
+endsnippet
+
 snippet adb "add block" i
 //add start `!v g:worker` `date +%Y/%m/%d` `!v g:current_project` {{{
 //add end   `!v g:worker` `date +%Y/%m/%d` `!v g:current_project` }}}
@@ -17,6 +21,10 @@ endsnippet
 
 snippet dl
 //del `!v g:worker` `date +%Y/%m/%d` `!v g:current_project`
+endsnippet
+
+snippet dlc "del for css"
+/* del `!v g:worker` `date +%Y/%m/%d` `!v g:current_project` */
 endsnippet
 
 snippet dls
@@ -104,4 +112,8 @@ endsnippet
 
 snippet cl "console.log"
 console.log(${1:variable});
+endsnippet
+
+snippet elog "entry log"
+$log->write(_DEBUG, var_export(${1:message}, true));
 endsnippet

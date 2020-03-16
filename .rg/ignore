@@ -4,10 +4,9 @@ tags
 *.min.js
 jquery.js
 www/material/flash/*
+www/material/chart/*
 cgi-bin
 opt
 www/tegaki
 www/tegaki_v2
-
-
-
+ent/*
