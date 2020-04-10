@@ -117,3 +117,41 @@ endsnippet
 snippet elog "entry log"
 $log->write(_DEBUG, var_export(${1:message}, true));
 endsnippet
+
+snippet sin
+[新規作成]
+endsnippet
+
+snippet hen
+[変更]
+endsnippet
+
+snippet tori
+[★取り下げ]
+endsnippet
+
+snippet rns
+//=============================================================
+//連携処理 START
+//=============================================================
+endsnippet
+
+snippet rne
+//=============================================================
+//連携処理 END
+//=============================================================
+endsnippet
+
+snippet ext
+if (ExtConfig::isExternalService($row['srvc_cd'])) {
+endsnippet
+
+snippet exts
+//送信処理
+$ext_api_client = new ExtApiClient($module_name, $row['srvc_cd'], false);
+if (!$ext_api_client->send($send_datas)) {
+	$request->setError("EXT_API_ERR_REQUEST_NOT_SENT");
+	return false;
+}
+$res_info = $ext_api_client->getResponse();
+endsnippet

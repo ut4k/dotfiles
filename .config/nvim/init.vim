@@ -25,6 +25,7 @@ autocmd ColorScheme * highlight User2 guifg=#c792ea guibg=0
 scriptencoding utf-8
 set encoding=utf-8
 
+set cmdheight=1
 set termguicolors
 set background=dark
 set t_Co=256
@@ -88,7 +89,7 @@ set wildignore+=*/.git/*,*/tmp/*,*.swp
 "html output
 let g:html_number_lines = 0
 let g:html_ignore_folding = 1
-let g:html_font = "Terminus"
+let g:html_font = "Consolas"
 
 "to enable termiguicolors in tmux
 let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
@@ -112,7 +113,6 @@ set statusline+=%0*
 
 set statusline+=%=
 set statusline+=%2*
-" set statusline+=%{MyGrepperStatus()}
 set statusline+=%1*
 set statusline+=%{NearestMethodOrFunction()}\  
 set statusline+=%0*
@@ -219,7 +219,6 @@ nnoremap gF :call GrepByFileName()<CR>
 nnoremap gR :call GrepByCword()<CR>
 "Grepper-stop
 nnoremap gS :Grepper-stop<CR>
-
 nnoremap <leader>bk :call CopyToDesktop()<CR>
 "coc
 nmap <silent> [g <Plug>(coc-diagnostic-prev)
@@ -229,7 +228,9 @@ nmap <silent> gd <Plug>(coc-definition)
 "ダブルクリックでワードコピー
 nnoremap <silent> <2-LeftMouse> :call system('clip.exe', expand('<cword>'))<CR>:let @/=expand('<cword>')<CR>:set hls<CR>
 "tagjumpをつねにgつきに
-nmap <c-]> g<c-]>
+" nmap <c-]> g<c-]>
+"do coc tag-jump
+" nmap <c-]> :call CocAction('jumpDefinition')<CR>
 nnoremap <M-Up> :wincmd k<CR>
 nnoremap <M-Down> :wincmd j<CR>
 nnoremap <M-Left> :wincmd h<CR>
@@ -258,6 +259,12 @@ nnoremap <leader>fm /\(add\\|update\\|del\\|debug\\|TODO\)\s*\(start\\|end\)*\s*
 nnoremap <leader>et :let @t = strftime("%Y\\/%m\\/%d")<CR>/<C-R>t<CR>
 "et edited yesterday 昨日の編集コメントを検索
 nnoremap <leader>ey :let @t = strftime("%Y\\/%m\\/%d", localtime() - (60*60*24))<CR>/<C-R>t<CR>
+"Alt + hjklでバッファ移動
+"<c-w> [hjkl] に慣れすぎて使わない...
+" nmap <silent> <A-k> :wincmd k<CR>
+" nmap <silent> <A-j> :wincmd j<CR>
+" nmap <silent> <A-h> :wincmd h<CR>
+" nmap <silent> <A-l> :wincmd l<CR>
 "}}}
 
 "vim-plug{{{
@@ -284,7 +291,7 @@ Plug 'xolox/vim-misc' "vim-colorscheme-switcher dependency
 Plug 'xolox/vim-colorscheme-switcher'
 Plug 'blueyed/smarty.vim'
 Plug 'justinmk/vim-dirvish'
-Plug 'junegunn/goyo.vim'
+" Plug 'MarcWeber/vim-addon-qf-layout'
 "php
 Plug 'StanAngeloff/php.vim'
 Plug 'shawncplus/phpcomplete.vim'
@@ -301,14 +308,8 @@ Plug 'liuchengxu/space-vim-dark'
 Plug 'kjssad/quantum.vim'
 Plug 'kshenoy/vim-sol'
 Plug 'mhartington/oceanic-next'
-Plug 'nightsense/cosmic_latte'
-Plug 'kadekillary/Turtles'
 Plug 'wadackel/vim-dogrun'
-Plug 'Badacadabra/vim-archery'
-Plug 'Wutzara/vim-materialtheme'
-Plug 'eemed/sitruuna.vim'
-Plug 'Junza/Spink'
-Plug 'duythinht/vim-coffee'
+Plug 'sts10/vim-mustard'
 call plug#end()
 "}}}
 
@@ -362,9 +363,6 @@ let g:php_sql_nowdoc = 0
 " commentary
 "----------------------------------------
 autocmd FileType php setlocal commentstring=//\ %s
-" tagbar-phpctags
-"---------------------------------------
-let g:tagbar_phpctags_bin = '~/phpctags/phpctags.phar'
 "-----------------------------------------
 " sorround
 "-----------------------------------------
@@ -374,17 +372,15 @@ let g:surround_{char2nr('q')} = "\\\"\r\\\""
 "-----------------------------------------
 let g:grepper = {}
 let g:grepper.rg = { 'grepformat':'%f:%l:%m', 'escape':'\^$.*[]' }
-" if g:on_ent_dir == 1
-if 1 == 1
+if g:on_ent_dir == 1
   let g:grepper.rg = {
         \'grepprg': 'rg --vimgrep --line-number --ignore-case --ignore-file $HOME/.rg/ignore_entry',
         \ }
-elseif 0 == 0
+elseif g:on_ent_dir == 0
   let g:grepper.rg = {
         \'grepprg': 'rg --vimgrep --line-number --ignore-case --ignore-file $HOME/.rg/ignore',
         \ }
 endif
-
 
 let g:grepper.tools = ['rg']
 let g:grepper.highlight = 1
@@ -404,12 +400,11 @@ let g:UltiSnipsEditSplit="vertical"
 let g:UltiSnipsSnippetDirectories=[$HOME . '/.vim/config/snippets']
 "-----------------------------------------
 " Vista
-" Tagbarから乗り換え
 "-----------------------------------------
-let g:vista_default_executive = "coc"
-"let g:vista_default_executive = "ctags"
+"let g:vista_default_executive = "coc"
+let g:vista_default_executive = "ctags"
 let g:vista_ignore_kinds = ['Variable', 'variable']
-let g:vista_cursor_delay = 200
+let g:vista_cursor_delay = 100
 let g:vista_sidebar_width = 55
 " -----------------------------------------
 " vim-colorscheme-switcher
@@ -418,7 +413,18 @@ let g:colorscheme_switcher_exclude_builtins=1
 " -----------------------------------------
 " phpcomplete
 " -----------------------------------------
-" let g:phpcomplete_mappings = { 'jump_to_def':'<C-]>' }
+let g:phpcomplete_enhance_jump_to_definition = 1
+let g:phpcomplete_mappings = {
+   \ 'jump_to_def': '<C-]>',
+   \ 'jump_to_def_split': '<C-W><C-]>',
+   \ 'jump_to_def_vsplit': '<C-W><C-\>',
+   \ 'jump_to_def_tabnew': '<C-W><C-[>',
+   \}
+" -----------------------------------------
+"  fzf
+" -----------------------------------------
+let g:fzf_preview_window = 'right:40%'
+
 "}}}
 
 "functions{{{
@@ -552,25 +558,9 @@ function! LinterStatus() abort
     \)
 endfunction
 
-command! LightlineReload call LightlineReload()
-
-function! LightlineReload()
-  call lightline#init()
-  call lightline#colorscheme()
-  call lightline#update()
-endfunction
-
 function! CopyCurrentFunctionName()
   let @* = NearestMethodOrFunction()
   :call system('clip.exe', @*)
-endfunction
-
-function! MyLineinfo()
-  return line('.') . '/' . line('$')
-endfunction
-
-function! MyFileformatInfo()
-  return &ff=='mac'?'mac[CR]':&ff=='unix'?'unix[LF]':'dos[CRLF]'
 endfunction
 
 function! s:show_documentation()
@@ -587,17 +577,11 @@ function! CopyToDesktop()
   call system(l:cmd)
 endfunction
 
-function! FJumpUp()
- normal [[
- call histdel("/")
- " call histdel("search", -1)
-endfunction
-
 function! NearestMethodOrFunction() abort
   return get(b:, 'vista_nearest_method_or_function', '')
 endfunction
 
-function! ReadAsCP932()
+function! Ecp932()
   :e ++enc=cp932
 endfunction
 
@@ -641,7 +625,7 @@ endfunction
 "}}}
 
 "custom command {{{
-command! ReadAsCP932 :call ReadAsCP932()
+command! Ecp932 :call Ecp932()
 "}}}
 
 "auto command {{{
@@ -651,12 +635,6 @@ augroup phpSyntaxOverride
   autocmd FileType php call PhpSyntaxOverride()
 augroup END
 
-" インサートモードから抜けたらIMEを英語にセット
-augroup reset_ime
-  au!
-  au InsertLeave * set iminsert=0
-augroup END
-
 "リサイズ時に画面幅をそろえる
 augroup Misc
     autocmd!
@@ -664,7 +642,8 @@ augroup Misc
 augroup END
 
 " push quickfix window always to the bottom
-autocmd FileType qf wincmd J
+" autocmd FileType qf wincmd J
+autocmd FileType qf if (getwininfo(win_getid())[0].loclist != 1) | wincmd J | endif
 
 "tab or space
 autocmd FileType haskell set tabstop=4|set shiftwidth=4|set expandtab
@@ -691,16 +670,16 @@ augroup END
 "}}}
 
 "colorscheme
-" colorscheme palenight
-" colorscheme xcodedark
-" colorscheme quantum
 colorscheme dogrun
+"colorscheme mustard
 set foldmethod=marker
 
 "auto open folds
 autocmd FileType php normal zR
 
 autocmd VimEnter * call vista#RunForNearestMethodOrFunction()
+
+" autocmd VimEnter * if filereadable(expand($PRJCONF)) | source $PRJCONF | endif
 
 "diff setting
 if &diff                             " only for diff mode/vimdiff
@@ -735,3 +714,11 @@ function! EvalVnew(bin_name)
     :silent :%y z|vnew|silent 0put=@z|silent execute "%!".a:bin_name
   endif
 endfunction
+
+vmap <leader>f  <Plug>(coc-format-selected)
+
+" let g:vim_addon_qf_layout = {}
+" let g:vim_addon_qf_layout.quickfix_formatters = [
+"     \'vim_addon_qf_layout#DefaultFormatter',
+"     \'vim_addon_qf_layout#Reset',
+"     \'NOP' ]
