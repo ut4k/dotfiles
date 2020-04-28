@@ -3,6 +3,7 @@ export TERM="xterm-256color"
 export SCRIPTS=$HOME/scripts
 export PATH=$PATH:~/phpctags/phpctags.phar
 export PATH=$PATH:~/.local/bin
+export PATH=$PATH:~/.composer/vendor/bin
 export PS1="\[\033[38;5;38m\]\u\[\]\[\033[38;5;15m\]@\[\]\[\033[38;5;172m\]\h\[\]\[\033[38;5;15m\] \[\]\w\[\]\n\[\]\[\033[38;5;41m\]\$\[\]\[\033[38;5;15m\] \[\]"
 export TMUX_TMPDIR=/tmp/tmp.tmux
 if [ -f /usr/bin/fd ]; then
@@ -25,7 +26,7 @@ alias vim="nvim"
 alias e="emacs -nw"
 alias emacs="emacs -nw"
 alias ctags="/usr/local/bin/ctags -R --options=$HOME/.ctags"
-alias yahoo="w3m yahoo.co.jp"
+alias yahoo="w3m -s -num yahoo.co.jp"
 alias ml="tmuxinator list"
 
 #run weasel-pageant on WSL

@@ -310,6 +310,15 @@ Plug 'kshenoy/vim-sol'
 Plug 'mhartington/oceanic-next'
 Plug 'wadackel/vim-dogrun'
 Plug 'sts10/vim-mustard'
+Plug 'flrnd/candid.vim'
+Plug 'tjammer/blayu.vim'
+Plug 'Jimeno0/vim-chito'
+Plug 'felipesousa/rupza'
+Plug 'dennougorilla/azuki.vim'
+Plug 'jmoggee/mirage.vim'
+Plug 'JarrodCTaylor/spartan'
+Plug 'nightsense/seabird'
+Plug 'NLKNguyen/papercolor-theme'
 call plug#end()
 "}}}
 
@@ -406,6 +415,7 @@ let g:vista_default_executive = "ctags"
 let g:vista_ignore_kinds = ['Variable', 'variable']
 let g:vista_cursor_delay = 100
 let g:vista_sidebar_width = 55
+let g:vista#renderer#enable_icon = 0
 " -----------------------------------------
 " vim-colorscheme-switcher
 " -----------------------------------------
@@ -656,12 +666,12 @@ autocmd FileType sql set tabstop=4|set shiftwidth=2|set noexpandtab|set smarttab
 autocmd FileType php :setlocal iskeyword+=$
 
 " WSL ヤンクでクリップボードにコピー
-" if system('uname -a | grep Microsoft') != ''
-"   augroup myYank
-"     autocmd!
-"     autocmd TextYankPost * :call system('clip.exe', @")
-"   augroup END
-" endif
+if system('uname -a | grep Microsoft') != ''
+  augroup myYank
+    autocmd!
+    autocmd TextYankPost * :call system('clip.exe', @")
+  augroup END
+endif
 
 augroup autoConvertHtml
     autocmd!
@@ -672,6 +682,10 @@ augroup END
 "colorscheme
 colorscheme dogrun
 "colorscheme mustard
+"colorscheme candid
+"colorscheme blayu
+" colorscheme OceanicNext
+" colorscheme chito
 set foldmethod=marker
 
 "auto open folds
@@ -715,10 +729,6 @@ function! EvalVnew(bin_name)
   endif
 endfunction
 
-vmap <leader>f  <Plug>(coc-format-selected)
-
-" let g:vim_addon_qf_layout = {}
-" let g:vim_addon_qf_layout.quickfix_formatters = [
-"     \'vim_addon_qf_layout#DefaultFormatter',
-"     \'vim_addon_qf_layout#Reset',
-"     \'NOP' ]
+vmap <leader>f <Plug>(coc-format-selected)
+"escでターミナルモードを終了
+tnoremap <F11> <C-\><C-n>
