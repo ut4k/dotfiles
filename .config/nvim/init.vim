@@ -12,6 +12,11 @@ endif
 let $PRJCONF = "$HOME/.vim/config/prj.vim"
 let $TMUXCONF = "$HOME/.tmux.conf"
 let $SNIPPETDIR = "$HOME/.vim/config/snippets/"
+"use fd for fzf.vim
+if filereadable("/usr/bin/fd")
+	let $FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --ignore-file=$HOME/ignore/ignore'
+endif
+
 "}}}
 
 "read external files {{{
@@ -292,6 +297,7 @@ Plug 'xolox/vim-colorscheme-switcher'
 Plug 'blueyed/smarty.vim'
 Plug 'justinmk/vim-dirvish'
 " Plug 'MarcWeber/vim-addon-qf-layout'
+" Plug 'pechorin/any-jump.vim' "まだ実用できなそう...
 "php
 Plug 'StanAngeloff/php.vim'
 Plug 'shawncplus/phpcomplete.vim'
@@ -372,6 +378,7 @@ let g:php_sql_nowdoc = 0
 " commentary
 "----------------------------------------
 autocmd FileType php setlocal commentstring=//\ %s
+autocmd FileType smarty setlocal commentstring={*\ %s\ *}
 "-----------------------------------------
 " sorround
 "-----------------------------------------
@@ -383,11 +390,11 @@ let g:grepper = {}
 let g:grepper.rg = { 'grepformat':'%f:%l:%m', 'escape':'\^$.*[]' }
 if g:on_ent_dir == 1
   let g:grepper.rg = {
-        \'grepprg': 'rg --vimgrep --line-number --ignore-case --ignore-file $HOME/.rg/ignore_entry',
+        \'grepprg': 'rg --vimgrep --line-number --ignore-case --ignore-file $HOME/ignore/ignore_entry',
         \ }
 elseif g:on_ent_dir == 0
   let g:grepper.rg = {
-        \'grepprg': 'rg --vimgrep --line-number --ignore-case --ignore-file $HOME/.rg/ignore',
+        \'grepprg': 'rg --vimgrep --line-number --ignore-case --ignore-file $HOME/ignore/ignore',
         \ }
 endif
 
@@ -661,6 +668,9 @@ autocmd FileType vim set tabstop=2|set shiftwidth=2|set expandtab
 autocmd FileType php set noexpandtab
 autocmd FileType json set tabstop=2|set shiftwidth=2|set expandtab
 autocmd FileType sql set tabstop=4|set shiftwidth=2|set noexpandtab|set smarttab
+autocmd FileType smarty set tabstop=4|set shiftwidth=2|set expandtab
+autocmd FileType html set tabstop=4|set shiftwidth=2|set expandtab
+autocmd FileType css set tabstop=4|set shiftwidth=2|set expandtab
 
 "phpは$をキーワードとしてあつかう wで $variable 全体がとれるように
 autocmd FileType php :setlocal iskeyword+=$
@@ -732,3 +742,5 @@ endfunction
 vmap <leader>f <Plug>(coc-format-selected)
 "escでターミナルモードを終了
 tnoremap <F11> <C-\><C-n>
+
+" let g:any_jump_references_enabled = 0
