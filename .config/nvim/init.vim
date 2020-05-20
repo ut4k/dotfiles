@@ -91,6 +91,8 @@ set wildignore+=*\\.git\\*,*\\.hg\\*,*\\.svn\\*
 set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*.jpg,*.png,*.gif,*.jpeg,*.swf
 set wildignore+=*/.git/*,*/tmp/*,*.swp
 
+set cscopequickfix=s+,c+,d+,i+,t+,e+,a+
+
 "html output
 let g:html_number_lines = 0
 let g:html_ignore_folding = 1
@@ -310,21 +312,12 @@ Plug 'vim-python/python-syntax'
 "colorscheme
 Plug 'drewtempelmeyer/palenight.vim'
 Plug 'skreek/skeletor.vim'
-Plug 'liuchengxu/space-vim-dark'
 Plug 'kjssad/quantum.vim'
 Plug 'kshenoy/vim-sol'
 Plug 'mhartington/oceanic-next'
 Plug 'wadackel/vim-dogrun'
-Plug 'sts10/vim-mustard'
-Plug 'flrnd/candid.vim'
-Plug 'tjammer/blayu.vim'
-Plug 'Jimeno0/vim-chito'
-Plug 'felipesousa/rupza'
-Plug 'dennougorilla/azuki.vim'
-Plug 'jmoggee/mirage.vim'
-Plug 'JarrodCTaylor/spartan'
-Plug 'nightsense/seabird'
-Plug 'NLKNguyen/papercolor-theme'
+Plug 'sainnhe/sonokai'
+Plug 'jsfaint/gen_tags.vim'
 call plug#end()
 "}}}
 
@@ -431,12 +424,12 @@ let g:colorscheme_switcher_exclude_builtins=1
 " phpcomplete
 " -----------------------------------------
 let g:phpcomplete_enhance_jump_to_definition = 1
-let g:phpcomplete_mappings = {
-   \ 'jump_to_def': '<C-]>',
-   \ 'jump_to_def_split': '<C-W><C-]>',
-   \ 'jump_to_def_vsplit': '<C-W><C-\>',
-   \ 'jump_to_def_tabnew': '<C-W><C-[>',
-   \}
+" let g:phpcomplete_mappings = {
+"    \ 'jump_to_def': '<C-]>',
+"    \ 'jump_to_def_split': '<C-W><C-]>',
+"    \ 'jump_to_def_vsplit': '<C-W><C-\>',
+"    \ 'jump_to_def_tabnew': '<C-W><C-[>',
+"    \}
 " -----------------------------------------
 "  fzf
 " -----------------------------------------
@@ -690,12 +683,8 @@ augroup END
 "}}}
 
 "colorscheme
-colorscheme dogrun
-"colorscheme mustard
-"colorscheme candid
-"colorscheme blayu
-" colorscheme OceanicNext
-" colorscheme chito
+" colorscheme dogrun
+colorscheme sonokai
 set foldmethod=marker
 
 "auto open folds
@@ -743,4 +732,53 @@ vmap <leader>f <Plug>(coc-format-selected)
 "escでターミナルモードを終了
 tnoremap <F11> <C-\><C-n>
 
-" let g:any_jump_references_enabled = 0
+" let g:sonokai_style = 'andromeda'
+let g:sonokai_style = 'atlantis'
+" let g:sonokai_style = 'maia'
+" let g:sonokai_style = 'shusia'
+let g:sonokai_enable_italic = 0
+let g:sonokai_disable_italic_comment = 1
+
+"gen_tags
+let g:gen_tags#statusline = 1
+let g:gen_tags#gtags_default_map = 0
+let g:loaded_gentags#ctags = 1
+
+if v:version >= 800
+    set cscopequickfix=s+,c+,d+,i+,t+,e+,g+,f+,a+
+else
+    set cscopequickfix=s+,c+,d+,i+,t+,e+,g+,f+
+endif
+
+function! s:gen_tags_find(cmd, keyword) abort
+    " Mark this position
+    execute "normal! mY"
+    " Close any open quickfix windows
+    cclose
+    " Clear existing quickfix list
+    cal setqflist([])
+
+    let l:cur_buf=@%
+    let l:cmd = 'cs find ' . a:cmd . ' ' . a:keyword
+    silent! keepjumps execute l:cmd
+
+    if len(getqflist()) > 1
+        " If the buffer that cscope jumped to is not same as current file, close the buffer
+        if l:cur_buf != @%
+            " Go back to where the command was issued
+            execute "normal! `Y"
+            " delete previous buffer.
+            bdelete #
+        endif
+        copen
+    endif
+endfunction
+
+" noremap <leader>c :call <SID>gen_tags_find('c', "<C-R><C-W>")<CR>
+" noremap <leader>f :call <SID>gen_tags_find('f', "<C-R><C-F>")<CR>
+noremap <C-]> :call <SID>gen_tags_find('g', "<C-R><C-W>")<CR>
+" noremap <leader>i :call <SID>gen_tags_find('i', "<C-R><C-F>")<CR>
+" noremap <leader>s :call <SID>gen_tags_find('s', "<C-R><C-W>")<CR>
+
+let g:gen_tags#blacklist = []
+

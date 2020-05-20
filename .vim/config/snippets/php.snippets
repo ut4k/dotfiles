@@ -1,0 +1,24 @@
+snippet fwg "framework get"
+$request->getParameter('${1:var}');
+endsnippet
+
+snippet fwgg "framework get"
+$request->getParameterByKeys([
+
+]);
+endsnippet
+
+snippet fws "framework set"
+$request->setAttribute('${1:var}', \$${2:var});
+endsnippet
+
+snippet fwa "framework assign"
+$this->assign('${1:var}', $request->getAttribute('${2:var}'));
+endsnippet
+
+snippet kz "keys"
+\$keys = [
+	'${1:name}'
+	,'${2:name}'
+];
+endsnippet
