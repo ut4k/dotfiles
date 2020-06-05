@@ -9,11 +9,11 @@ $request->getParameterByKeys([
 endsnippet
 
 snippet fws "framework set"
-$request->setAttribute('${1:var}', \$${2:var});
+$request->setAttribute('${1:var}', \$${2:$1});
 endsnippet
 
 snippet fwa "framework assign"
-$this->assign('${1:var}', $request->getAttribute('${2:var}'));
+$this->assign('${1:var}', $request->getAttribute('${2:$2}'));
 endsnippet
 
 snippet kz "keys"

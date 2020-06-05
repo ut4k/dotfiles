@@ -58,3 +58,4 @@ mdtoh () {
 # export DISPLAY=localhost:0.0
 
 alias npm='/usr/bin/npm'
+export GTAGSLABEL=pygments

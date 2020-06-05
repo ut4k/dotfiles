@@ -159,3 +159,9 @@ if (!$ext_api_client->send($send_datas)) {
 }
 $res_info = $ext_api_client->getResponse();
 endsnippet
+
+snippet setter
+function set${4:What}(\$${2:what}_) {
+	$this->${3:$2} = \$${4:$2}_;
+}
+endsnippet

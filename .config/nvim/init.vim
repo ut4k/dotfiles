@@ -27,6 +27,7 @@ if filereadable(expand($PRJCONF)) | source $PRJCONF | endif
 autocmd ColorScheme * highlight User1 guifg=#ffcb6b guibg=0 gui=bold
 autocmd ColorScheme * highlight User2 guifg=#c792ea guibg=0
 
+
 scriptencoding utf-8
 set encoding=utf-8
 
@@ -134,8 +135,10 @@ set statusline+=%5.l/%L
 let mapleader = ';' "Leader
 "save
 nnoremap <leader>s :w<CR>
-"xで削除したらブラッホールにぶちこむ
+"delete without yanking
 nnoremap x "_x
+" replace currently selected text with default register without yanking it
+vnoremap p "_dP
 "次のバッファ
 nnoremap <silent> ]b :bnext<CR>
 "前のバッファ
@@ -173,7 +176,7 @@ vnoremap ad :!column -t -s " " \| sed 's/^/ /'<CR><CR>
 "phpdoc
 nnoremap <leader>dc :call PhpDocSingle()<CR>
 "add / on top of line on VisualMode
-vnoremap p !sed 's/^/\//'<CR>
+vnoremap <leader>p !sed 's/^/\//'<CR>
 "change word by register0 word
 nnoremap <leader>x cw<c-r>0
 "go to abs path file
@@ -298,8 +301,7 @@ Plug 'xolox/vim-misc' "vim-colorscheme-switcher dependency
 Plug 'xolox/vim-colorscheme-switcher'
 Plug 'blueyed/smarty.vim'
 Plug 'justinmk/vim-dirvish'
-" Plug 'MarcWeber/vim-addon-qf-layout'
-" Plug 'pechorin/any-jump.vim' "まだ実用できなそう...
+Plug 'jsfaint/gen_tags.vim'
 "php
 Plug 'StanAngeloff/php.vim'
 Plug 'shawncplus/phpcomplete.vim'
@@ -317,7 +319,7 @@ Plug 'kshenoy/vim-sol'
 Plug 'mhartington/oceanic-next'
 Plug 'wadackel/vim-dogrun'
 Plug 'sainnhe/sonokai'
-Plug 'jsfaint/gen_tags.vim'
+Plug 'franbach/miramare'
 call plug#end()
 "}}}
 
@@ -491,6 +493,8 @@ function! PhpSyntaxOverride()
   hi! link phpFunctions Function
   hi! link phpMethod Function
 
+  hi! link phpMethodsVar Variable
+
   hi! link phpRegion phpClasses
 endfunction
 
@@ -657,13 +661,9 @@ autocmd FileType qf if (getwininfo(win_getid())[0].loclist != 1) | wincmd J | en
 
 "tab or space
 autocmd FileType haskell set tabstop=4|set shiftwidth=4|set expandtab
-autocmd FileType vim set tabstop=2|set shiftwidth=2|set expandtab
-autocmd FileType php set noexpandtab
-autocmd FileType json set tabstop=2|set shiftwidth=2|set expandtab
+autocmd FileType html,smarty,css,php,vim,json set tabstop=2|set shiftwidth=2|set noexpandtab
 autocmd FileType sql set tabstop=4|set shiftwidth=2|set noexpandtab|set smarttab
-autocmd FileType smarty set tabstop=4|set shiftwidth=2|set expandtab
-autocmd FileType html set tabstop=4|set shiftwidth=2|set expandtab
-autocmd FileType css set tabstop=4|set shiftwidth=2|set expandtab
+autocmd FileType txt set tabstop=2|set shiftwidth=2|set expandtab
 
 "phpは$をキーワードとしてあつかう wで $variable 全体がとれるように
 autocmd FileType php :setlocal iskeyword+=$
@@ -732,14 +732,11 @@ vmap <leader>f <Plug>(coc-format-selected)
 "escでターミナルモードを終了
 tnoremap <F11> <C-\><C-n>
 
-" let g:sonokai_style = 'andromeda'
-let g:sonokai_style = 'atlantis'
-" let g:sonokai_style = 'maia'
-" let g:sonokai_style = 'shusia'
 let g:sonokai_enable_italic = 0
 let g:sonokai_disable_italic_comment = 1
 
 "gen_tags
+let g:gen_tags#ctags_auto_gen = 0
 let g:gen_tags#statusline = 1
 let g:gen_tags#gtags_default_map = 0
 let g:loaded_gentags#ctags = 1
@@ -774,11 +771,16 @@ function! s:gen_tags_find(cmd, keyword) abort
     endif
 endfunction
 
-" noremap <leader>c :call <SID>gen_tags_find('c', "<C-R><C-W>")<CR>
-" noremap <leader>f :call <SID>gen_tags_find('f', "<C-R><C-F>")<CR>
-noremap <C-]> :call <SID>gen_tags_find('g', "<C-R><C-W>")<CR>
-" noremap <leader>i :call <SID>gen_tags_find('i', "<C-R><C-F>")<CR>
-" noremap <leader>s :call <SID>gen_tags_find('s', "<C-R><C-W>")<CR>
+noremap <C-x>c :call <SID>gen_tags_find('c', "<C-R><C-W>")<CR>
+noremap <C-x>g :call <SID>gen_tags_find('g', "<C-R><C-W>")<CR>
 
-let g:gen_tags#blacklist = []
+nmap <space>e :CocCommand explorer<CR>
 
+hi! link CocErrorVirtualText CocErrorSign
+hi! link CocWarningVirtualText CocWarningSign
+hi! link CocInfoVirtualText CocInfoSign
+hi! link CocHintVirtualText CocHintSign
+
+function! Test1()
+  :!prettier --parser php --use-tabs
+endfunction
