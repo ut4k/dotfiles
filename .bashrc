@@ -4,6 +4,7 @@ export SCRIPTS=$HOME/scripts
 export PATH=$PATH:~/phpctags/phpctags.phar
 export PATH=$PATH:~/.local/bin
 export PATH=$PATH:~/.composer/vendor/bin
+export PATH=$PATH:~/.emacs.d/bin
 export PS1="\[\033[38;5;38m\]\u\[\]\[\033[38;5;15m\]@\[\]\[\033[38;5;172m\]\h\[\]\[\033[38;5;15m\] \[\]\w\[\]\n\[\]\[\033[38;5;41m\]\$\[\]\[\033[38;5;15m\] \[\]"
 export TMUX_TMPDIR=/tmp/tmp.tmux
 # if [ -f /usr/bin/fd ]; then
@@ -23,8 +24,8 @@ alias srans='~/srlscripts/answer.sh'
 alias srans2='~/srlscripts/answer2.sh'
 alias vi="nvim"
 alias vim="nvim"
-alias e="emacs -nw"
-alias emacs="emacs -nw"
+# alias e="emacs -nw"
+# alias emacs="emacs -nw"
 alias ctags="/usr/local/bin/ctags -R --options=$HOME/.ctags"
 alias yahoo="w3m -s -num yahoo.co.jp"
 alias ml="tmuxinator list"
@@ -59,3 +60,7 @@ mdtoh () {
 
 alias npm='/usr/bin/npm'
 export GTAGSLABEL=pygments
+
+# VcXsrv
+umask 022
+export DISPLAY=localhost:0.0

@@ -288,7 +288,8 @@ Plug 'vim-scripts/httplog' "usage: setf httplog
 Plug 'will133/vim-dirdiff'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
-Plug 'neoclide/coc.nvim', {'branch': 'release', 'do': { -> coc#util#install()}}
+" Plug 'neoclide/coc.nvim', {'branch': 'release', 'do': { -> coc#util#install()}}
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'mhinz/vim-grepper'
 Plug 'triglav/vim-visual-increment'
 Plug 'SirVer/ultisnips'
@@ -296,7 +297,6 @@ Plug 'honza/vim-snippets'
 Plug 'sheerun/vim-polyglot' "language pack
 Plug 'markonm/traces.vim' "substitute
 Plug 'liuchengxu/vista.vim'
-Plug 'wesQ3/vim-windowswap'
 Plug 'xolox/vim-misc' "vim-colorscheme-switcher dependency
 Plug 'xolox/vim-colorscheme-switcher'
 Plug 'blueyed/smarty.vim'
@@ -320,6 +320,7 @@ Plug 'mhartington/oceanic-next'
 Plug 'wadackel/vim-dogrun'
 Plug 'sainnhe/sonokai'
 Plug 'franbach/miramare'
+Plug 'fxn/vim-monochrome'
 call plug#end()
 "}}}
 
@@ -436,6 +437,9 @@ let g:phpcomplete_enhance_jump_to_definition = 1
 "  fzf
 " -----------------------------------------
 let g:fzf_preview_window = 'right:40%'
+let g:fzf_prefer_tmux = 0
+let g:fzf_layout = { 'down' : '~14%' }
+
 
 "}}}
 
@@ -669,22 +673,25 @@ autocmd FileType txt set tabstop=2|set shiftwidth=2|set expandtab
 autocmd FileType php :setlocal iskeyword+=$
 
 " WSL ヤンクでクリップボードにコピー
-if system('uname -a | grep Microsoft') != ''
-  augroup myYank
-    autocmd!
-    autocmd TextYankPost * :call system('clip.exe', @")
-  augroup END
-endif
+ if system('uname -a | grep Microsoft') != ''
+   augroup myYank
+     autocmd!
+     autocmd TextYankPost * :call system('clip.exe', @")
+   augroup END
+ endif
 
-augroup autoConvertHtml
-    autocmd!
-    autocmd BufWritePost suralanote.md | silent! call system("pandochtml ".expand("%")." > /dev/null")
-augroup END
+ augroup autoConvertHtml
+     autocmd!
+     autocmd BufWritePost suralanote.md | silent! call system("pandochtml ".expand("%")." > /dev/null")
+ augroup END
 "}}}
 
 "colorscheme
 " colorscheme dogrun
-colorscheme sonokai
+" colorscheme miramare
+colorscheme OceanicNext
+" colorscheme monochrome
+
 set foldmethod=marker
 
 "auto open folds
@@ -703,7 +710,6 @@ endif
 "===========================================
 "experimental
 "===========================================
-let g:fzf_prefer_tmux = 0
 
 function! MyGrepperStatus()
   let l:stat = grepper#statusline()
@@ -729,7 +735,8 @@ function! EvalVnew(bin_name)
 endfunction
 
 vmap <leader>f <Plug>(coc-format-selected)
-"escでターミナルモードを終了
+
+"F11でターミナルモードを終了
 tnoremap <F11> <C-\><C-n>
 
 let g:sonokai_enable_italic = 0
