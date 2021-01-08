@@ -1,32 +1,35 @@
 "run auto-intall script {{{
 if filereadable($HOME . "/scripts/vim-setup.sh")
-  let g:install_script_ret = system($HOME . "/scripts/vim-setup.sh")
-  if g:install_script_ret != ""
-    echo g:install_script_ret
-    sleep 2 
-  endif
+ let g:install_script_ret = system($HOME . "/scripts/vim-setup.sh")
+ if g:install_script_ret != ""
+  echo g:install_script_ret
+  sleep 2
+ endif
 endif
 "}}}
 "
 "global variable {{{
-let $PRJCONF = "$HOME/.vim/config/prj.vim"
-let $TMUXCONF = "$HOME/.tmux.conf"
+let $PRJCONF    = "$HOME/.vim/config/prj.vim"
+let $PLUGCONF   = "$HOME/.vim/config/plugins.vim"
+let $TMUXCONF   = "$HOME/.tmux.conf"
 let $SNIPPETDIR = "$HOME/.vim/config/snippets/"
+let $IGNORECONF = "$HOME/ignore/ignore"
+
 "use fd for fzf.vim
 if filereadable("/usr/bin/fd")
-	let $FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --ignore-file=$HOME/ignore/ignore'
+ let $FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --ignore-file=$HOME/ignore/ignore'
 endif
 
 "}}}
 
 "read external files {{{
 if filereadable(expand($PRJCONF)) | source $PRJCONF | endif
+if filereadable(expand($PLUGCONF)) | source $PLUGCONF | endif
 "}}}
 
 "basic{{{
 autocmd ColorScheme * highlight User1 guifg=#ffcb6b guibg=0 gui=bold
 autocmd ColorScheme * highlight User2 guifg=#c792ea guibg=0
-
 
 scriptencoding utf-8
 set encoding=utf-8
@@ -44,8 +47,9 @@ set gdefault "global substitute by default /g option
 set ignorecase
 set smartcase
 set list
-set listchars=tab:»\ ,precedes:«,extends:»,eol:↲
 set ambiwidth=double
+set listchars=tab:»\ ,precedes:«,extends:»,eol:↲
+" set listchars=tab:\|\ ,precedes:«,extends:»,eol:↲
 " set whichwrap+=h,l,<,>,[,],b,s "行間をでシームレスに移動する
 "
 " ファイルが変更されたら自動で再読み込み
@@ -77,15 +81,17 @@ set showmatch
 set showmode
 set smartcase
 set splitright
-set tabstop=2
-set title
-set titlestring=%{expand('%:p')}
+" set tabstop=2
+set tabstop=4
+set notitle
+" set titlestring=%{expand('%:p')}
+" set titlestring=%{expand('%:p')}
 set tags=tags
 let $BASH_ENV = expand("$HOME/.bashrc") "load bash config
 
 "todo
-" syntax sync minlines=20000
-set redrawtime=4000
+syntax sync minlines=20000
+set redrawtime=10000
 
 "ワイルドカードで検索除外
 set wildignore+=*\\.git\\*,*\\.hg\\*,*\\.svn\\*
@@ -122,7 +128,7 @@ set statusline+=%0*
 set statusline+=%=
 set statusline+=%2*
 set statusline+=%1*
-set statusline+=%{NearestMethodOrFunction()}\  
+set statusline+=%{NearestMethodOrFunction()}\
 set statusline+=%0*
 set statusline+=[%{&fileencoding}]
 set statusline+=[%{&ff=='mac'?'CR':&ff=='unix'?'LF':'CRLF'}]
@@ -153,11 +159,13 @@ nnoremap <leader>ee :call QFixToggle()<CR>:wincmd=<CR><CR>
 nnoremap <F3> :noh<CR><CR>
 "vimrcを縦スプリットで開く
 nnoremap <leader>ev :vs $MYVIMRC<CR><CR>
-nnoremap <leader>epr :vs $PRJCONF<CR><CR>
+nnoremap <leader>ep :vs $PRJCONF<CR><CR>
+nnoremap <leader>ex :vs $PLUGCONF<CR><CR>
 "~/.tmux.confを縦スプリットで開く
 nnoremap <leader>tc :vs $TMUXCONF<CR><CR>
 "vimrcを再読み込みする
-nnoremap <silent> <F12> :source $MYVIMRC<CR>:call PhpSyntaxOverride()<CR><CR>
+nnoremap <silent> <F12> :source $MYVIMRC<CR>
+" nnoremap <silent> <F12> :source $MYVIMRC<CR>:call PhpSyntaxOverride()<CR><CR>
 "tag list pop
 nnoremap tp :Vista!!<CR>
 "ファイル名をクリップボードにコピー
@@ -195,7 +203,7 @@ imap <F1> <C-o>:echo<CR>
 "compile c and run the bin
 nnoremap <F9> :call RunC()<CR>
 "prepare grep command
-nnoremap ff :Grepper<CR>
+nnoremap ff :Rg<space>
 "+ buffer size vertically
 nnoremap <S-h> :vert resize +15<CR>
 "- buffer vertically
@@ -208,8 +216,8 @@ nnoremap <leader>w /<c-r>"<CR>
 nnoremap <leader>ow :call WinExplorer()<CR>
 "identify hilight under cursor
 nnoremap <F10> :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<'
-\ . synIDattr(synID(line("."),col("."),0),"name") . "> lo<"
-\ . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">"<CR>
+   \ . synIDattr(synID(line("."),col("."),0),"name") . "> lo<"
+   \ . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">"<CR>
 "fzf
 nnoremap <c-p> :Files<CR>
 nnoremap <c-space> :Buffers<CR>
@@ -223,44 +231,41 @@ nnoremap <leader>gct :!/usr/local/bin/ctags -R --options=$HOME/.ctags<CR>
 nnoremap <leader>fn :call FileNameToReg()<CR>
 nnoremap <leader>am :call AddtoModFileList()<CR>
 
-"exec grepper with file name as a query
+"grep
 nnoremap gF :call GrepByFileName()<CR>
-"exec grepper with cursor word as a query
 nnoremap gR :call GrepByCword()<CR>
-"Grepper-stop
-nnoremap gS :Grepper-stop<CR>
+
 nnoremap <leader>bk :call CopyToDesktop()<CR>
 "coc
 nmap <silent> [g <Plug>(coc-diagnostic-prev)
 nmap <silent> ]g <Plug>(coc-diagnostic-next)
 "定義もとへ go definition
 nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gs :vs<CR><Plug>(coc-definition)
 "ダブルクリックでワードコピー
 nnoremap <silent> <2-LeftMouse> :call system('clip.exe', expand('<cword>'))<CR>:let @/=expand('<cword>')<CR>:set hls<CR>
-"tagjumpをつねにgつきに
-" nmap <c-]> g<c-]>
-"do coc tag-jump
-" nmap <c-]> :call CocAction('jumpDefinition')<CR>
-nnoremap <M-Up> :wincmd k<CR>
-nnoremap <M-Down> :wincmd j<CR>
-nnoremap <M-Left> :wincmd h<CR>
-nnoremap <M-Right> :wincmd l<CR>
-nnoremap <leader>ph :call PhpSyntaxOverride()<CR>
-nnoremap <F8> :NextColorScheme<CR>:call PhpSyntaxOverride()<CR>
+
+" nnoremap <leader>ph :call PhpSyntaxOverride()<CR>
+" nnoremap <F8> :NextColorScheme<CR>:call PhpSyntaxOverride()<CR>
+
 "type javascript
 nnoremap <leader>tj :set filetype=javascript<CR>
 "type html
 nnoremap <leader>th :set filetype=html<CR>
 "Meta-e カレントバッファのphpコードを実行してvsplitで開く
 nnoremap <M-e> :call EvalVnew('php')<CR>
-"コミットポップアップ
+"Tortoise SVNコミット guiポップアップ
 nnoremap cm :call SvnCommitSrl()<CR>
+"Tortoise SVNログ guiポップアップ
+nnoremap <leader>sl :call SvnLogPop()<CR>
+"Tortoise SVNリバート guiポップアップ
+nnoremap <leader>rv :call SvnRevertSrl()<CR>
 "ライブラリを開く openlib
 nnoremap <leader>ol :call OpenLibSrl()<CR>
 "入り口プログラムを開く openentry
 nnoremap <leader>oe :call OpenEntrySrl()<CR>
 "TODOをgrep
- nnoremap <leader>gtd :GrepperRg "(debug\|TODO).*kimura"<CR>
+nnoremap <leader>gtd :Rg (debug\|TODO).*kimura<CR>
 "fin debug comments
 nnoremap <leader>fd /debug\\|TODO\s*\(start\\|end\)*\s*kimura<CR>
 "find my comments
@@ -269,59 +274,16 @@ nnoremap <leader>fm /\(add\\|update\\|del\\|debug\\|TODO\)\s*\(start\\|end\)*\s*
 nnoremap <leader>et :let @t = strftime("%Y\\/%m\\/%d")<CR>/<C-R>t<CR>
 "et edited yesterday 昨日の編集コメントを検索
 nnoremap <leader>ey :let @t = strftime("%Y\\/%m\\/%d", localtime() - (60*60*24))<CR>/<C-R>t<CR>
-"Alt + hjklでバッファ移動
-"<c-w> [hjkl] に慣れすぎて使わない...
-" nmap <silent> <A-k> :wincmd k<CR>
-" nmap <silent> <A-j> :wincmd j<CR>
-" nmap <silent> <A-h> :wincmd h<CR>
-" nmap <silent> <A-l> :wincmd l<CR>
-"}}}
+"F11でターミナルモードを終了
+tnoremap <F11> <C-\><C-n>
+"ファイルツリー
+" nmap <space>e :CocCommand explorer<CR>
+"ビジュアル選択をフォーマット
+vmap <leader>f <Plug>(coc-format-selected)
+nnoremap <leader>gv :GraphvizCompile png<CR>:Graphviz png<CR>
+nnoremap <leader>gv :GraphvizCompile png<CR>:Graphviz png<CR>
 
-"vim-plug{{{
-call plug#begin('~/.local/share/nvim/plugged')
-Plug 'junegunn/vim-easy-align'
-Plug 'mattn/emmet-vim'
-Plug 'tpope/vim-commentary'
-Plug 'tpope/vim-repeat'
-Plug 'tpope/vim-surround'
-Plug 'vim-scripts/httplog' "usage: setf httplog
-Plug 'will133/vim-dirdiff'
-Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
-Plug 'junegunn/fzf.vim'
-" Plug 'neoclide/coc.nvim', {'branch': 'release', 'do': { -> coc#util#install()}}
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
-Plug 'mhinz/vim-grepper'
-Plug 'triglav/vim-visual-increment'
-Plug 'SirVer/ultisnips'
-Plug 'honza/vim-snippets'
-Plug 'sheerun/vim-polyglot' "language pack
-Plug 'markonm/traces.vim' "substitute
-Plug 'liuchengxu/vista.vim'
-Plug 'xolox/vim-misc' "vim-colorscheme-switcher dependency
-Plug 'xolox/vim-colorscheme-switcher'
-Plug 'blueyed/smarty.vim'
-Plug 'justinmk/vim-dirvish'
-Plug 'jsfaint/gen_tags.vim'
-"php
-Plug 'StanAngeloff/php.vim'
-Plug 'shawncplus/phpcomplete.vim'
-Plug 'vim-scripts/PDV--phpDocumentor-for-Vim'
-"javascript
-Plug 'heavenshell/vim-jsdoc'
-Plug 'pangloss/vim-javascript'
-"python
-Plug 'vim-python/python-syntax'
-"colorscheme
-Plug 'drewtempelmeyer/palenight.vim'
-Plug 'skreek/skeletor.vim'
-Plug 'kjssad/quantum.vim'
-Plug 'kshenoy/vim-sol'
-Plug 'mhartington/oceanic-next'
-Plug 'wadackel/vim-dogrun'
-Plug 'sainnhe/sonokai'
-Plug 'franbach/miramare'
-Plug 'fxn/vim-monochrome'
-call plug#end()
+nnoremap <leader>ws :StripWhitespace<CR><CR>
 "}}}
 
 "plugin settings{{{
@@ -330,11 +292,11 @@ call plug#end()
 "----------------------------------------
 let g:user_emmet_leader_key='<c-e>'
 let g:user_emmet_settings = {
-    \    'variables': {
-    \      'lang': "ja"
-    \    },
-    \   'indentation': '  '
-    \ }
+   \    'variables': {
+   \      'lang': "ja"
+   \    },
+   \   'indentation': '  '
+   \ }
 "----------------------------------------
 " EasyAlign
 "----------------------------------------
@@ -366,7 +328,7 @@ let g:php_var_selector_is_identifier= 1
 let g:php_baselib = 1
 let g:php_parent_error_close = 0
 let g:php_parent_error_open = 0
-let g:php_sql_query = 1
+let g:php_sql_query = 0
 let g:php_folding = 0
 let g:php_sql_heredoc = 0
 let g:php_sql_nowdoc = 0
@@ -375,31 +337,11 @@ let g:php_sql_nowdoc = 0
 "----------------------------------------
 autocmd FileType php setlocal commentstring=//\ %s
 autocmd FileType smarty setlocal commentstring={*\ %s\ *}
+autocmd FileType sql setlocal commentstring=--\ %s
 "-----------------------------------------
 " sorround
 "-----------------------------------------
 let g:surround_{char2nr('q')} = "\\\"\r\\\""
-"-----------------------------------------
-" Grepper
-"-----------------------------------------
-let g:grepper = {}
-let g:grepper.rg = { 'grepformat':'%f:%l:%m', 'escape':'\^$.*[]' }
-if g:on_ent_dir == 1
-  let g:grepper.rg = {
-        \'grepprg': 'rg --vimgrep --line-number --ignore-case --ignore-file $HOME/ignore/ignore_entry',
-        \ }
-elseif g:on_ent_dir == 0
-  let g:grepper.rg = {
-        \'grepprg': 'rg --vimgrep --line-number --ignore-case --ignore-file $HOME/ignore/ignore',
-        \ }
-endif
-
-let g:grepper.tools = ['rg']
-let g:grepper.highlight = 1
-let g:grepper.jump = 1
-let g:grepper.prompt_text = '$t> '
-let g:grepper.prompt_quote = 1  "自動でクオーティングしたことにする
-let g:grepper.switch = 1
 "-----------------------------------------
 " UltiSnips
 "-----------------------------------------
@@ -413,12 +355,20 @@ let g:UltiSnipsSnippetDirectories=[$HOME . '/.vim/config/snippets']
 "-----------------------------------------
 " Vista
 "-----------------------------------------
-"let g:vista_default_executive = "coc"
+" let g:vista_default_executive = "coc"
 let g:vista_default_executive = "ctags"
 let g:vista_ignore_kinds = ['Variable', 'variable']
 let g:vista_cursor_delay = 100
 let g:vista_sidebar_width = 55
-let g:vista#renderer#enable_icon = 0
+let g:vista#renderer#enable_icon = 1
+let g:vista_icon_indent = ["╰─▸ ", "├─▸ "]
+let g:vista_icon_indent = ['└ ', '│ ']
+
+
+"tag focus
+" nnoremap tf :Vista focus<CR>
+"fzf symbol
+nnoremap <C-s> :Vista finder<CR>
 " -----------------------------------------
 " vim-colorscheme-switcher
 " -----------------------------------------
@@ -436,140 +386,166 @@ let g:phpcomplete_enhance_jump_to_definition = 1
 " -----------------------------------------
 "  fzf
 " -----------------------------------------
-let g:fzf_preview_window = 'right:40%'
+" let g:fzf_preview_window = 'right:40%'
+let g:fzf_preview_window = []
 let g:fzf_prefer_tmux = 0
 let g:fzf_layout = { 'down' : '~14%' }
-
-
+" -----------------------------------------
+"  gen_tags
+" -----------------------------------------
+let g:gen_tags#ctags_auto_gen = 0
+let g:gen_tags#statusline = 0
+let g:gen_tags#gtags_default_map = 0
+let g:loaded_gentags#ctags = 1
+" -----------------------------------------
+"  vim-javascript
+" -----------------------------------------
+let g:javascript_plugin_jsdoc = 1
 "}}}
 
 "functions{{{
 "全角スペースをハイライト表示
 function! ZenkakuSpace()
-    highlight ZenkakuSpace guibg=purple
+ highlight ZenkakuSpace guibg=purple
 endfunction
 
 if has('syntax')
-    augroup ZenkakuSpace
-        autocmd!
-        autocmd ColorScheme       * call ZenkakuSpace()
-        autocmd VimEnter,WinEnter * match ZenkakuSpace /　/
-    augroup END
-    call ZenkakuSpace()
+ augroup ZenkakuSpace
+  autocmd!
+  autocmd ColorScheme       * call ZenkakuSpace()
+  autocmd VimEnter,WinEnter * match ZenkakuSpace /　/
+ augroup END
+ call ZenkakuSpace()
 endif
+
+function! ToLF()
+:e ++ff=unix
+endfunction
 
 "現在のファイルをインタプリタで実行
 function! RunScript()
-	"haskellならghcのインタプリタ
-	if expand('%:e') == "hs"
-		let l:bin = "runghc"
-	else
-	"それ以外なら拡張子そのままをコマンド
-		let l:bin = expand('%:e') 
-	endif
-	let l:file = expand('%')
-	execute ':vnew | 0read ! '. l:bin .' #'
+ "現在のバッファ
+ let l:curbuf = bufnr('%')
+
+ "haskellならghcのインタプリタ
+ if expand('%:e') == "hs"
+  let l:bin = "runghc"
+ else
+  "それ以外なら拡張子そのままをコマンド
+  let l:bin = expand('%:e')
+ endif
+ let l:file = expand('%')
+ if bufwinnr('RunScript') > 0
+  bw! RunScript
+ endif
+ execute ':vnew RunScript | 0read ! '. l:bin .' #'
+
+ "ROにする
+ " set readonly
+
+ "左側のバッファに戻る
+ wincmd h
 endfunction
 
 "現在のファイルをインタプリタで実行
 function! RunInTmux()
-	"haskellならghcのインタプリタ
-	if expand('%:e') == "hs"
-		let l:bin = "runghc"
-	else
-	"それ以外なら拡張子そのままをコマンド
-		let l:bin = expand('%:e') 
-	endif
-	let l:file = expand('%')
-	execute '!tmux send-keys -t 1 "'.l:bin.' '.l:file.'" Enter'
+ "haskellならghcのインタプリタ
+ if expand('%:e') == "hs"
+  let l:bin = "runghc"
+ else
+  "それ以外なら拡張子そのままをコマンド
+  let l:bin = expand('%:e')
+ endif
+ let l:file = expand('%')
+ execute '!tmux send-keys -t 1 "'.l:bin.' '.l:file.'" Enter'
 endfunction
 
 
 function! PhpSyntaxOverride()
-  " return
-  hi! link phpVarSelector SpecialChar
-  hi! link phpIdentifier Identifier
+ " return
+ hi! link phpVarSelector SpecialChar
+ hi! link phpIdentifier Identifier
 
-  hi! link phpDocTags phpDefine
-  hi! link phpDocParam phpType
+ hi! link phpDocTags phpDefine
+ hi! link phpDocParam phpType
 
-  hi! link phpFunction Function
-  hi! link phpFunctions Function
-  hi! link phpMethod Function
+ hi! link phpFunction Function
+ hi! link phpFunctions Function
+ hi! link phpMethod Function
 
-  hi! link phpMethodsVar Variable
+ hi! link phpMethodsVar Variable
 
-  hi! link phpRegion phpClasses
+ hi! link phpRegion phpClasses
 endfunction
 
 "docrootからのパスで開く
 function! GotoFileFromDocRoot()
-    let root_dir = getcwd() . "/"
-    let filename = getline('.')
-    let filepath = root_dir . filename
-    if filereadable(filepath)
-        execute 'edit ' . filepath
-    else
-        echohl ErrorMsg
-        echo 'ファイルが見つかりませんでした!  ---> ' . filename
-        echohl None
-    endif
+ let root_dir = getcwd() . "/"
+ let filename = getline('.')
+ let filepath = root_dir . filename
+ if filereadable(filepath)
+  execute 'edit ' . filepath
+ else
+  echohl ErrorMsg
+  echo 'ファイルが見つかりませんでした!  ---> ' . filename
+  echohl None
+ endif
 endfunction
 
 function! GotoEntFile()
-    let filename = getline('.')
-    let filepath = "/d/workspace/surala" . filename
-    if filereadable(filepath)
-        execute 'edit ' . filepath
-    else
-        echohl ErrorMsg
-        echo 'ファイルが見つかりませんでした!  ---> ' . filename
-        echohl None
-    endif
+ let filename = getline('.')
+ let filepath = "/d/workspace/surala" . filename
+ if filereadable(filepath)
+  execute 'edit ' . filepath
+ else
+  echohl ErrorMsg
+  echo 'ファイルが見つかりませんでした!  ---> ' . filename
+  echohl None
+ endif
 endfunction
 
 function! VarDumpPhpVariable()
-  let @* = "var_dump(" . expand('<cword>') . "); //########## TODO kimura ".strftime("%Y/%m/%d")." ##########"
+ let @* = "var_dump(" . expand('<cword>') . "); //########## TODO kimura ".strftime("%Y/%m/%d")." ##########"
 endfunction
 
 function! PrePhpVariable()
-  let @* = "pre(" . expand('<cword>') . "); //########## TODO kimura ".strftime("%Y/%m/%d")." ##########"
+ let @* = "pre(" . expand('<cword>') . "); //########## TODO kimura ".strftime("%Y/%m/%d")." ##########"
 endfunction
 
 function! ClogVar()
-  let @* = "console.log(\"" . expand('<cword>') . ":\", " . expand('<cword>') . "); //########## TODO kimura ".strftime("%Y/%m/%d")." ##########"
+ let @* = "console.log(\"" . expand('<cword>') . ":\", " . expand('<cword>') . "); //########## TODO kimura ".strftime("%Y/%m/%d")." ##########"
 endfunction
 
 function! QFixToggle()
-  let _ = winnr('$')
-    cclose
-  if _ == winnr('$')
-    cwindow
-  endif
+ let _ = winnr('$')
+ cclose
+ if _ == winnr('$')
+  cwindow
+ endif
 endfunction
 
 function! RunC()
-  if (&filetype == "c")
-   execute '!gcc '.expand('%').' && ./a.out'
-  else
-   echohl WarningMsg | echo 'cannot run. not a c file.'
-  endif
+ if (&filetype == "c")
+  execute '!gcc '.expand('%').' && ./a.out'
+ else
+  echohl WarningMsg | echo 'cannot run. not a c file.'
+ endif
 endfunction
 
 function! CopyIntoOrgDir(newName)
-	let l:cmd = 'cp ' . expand('%') . ' ' . expand('%:h') . '/'. a:newName
-	echo l:cmd
-	call system(l:cmd)
-	execute 'edit ' . expand('%:h') . '/'. a:newName
+ let l:cmd = 'cp ' . expand('%') . ' ' . expand('%:h') . '/'. a:newName
+ echo l:cmd
+ call system(l:cmd)
+ execute 'edit ' . expand('%:h') . '/'. a:newName
 endfunction
 
 function! LinterStatus() abort
-    let l:counts = ale#statusline#Count(bufnr(''))
+ let l:counts = ale#statusline#Count(bufnr(''))
 
-    let l:all_errors = l:counts.error + l:counts.style_error
-    let l:all_non_errors = l:counts.total - l:all_errors
+ let l:all_errors = l:counts.error + l:counts.style_error
+ let l:all_non_errors = l:counts.total - l:all_errors
 
-    return l:counts.total == 0 ? 'OK' : printf(
+ return l:counts.total == 0 ? 'OK' : printf(
     \   '%dW %dE',
     \   all_non_errors,
     \   all_errors
@@ -577,69 +553,77 @@ function! LinterStatus() abort
 endfunction
 
 function! CopyCurrentFunctionName()
-  let @* = NearestMethodOrFunction()
-  :call system('clip.exe', @*)
+ let @* = NearestMethodOrFunction()
+ :call system('clip.exe', @*)
 endfunction
 
 function! s:show_documentation()
-  if (index(['vim','help'], &filetype) >= 0)
-    execute 'h '.expand('<cword>')
-  else
-    call CocAction('doHover')
-  endif
+ if (index(['vim','help'], &filetype) >= 0)
+  execute 'h '.expand('<cword>')
+ else
+  call CocAction('doHover')
+ endif
 endfunction
 
 function! CopyToDesktop()
-  let l:cmd = "cp ".expand("%")." /c/Users/kimura.AZET/Desktop/".expand("%:t").".bak.".strftime("%Y%m%d")
-  echo l:cmd
-  call system(l:cmd)
+ let l:cmd = "cp ".expand("%")." /c/Users/kimura.AZET/Desktop/".expand("%:t").".bak.".strftime("%Y%m%d")
+ echo l:cmd
+ call system(l:cmd)
 endfunction
 
 function! NearestMethodOrFunction() abort
-  return get(b:, 'vista_nearest_method_or_function', '')
+ return get(b:, 'vista_nearest_method_or_function', '')
 endfunction
 
 function! Ecp932()
-  :e ++enc=cp932
+ :e ++enc=cp932
 endfunction
 
 function! WinExplorer()
-  let l:wpath = trim(system("wslpath -w " .expand("%:p")))
-  let l:cmd = "/mnt/c/Windows/explorer.exe /select,\"" . l:wpath . "\""
-  echo "opening ".l:wpath." ..."
-  call system(l:cmd)
+ let l:wpath = trim(system("wslpath -w " .expand("%:p")))
+ let l:cmd = "/mnt/c/Windows/explorer.exe /select,\"" . l:wpath . "\""
+ echo "opening ".l:wpath." ..."
+ call system(l:cmd)
 endfunction
 
 function! FileNameToReg()
-  let l:path = expand("%")
-  if g:on_ent_dir == 1
-    let l:path = "/ent/" . l:path
-  endif
-  let @+=l:path
-   :call system('clip.exe', @+)
+ let l:path = expand("%")
+ if g:on_ent_dir == 1
+  let l:path = "/ent/" . l:path
+ endif
+ let @+=l:path
+ :call system('clip.exe', @+)
 endfunction
 
 function! GrepByFileName()
-  let l:current_file_name = expand("%:t") "tail modifier
-  execute "Grepper -noprompt -query " . l:current_file_name
+ let l:current_file_name = expand("%:t") "tail modifier
+ execute ":Rg " . l:current_file_name
 endfunction
 
 function! GrepByCword()
-  let l:cword = expand("<cword>")
-  execute "Grepper -noprompt -query " . l:cword
+ let l:cword = expand("<cword>")
+ execute ":Rg " . l:cword
 endfunction
 
 "変更ファイルのメモに今のファイルパス加える
 function! AddtoModFileList()
-  let l:path = expand("%")
-  let l:dt = strftime("%Y%m%d")
-  if g:on_ent_dir == 1
-    let l:path = "/ent/" . l:path
-  endif
-  call system("echo ".l:path." >> /mnt/d/notes/reports/".l:dt.".txt")
-  call system("tmux send-keys -t report :e! Enter")
-  echo "Added to > ".l:dt.".txt"
+ let l:path = expand("%")
+ let l:dt = strftime("%Y%m%d")
+ if g:on_ent_dir == 1
+  let l:path = "/ent/" . l:path
+ endif
+ call system("echo ".l:path." >> /mnt/d/notes/reports/".l:dt.".txt")
+ call system("tmux send-keys -t report :e! Enter")
+ echo "Added to > ".l:dt.".txt"
 endfunction
+
+function! EvalVnew(bin_name)
+ let l:answer = confirm('Do eval?', "&Yes\n&No", 1)
+ if l:answer == 1
+  :silent :%y z|vnew|silent 0put=@z|silent execute "%!".a:bin_name
+ endif
+endfunction
+
 "}}}
 
 "custom command {{{
@@ -648,15 +632,15 @@ command! Ecp932 :call Ecp932()
 
 "auto command {{{
 "phpシンタックス上書き
-augroup phpSyntaxOverride
-  autocmd!
-  autocmd FileType php call PhpSyntaxOverride()
-augroup END
+" augroup phpSyntaxOverride
+"  autocmd!
+"  autocmd FileType php call PhpSyntaxOverride()
+" augroup END
 
 "リサイズ時に画面幅をそろえる
 augroup Misc
-    autocmd!
-    autocmd VimResized * exe "normal! \<c-w>="
+ autocmd!
+ autocmd VimResized * exe "normal! \<c-w>="
 augroup END
 
 " push quickfix window always to the bottom
@@ -665,32 +649,44 @@ autocmd FileType qf if (getwininfo(win_getid())[0].loclist != 1) | wincmd J | en
 
 "tab or space
 autocmd FileType haskell set tabstop=4|set shiftwidth=4|set expandtab
-autocmd FileType html,smarty,css,php,vim,json set tabstop=2|set shiftwidth=2|set noexpandtab
+autocmd FileType html,smarty,css,php,json,javascript set tabstop=2|set shiftwidth=2|set noexpandtab
 autocmd FileType sql set tabstop=4|set shiftwidth=2|set noexpandtab|set smarttab
-autocmd FileType txt set tabstop=2|set shiftwidth=2|set expandtab
+autocmd FileType text set tabstop=2|set shiftwidth=2|set expandtab
+autocmd FileType vim set tabstop=1|set shiftwidth=1|set expandtab
+autocmd FileType dot set tabstop=2|set shiftwidth=2|set expandtab
 
 "phpは$をキーワードとしてあつかう wで $variable 全体がとれるように
 autocmd FileType php :setlocal iskeyword+=$
 
 " WSL ヤンクでクリップボードにコピー
- if system('uname -a | grep Microsoft') != ''
-   augroup myYank
-     autocmd!
-     autocmd TextYankPost * :call system('clip.exe', @")
-   augroup END
- endif
-
- augroup autoConvertHtml
-     autocmd!
-     autocmd BufWritePost suralanote.md | silent! call system("pandochtml ".expand("%")." > /dev/null")
+if system("uname -a | grep [m|M]icrosoft") != ''
+ augroup myYank
+  autocmd!
+  autocmd TextYankPost * :call system('clip.exe', @")
+  " autocmd TextYankPost * :call system('win32yank.exe -i', @")
  augroup END
+endif
+
+augroup autoConvertHtml
+ autocmd!
+ autocmd BufWritePost suralanote.md | silent! call system("pandochtml ".expand("%")." > /dev/null")
+augroup END
 "}}}
 
 "colorscheme
 " colorscheme dogrun
 " colorscheme miramare
-colorscheme OceanicNext
+" colorscheme OceanicNext
 " colorscheme monochrome
+" colorscheme sonokai
+" colorscheme forest-night
+" colorscheme palenight
+colorscheme quantum
+
+hi! link CocErrorVirtualText CocErrorSign
+hi! link CocWarningVirtualText CocWarningSign
+hi! link CocInfoVirtualText CocInfoSign
+hi! link CocHintVirtualText CocHintSign
 
 set foldmethod=marker
 
@@ -703,91 +699,89 @@ autocmd VimEnter * call vista#RunForNearestMethodOrFunction()
 
 "diff setting
 if &diff                             " only for diff mode/vimdiff
-  set diffopt=filler,context:1000000 " filler is default and inserts empty lines for sync
-  colo sol
+ set diffopt=filler,context:1000000 " filler is default and inserts empty lines for sync
+ colo sol
 endif
 
-"===========================================
+"======================================================================================
 "experimental
-"===========================================
+"======================================================================================
+" let g:vista_echo_cursor = 0
+let g:vista_blink = [0, 0]
 
-function! MyGrepperStatus()
-  let l:stat = grepper#statusline()
-  let l:query = ""
+let g:better_whitespace_enabled=1
+let g:strip_whitespace_on_save=1
+let g:strip_whitespace_confirm=0
+let g:strip_whitelines_at_eof=1
+let g:show_spaces_that_precede_tabs=1
+let g:better_whitespace_ctermcolor='red'
+let g:better_whitespace_guicolor='DeepPink'
 
-  if l:stat != ""
-    let l:cmd_arr = split(l:stat, " ")
-    let l:lastidx = len(l:cmd_arr)-1
-    let l:query = 'rg:'.l:cmd_arr[l:lastidx]
-  endif
-  return l:query
+let g:graphviz_viewer = "/home/yuta/honeyview.sh"
+let g:graphviz_output_format = 'png'
+
+let g:jsdoc_lehre_path = "/home/yuta/.yarn/bin/lehre"
+
+command! -bang -nargs=* Rg
+  \ call fzf#vim#grep(
+  \   'rg -j 4 --vimgrep --column --line-number --ignore-case --color=never --ignore-file $HOME/ignore/ignore -- '.shellescape(<q-args>), 1,)
+
+" CTRL-A CTRL-Q to select all and build quickfix list
+
+function! s:build_quickfix_list(lines)
+  call setqflist(map(copy(a:lines), '{ "filename": v:val }'))
+  copen
+  cc
 endfunction
 
-augroup nosynmd
-  au BufRead,BufNewFile *.md :syntax off
-augroup END
+let g:fzf_action = {
+  \ 'ctrl-q': function('s:build_quickfix_list'),
+  \ 'ctrl-t': 'tab split',
+  \ 'ctrl-x': 'split',
+  \ 'ctrl-v': 'vsplit' }
 
-function! EvalVnew(bin_name)
-  let l:answer = confirm('Do eval?', "&Yes\n&No", 1)
-  if l:answer == 1
-    :silent :%y z|vnew|silent 0put=@z|silent execute "%!".a:bin_name
-  endif
-endfunction
+let $FZF_DEFAULT_OPTS = '--bind ctrl-a:select-all'
 
-vmap <leader>f <Plug>(coc-format-selected)
+syntax sync minlines=20000
+set redrawtime=10000
 
-"F11でターミナルモードを終了
-tnoremap <F11> <C-\><C-n>
+"tree-sitter
+" lua <<EOF
+" require'nvim-treesitter.configs'.setup {
+"   highlight = {
+"     enable = true,
+"     disable = {
+"     }
+"   }
+" }
+" EOF
 
-let g:sonokai_enable_italic = 0
-let g:sonokai_disable_italic_comment = 1
+let g:vimade = {}
+let g:vimade.fadelevel = 0.3
+let g:vimade.fademinimap = 1
+let g:vimade.enabletreesitter = 1
 
-"gen_tags
-let g:gen_tags#ctags_auto_gen = 0
-let g:gen_tags#statusline = 1
-let g:gen_tags#gtags_default_map = 0
-let g:loaded_gentags#ctags = 1
+let g:Lf_WindowPosition = 'popup'
 
-if v:version >= 800
-    set cscopequickfix=s+,c+,d+,i+,t+,e+,g+,f+,a+
-else
-    set cscopequickfix=s+,c+,d+,i+,t+,e+,g+,f+
-endif
+"----------------------------------------------------status-line実験
 
-function! s:gen_tags_find(cmd, keyword) abort
-    " Mark this position
-    execute "normal! mY"
-    " Close any open quickfix windows
-    cclose
-    " Clear existing quickfix list
-    cal setqflist([])
+" function! ActiveLine()
+"     return luaeval("require'status-line'.activeLine()")
+" endfunction
 
-    let l:cur_buf=@%
-    let l:cmd = 'cs find ' . a:cmd . ' ' . a:keyword
-    silent! keepjumps execute l:cmd
+" function! InactiveLine()
+" 	return luaeval("require'status-line'.inactiveLine()")
+" endfunction
 
-    if len(getqflist()) > 1
-        " If the buffer that cscope jumped to is not same as current file, close the buffer
-        if l:cur_buf != @%
-            " Go back to where the command was issued
-            execute "normal! `Y"
-            " delete previous buffer.
-            bdelete #
-        endif
-        copen
-    endif
-endfunction
+" augroup Statusline
+" 	autocmd!
+" 	autocmd WinEnter,BufEnter * setlocal statusline=%!ActiveLine()
+" 	autocmd WinLeave,BufLeave * setlocal statusline=%!InactiveLine()
+" augroup END
 
-noremap <C-x>c :call <SID>gen_tags_find('c', "<C-R><C-W>")<CR>
-noremap <C-x>g :call <SID>gen_tags_find('g', "<C-R><C-W>")<CR>
+" augroup UPDATE_FUNCTION
+" 	autocmd!
+" 	autocmd CursorHold * silent! lua require'lsp-status'.update_current_function()
+" augroup END
 
-nmap <space>e :CocCommand explorer<CR>
-
-hi! link CocErrorVirtualText CocErrorSign
-hi! link CocWarningVirtualText CocWarningSign
-hi! link CocInfoVirtualText CocInfoSign
-hi! link CocHintVirtualText CocHintSign
-
-function! Test1()
-  :!prettier --parser php --use-tabs
-endfunction
+" set statusline=%!ActiveLine()

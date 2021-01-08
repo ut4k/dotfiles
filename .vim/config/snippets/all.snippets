@@ -103,6 +103,16 @@ if ($result = $cdb->query($sql)) {
 	while ($list = $cdb->fetch_assoc($result)) {
 
 	}
+	$cdb->free_result($result);
+}
+endsnippet
+
+snippet fet "fetch"
+if ($result = $cdb->query($sql)) {
+	while ($row = $cdb->fetch_assoc($result)) {
+
+	}
+	$cdb->free_result($result);
 }
 endsnippet
 
@@ -163,5 +173,22 @@ endsnippet
 snippet setter
 function set${4:What}(\$${2:what}_) {
 	$this->${3:$2} = \$${4:$2}_;
+}
+endsnippet
+
+snippet th
+@throws Exception
+endsnippet
+
+snippet sng
+[案件]：すらら様FBNo000
+[状況]：完了
+[備考]：
+[修正ファイル]
+endsnippet
+
+snippet tdbg
+if (FwSession::get('baseinfo')['teacher_id'] == 'YOUR-ID') {
+
 }
 endsnippet
