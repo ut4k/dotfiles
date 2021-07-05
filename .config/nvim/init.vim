@@ -7,29 +7,38 @@ if filereadable($HOME . "/scripts/vim-setup.sh")
  endif
 endif
 "}}}
-"
 "global variable {{{
-let $PRJCONF    = "$HOME/.vim/config/prj.vim"
-let $PLUGCONF   = "$HOME/.vim/config/plugins.vim"
-let $TMUXCONF   = "$HOME/.tmux.conf"
-let $SNIPPETDIR = "$HOME/.vim/config/snippets/"
-let $IGNORECONF = "$HOME/ignore/ignore"
-
-"use fd for fzf.vim
-if filereadable("/usr/bin/fd")
- let $FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --ignore-file=$HOME/ignore/ignore'
-endif
-
+let $PRJCONF        = "$HOME/.vim/config/prj.vim"
+let $PLUGCONF       = "$HOME/.vim/config/plugins.vim"
+let $TMUXCONF       = "$HOME/.tmux.conf"
+let $SNIPPETDIR     = "$HOME/.vim/config/snippets/"
+let $IGNOREFILE     = "$HOME/ignore/ignore"
+let $IGNOREFILE_ENT = "$HOME/ignore/ignore_ent"
 "}}}
-
 "read external files {{{
 if filereadable(expand($PRJCONF)) | source $PRJCONF | endif
 if filereadable(expand($PLUGCONF)) | source $PLUGCONF | endif
 "}}}
+"
+if OnEntryDir() == 1
+   let $IGNOREFILE = $IGNOREFILE_ENT
+endif
+
+"use fd for fzf.vim
+" if filereadable("/usr/bin/fd")
+if executable("fd")
+ let $FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --ignore-file='.$IGNOREFILE
+else
+ echo "fdが見つかりません (sudo apt install fd-find)"
+ " ln -s $(which fdfind) ~/.local/bin/fd
+endif
 
 "basic{{{
 autocmd ColorScheme * highlight User1 guifg=#ffcb6b guibg=0 gui=bold
 autocmd ColorScheme * highlight User2 guifg=#c792ea guibg=0
+
+autocmd ColorScheme * highlight LspDiagnosticsSignError guibg=red
+autocmd ColorScheme * highlight LspDiagnosticsSignHint guibg=red
 
 scriptencoding utf-8
 set encoding=utf-8
@@ -49,8 +58,6 @@ set smartcase
 set list
 set ambiwidth=double
 set listchars=tab:»\ ,precedes:«,extends:»,eol:↲
-" set listchars=tab:\|\ ,precedes:«,extends:»,eol:↲
-" set whichwrap+=h,l,<,>,[,],b,s "行間をでシームレスに移動する
 "
 " ファイルが変更されたら自動で再読み込み
 set autoread
@@ -79,13 +86,10 @@ set shiftwidth=2
 set showcmd
 set showmatch
 set showmode
-set smartcase
 set splitright
-" set tabstop=2
-set tabstop=4
+set tabstop=2
+" set tabstop=4
 set notitle
-" set titlestring=%{expand('%:p')}
-" set titlestring=%{expand('%:p')}
 set tags=tags
 let $BASH_ENV = expand("$HOME/.bashrc") "load bash config
 
@@ -229,6 +233,7 @@ nnoremap <c-z> :call fzf#vim#files('.', {'options':'--query '.expand('%:t')})<CR
 nnoremap <silent> K :call <SID>show_documentation()<CR>
 nnoremap <leader>gct :!/usr/local/bin/ctags -R --options=$HOME/.ctags<CR>
 nnoremap <leader>fn :call FileNameToReg()<CR>
+nnoremap <leader>fl :call FileNameLineToReg()<CR>
 nnoremap <leader>am :call AddtoModFileList()<CR>
 
 "grep
@@ -236,12 +241,6 @@ nnoremap gF :call GrepByFileName()<CR>
 nnoremap gR :call GrepByCword()<CR>
 
 nnoremap <leader>bk :call CopyToDesktop()<CR>
-"coc
-nmap <silent> [g <Plug>(coc-diagnostic-prev)
-nmap <silent> ]g <Plug>(coc-diagnostic-next)
-"定義もとへ go definition
-nmap <silent> gd <Plug>(coc-definition)
-nmap <silent> gs :vs<CR><Plug>(coc-definition)
 "ダブルクリックでワードコピー
 nnoremap <silent> <2-LeftMouse> :call system('clip.exe', expand('<cword>'))<CR>:let @/=expand('<cword>')<CR>:set hls<CR>
 
@@ -276,10 +275,7 @@ nnoremap <leader>et :let @t = strftime("%Y\\/%m\\/%d")<CR>/<C-R>t<CR>
 nnoremap <leader>ey :let @t = strftime("%Y\\/%m\\/%d", localtime() - (60*60*24))<CR>/<C-R>t<CR>
 "F11でターミナルモードを終了
 tnoremap <F11> <C-\><C-n>
-"ファイルツリー
-" nmap <space>e :CocCommand explorer<CR>
 "ビジュアル選択をフォーマット
-vmap <leader>f <Plug>(coc-format-selected)
 nnoremap <leader>gv :GraphvizCompile png<CR>:Graphviz png<CR>
 nnoremap <leader>gv :GraphvizCompile png<CR>:Graphviz png<CR>
 
@@ -355,7 +351,6 @@ let g:UltiSnipsSnippetDirectories=[$HOME . '/.vim/config/snippets']
 "-----------------------------------------
 " Vista
 "-----------------------------------------
-" let g:vista_default_executive = "coc"
 let g:vista_default_executive = "ctags"
 let g:vista_ignore_kinds = ['Variable', 'variable']
 let g:vista_cursor_delay = 100
@@ -364,9 +359,6 @@ let g:vista#renderer#enable_icon = 1
 let g:vista_icon_indent = ["╰─▸ ", "├─▸ "]
 let g:vista_icon_indent = ['└ ', '│ ']
 
-
-"tag focus
-" nnoremap tf :Vista focus<CR>
 "fzf symbol
 nnoremap <C-s> :Vista finder<CR>
 " -----------------------------------------
@@ -393,10 +385,10 @@ let g:fzf_layout = { 'down' : '~14%' }
 " -----------------------------------------
 "  gen_tags
 " -----------------------------------------
-let g:gen_tags#ctags_auto_gen = 0
-let g:gen_tags#statusline = 0
-let g:gen_tags#gtags_default_map = 0
-let g:loaded_gentags#ctags = 1
+" let g:gen_tags#ctags_auto_gen = 0
+" let g:gen_tags#statusline = 0
+" let g:gen_tags#gtags_default_map = 0
+" let g:loaded_gentags#ctags = 1
 " -----------------------------------------
 "  vim-javascript
 " -----------------------------------------
@@ -561,7 +553,7 @@ function! s:show_documentation()
  if (index(['vim','help'], &filetype) >= 0)
   execute 'h '.expand('<cword>')
  else
-  call CocAction('doHover')
+  " call CocAction('doHover')
  endif
 endfunction
 
@@ -588,10 +580,30 @@ endfunction
 
 function! FileNameToReg()
  let l:path = expand("%")
- if g:on_ent_dir == 1
+ if OnEntryDir() == 1
   let l:path = "/ent/" . l:path
  endif
  let @+=l:path
+ let @"=l:path
+ let @*=l:path
+ :call system('clip.exe', @+)
+endfunction
+
+function! FileNameWithFuncToReg()
+ let l:ret = expand("%") . ' 
+ \ ' . 'function ' .  get(b:, 'vista_nearest_method_or_function', '')
+
+ let @+=l:ret
+ let @"=l:ret
+ let @*=l:ret
+ :call system('clip.exe', @+)
+endfunction
+
+function! FileNameLineToReg()
+ let l:ret = expand("%") . " LINE:" . line(".")
+ let @+=l:ret
+ let @"=l:ret
+ let @*=l:ret
  :call system('clip.exe', @+)
 endfunction
 
@@ -603,18 +615,6 @@ endfunction
 function! GrepByCword()
  let l:cword = expand("<cword>")
  execute ":Rg " . l:cword
-endfunction
-
-"変更ファイルのメモに今のファイルパス加える
-function! AddtoModFileList()
- let l:path = expand("%")
- let l:dt = strftime("%Y%m%d")
- if g:on_ent_dir == 1
-  let l:path = "/ent/" . l:path
- endif
- call system("echo ".l:path." >> /mnt/d/notes/reports/".l:dt.".txt")
- call system("tmux send-keys -t report :e! Enter")
- echo "Added to > ".l:dt.".txt"
 endfunction
 
 function! EvalVnew(bin_name)
@@ -632,10 +632,10 @@ command! Ecp932 :call Ecp932()
 
 "auto command {{{
 "phpシンタックス上書き
-" augroup phpSyntaxOverride
-"  autocmd!
-"  autocmd FileType php call PhpSyntaxOverride()
-" augroup END
+augroup phpSyntaxOverride
+ autocmd!
+ autocmd FileType php call PhpSyntaxOverride()
+augroup END
 
 "リサイズ時に画面幅をそろえる
 augroup Misc
@@ -673,20 +673,7 @@ augroup autoConvertHtml
 augroup END
 "}}}
 
-"colorscheme
-" colorscheme dogrun
-" colorscheme miramare
-" colorscheme OceanicNext
-" colorscheme monochrome
-" colorscheme sonokai
-" colorscheme forest-night
-" colorscheme palenight
 colorscheme quantum
-
-hi! link CocErrorVirtualText CocErrorSign
-hi! link CocWarningVirtualText CocWarningSign
-hi! link CocInfoVirtualText CocInfoSign
-hi! link CocHintVirtualText CocHintSign
 
 set foldmethod=marker
 
@@ -694,8 +681,6 @@ set foldmethod=marker
 autocmd FileType php normal zR
 
 autocmd VimEnter * call vista#RunForNearestMethodOrFunction()
-
-" autocmd VimEnter * if filereadable(expand($PRJCONF)) | source $PRJCONF | endif
 
 "diff setting
 if &diff                             " only for diff mode/vimdiff
@@ -706,7 +691,6 @@ endif
 "======================================================================================
 "experimental
 "======================================================================================
-" let g:vista_echo_cursor = 0
 let g:vista_blink = [0, 0]
 
 let g:better_whitespace_enabled=1
@@ -724,7 +708,11 @@ let g:jsdoc_lehre_path = "/home/yuta/.yarn/bin/lehre"
 
 command! -bang -nargs=* Rg
   \ call fzf#vim#grep(
-  \   'rg -j 4 --vimgrep --column --line-number --ignore-case --color=never --ignore-file $HOME/ignore/ignore -- '.shellescape(<q-args>), 1,)
+  \   'rg -j 4 --vimgrep --column --line-number --ignore-case --color=always --ignore-file '.$IGNOREFILE.' -- '.shellescape(<q-args>), 1,)
+
+command! -bang -nargs=* Rgc
+  \ call fzf#vim#grep(
+  \   'rg -j 4 --vimgrep --column --line-number -S --color=always --ignore-file '.$IGNOREFILE.' -- '.shellescape(<q-args>), 1,)
 
 " CTRL-A CTRL-Q to select all and build quickfix list
 
@@ -745,43 +733,25 @@ let $FZF_DEFAULT_OPTS = '--bind ctrl-a:select-all'
 syntax sync minlines=20000
 set redrawtime=10000
 
-"tree-sitter
-" lua <<EOF
-" require'nvim-treesitter.configs'.setup {
-"   highlight = {
-"     enable = true,
-"     disable = {
-"     }
-"   }
-" }
-" EOF
-
-let g:vimade = {}
-let g:vimade.fadelevel = 0.3
-let g:vimade.fademinimap = 1
-let g:vimade.enabletreesitter = 1
-
 let g:Lf_WindowPosition = 'popup'
 
-"----------------------------------------------------status-line実験
+" --------------------------------------------------------
+"coc
+""定義もとへ go definition
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gs :vs<CR><Plug>(coc-definition)
+"ビジュアル選択をフォーマット
+vmap <leader>f <Plug>(coc-format-selected)
 
-" function! ActiveLine()
-"     return luaeval("require'status-line'.activeLine()")
-" endfunction
+function! s:show_documentation()
+   if (index(['vim','help'], &filetype) >= 0)
+      execute 'h '.expand('<cword>')
+   else
+      call CocAction('doHover')
+   endif
+endfunction
 
-" function! InactiveLine()
-" 	return luaeval("require'status-line'.inactiveLine()")
-" endfunction
-
-" augroup Statusline
-" 	autocmd!
-" 	autocmd WinEnter,BufEnter * setlocal statusline=%!ActiveLine()
-" 	autocmd WinLeave,BufLeave * setlocal statusline=%!InactiveLine()
-" augroup END
-
-" augroup UPDATE_FUNCTION
-" 	autocmd!
-" 	autocmd CursorHold * silent! lua require'lsp-status'.update_current_function()
-" augroup END
-
-" set statusline=%!ActiveLine()
+hi! link CocErrorVirtualText CocErrorSign
+hi! link CocWarningVirtualText CocWarningSign
+hi! link CocInfoVirtualText CocInfoSign
+hi! link CocHintVirtualText CocHintSign

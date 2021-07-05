@@ -10,7 +10,6 @@ Plug 'vim-scripts/httplog' "usage: setf httplog
 Plug 'will133/vim-dirdiff'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'triglav/vim-visual-increment'
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
@@ -21,19 +20,18 @@ Plug 'xolox/vim-misc' "vim-colorscheme-switcher dependency
 Plug 'xolox/vim-colorscheme-switcher'
 Plug 'blueyed/smarty.vim'
 Plug 'justinmk/vim-dirvish'
-Plug 'jsfaint/gen_tags.vim'
+" Plug 'jsfaint/gen_tags.vim'
 Plug 'liuchengxu/graphviz.vim'
 "Plug 'ntpeters/vim-better-whitespace'
-Plug 'jceb/vim-orgmode'
-Plug 'TaDaa/vimade'
 Plug 'norcalli/nvim-colorizer.lua'
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}  " We recommend updating the parsers on update
-Plug 'Yggdroot/LeaderF', { 'do': ':LeaderfInstallCExtension' }
 Plug 'neovim/nvim-lspconfig'
-Plug 'nvim-lua/lsp-status.nvim'
+
+"language-server
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+
 
 "php
-" Plug 'StanAngeloff/php.vim'
 Plug 'shawncplus/phpcomplete.vim'
 Plug 'vim-scripts/PDV--phpDocumentor-for-Vim'
 Plug 'phpactor/phpactor', {'for': 'php', 'branch': 'master', 'do': 'composer install --no-dev -o'}
@@ -48,11 +46,13 @@ Plug 'pangloss/vim-javascript'
 
 "colorscheme
 Plug 'drewtempelmeyer/palenight.vim'
-Plug 'skreek/skeletor.vim'
 Plug 'kjssad/quantum.vim'
 Plug 'kshenoy/vim-sol'
 Plug 'mhartington/oceanic-next'
 Plug 'sainnhe/sonokai'
 Plug 'franbach/miramare'
+
+Plug 'RishabhRD/popfix'
+Plug 'RishabhRD/nvim-lsputils'
 call plug#end()
 "}}}
