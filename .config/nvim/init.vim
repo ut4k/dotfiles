@@ -1,5 +1,9 @@
+function! OnEntryDir()
+ return 0
+endfunction
+
 "run auto-intall script {{{
-if filereadable($HOME . "/scripts/vim-setup.sh")
+if filereadable($HOME."/scripts/vim-setup.sh")
  let g:install_script_ret = system($HOME . "/scripts/vim-setup.sh")
  if g:install_script_ret != ""
   echo g:install_script_ret
@@ -755,3 +759,4 @@ hi! link CocErrorVirtualText CocErrorSign
 hi! link CocWarningVirtualText CocWarningSign
 hi! link CocInfoVirtualText CocInfoSign
 hi! link CocHintVirtualText CocHintSign
+

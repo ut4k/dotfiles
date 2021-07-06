@@ -79,3 +79,7 @@ fi
 grep_php_comm() {
   grep -rn --include \*.php 'pre\|print_r\|echo\|var_dump\|var_export' .
 }
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion

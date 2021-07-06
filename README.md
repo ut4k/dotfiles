@@ -48,6 +48,72 @@ vimからLintが動いてるかテストするには`:!phpmd % text unusedcode.x
 
 ## nvim
 
+### node
+
+`nvm`を使ってインストール。Node 12 >=が必要。
+
+```
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
+source ~/.bashrc
+nvm install node
+
+node -v
+```
+
+#### 間違えた場合：
+
+```
+echo $NVM_DIR
+rm -rf $NVM_DIR
+```
+
+###　fd
+
+Ubuntu:
+```
+sudo apt install fd-find
+```
+
+binが`fdfind`という名前になるので・・・シンボリックリンクを作成する。
+
+```
+mkdri -p ~/.local/bin
+ln -s $(which fdfind) ~/.local/bin/fd
+```
+
+### vim-plug
+
+https://github.com/junegunn/vim-plug
+
+```
+sh -c 'curl -fLo "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.vim --create-dirs \
+       https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+```
+
+### ctags
+
+#### autotools
+
+```
+sudo apt install \
+    gcc make \
+    pkg-config autoconf automake \
+    python3-docutils \
+    libseccomp-dev \
+    libjansson-dev \
+    libyaml-dev \
+    libxml2-dev
+```
+
+https://github.com/universal-ctags/ctags#how-to-build-and-install
+
+### python3 provider
+
+```
+sudo apt install python3-pip
+pip3 install --user --upgrade pynvim
+```
+
 ### 作業ディレクトリに`.nvimlog`ができてしまうとき
 
 デフォルトのログファイル`~/.local/share/nvim/log`が書き込み不可だと作業ディレクトリに毎回`.nvimlog`ができてしまう。  
