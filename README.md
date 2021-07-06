@@ -67,7 +67,7 @@ echo $NVM_DIR
 rm -rf $NVM_DIR
 ```
 
-###　fd
+### fd
 
 Ubuntu:
 ```
