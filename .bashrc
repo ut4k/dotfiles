@@ -10,6 +10,7 @@ export PATH=$PATH:~/.local/bin
 export PATH=$PATH:~/.composer/vendor/bin
 export PATH=$PATH:~/.emacs.d/bin
 export PATH=$PATH:~/.yarn/bin
+export PATH=$HOME/.nodebrew/current/bin:$PATH
 export PS1="\[\033[38;5;38m\]\u\[\]\[\033[38;5;15m\]@\[\]\[\033[38;5;172m\]\h\[\]\[\033[38;5;15m\] \[\]\w\[\]\n\[\]\[\033[38;5;41m\]$(moon_emoji)\[\]\[\033[38;5;15m\] \[\]"
 export TMUX_TMPDIR=/tmp/tmp.tmux
 # if [ -f /usr/bin/fd ]; then
@@ -17,8 +18,13 @@ export TMUX_TMPDIR=/tmp/tmp.tmux
 # fi
 export DT='/mnt/c/Users/kimura.AZET/Desktop'
 export WO='/mnt/d/workspace'
+export W='/mnt/d/workspace'
 
 alias ~='cd $HOME'
+alias w='cd $W'
+alias s='cd $W/surala'
+
+
 alias ll='ls -l'
 alias rc='source $HOME/.bashrc'
 alias vrc='vim $HOME/.bashrc'
@@ -26,8 +32,10 @@ alias showpath="sed 's/:/\n/g' <<< \"$PATH\""
 
 alias mux='tmuxinator'
 
+alias v="nvim"
 alias vi="nvim"
 alias vim="nvim"
+alias sv='cd $W/surala && nvim'
 
 # alias e="emacs -nw"
 # alias emacs="emacs -nw"

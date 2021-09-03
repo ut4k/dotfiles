@@ -419,17 +419,22 @@ function! RunScript()
  "現在のバッファ
  let l:curbuf = bufnr('%')
 
- "haskellならghcのインタプリタ
+ "haskell
  if expand('%:e') == "hs"
   let l:bin = "runghc"
+ "python
+ elseif expand('%:e') == "py"
+  let l:bin = "python3"
  else
   "それ以外なら拡張子そのままをコマンド
   let l:bin = expand('%:e')
  endif
+
  let l:file = expand('%')
  if bufwinnr('RunScript') > 0
   bw! RunScript
  endif
+
  execute ':vnew RunScript | 0read ! '. l:bin .' #'
 
  "ROにする
@@ -600,7 +605,7 @@ function! FileNameWithFuncToReg()
 endfunction
 
 function! FileNameLineToReg()
- let l:ret = expand("%") . " LINE:" . line(".")
+ let l:ret = expand("%") . " line:" . line(".")
  let @+=l:ret
  let @"=l:ret
  let @*=l:ret
@@ -710,6 +715,7 @@ command! -bang -nargs=* Rg
   \ call fzf#vim#grep(
   \   'rg -j 4 --vimgrep --column --line-number --ignore-case --color=always --ignore-file '.$IGNOREFILE.' -- '.shellescape(<q-args>), 1,)
 
+" ripgrep case sensitive
 command! -bang -nargs=* Rgc
   \ call fzf#vim#grep(
   \   'rg -j 4 --vimgrep --column --line-number -S --color=always --ignore-file '.$IGNOREFILE.' -- '.shellescape(<q-args>), 1,)
@@ -755,3 +761,9 @@ hi! link CocErrorVirtualText CocErrorSign
 hi! link CocWarningVirtualText CocWarningSign
 hi! link CocInfoVirtualText CocInfoSign
 hi! link CocHintVirtualText CocHintSign
+
+let g:previm_open_cmd = '/mnt/c/Program\ Files\ \(x86\)/Google/Chrome/Application/chrome.exe'
+let g:previm_wsl_mode = 1
+
+" let g:previm_open_cmd="/mnt/c/Program\ Files\ \(x86\)/Google/Chrome/Application/chrome.exe"
+" let g:previm_wsl_mode = 1

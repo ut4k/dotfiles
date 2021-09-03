@@ -30,6 +30,11 @@ Plug 'neovim/nvim-lspconfig'
 "language-server
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
+"markdown
+Plug 'godlygeek/tabular'
+Plug 'plasticboy/vim-markdown'
+Plug 'kannokanno/previm'
+
 
 "php
 Plug 'shawncplus/phpcomplete.vim'
