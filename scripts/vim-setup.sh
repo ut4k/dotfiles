@@ -17,9 +17,9 @@ fi
 # nodejs
 #########################################
 
-if ! type nodejs > /dev/null; then
-  echo "please install nodejs"
-fi
+# if ! type nodejs > /dev/null; then
+#   echo "please install nodejs"
+# fi
 
 
 exit
