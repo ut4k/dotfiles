@@ -26,6 +26,7 @@ Plug 'liuchengxu/graphviz.vim'
 Plug 'norcalli/nvim-colorizer.lua'
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}  " We recommend updating the parsers on update
 Plug 'neovim/nvim-lspconfig'
+" Plug 'wellle/context.vim'
 
 "language-server
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
@@ -39,11 +40,12 @@ Plug 'kannokanno/previm'
 "php
 Plug 'shawncplus/phpcomplete.vim'
 Plug 'vim-scripts/PDV--phpDocumentor-for-Vim'
-Plug 'phpactor/phpactor', {'for': 'php', 'branch': 'master', 'do': 'composer install --no-dev -o'}
+" Plug 'phpactor/phpactor', {'for': 'php', 'branch': 'master', 'do': 'composer install --no-dev -o'}
 " Require ncm2 and this plugin
 Plug 'ncm2/ncm2'
 Plug 'roxma/nvim-yarp'
-Plug 'phpactor/ncm2-phpactor'
+" Plug 'phpactor/ncm2-phpactor'
+" Plug 'vim-vdebug/vdebug'
 
 "javascript
 Plug 'heavenshell/vim-jsdoc'
@@ -59,5 +61,8 @@ Plug 'franbach/miramare'
 
 Plug 'RishabhRD/popfix'
 Plug 'RishabhRD/nvim-lsputils'
+Plug 'folke/lsp-colors.nvim'
+Plug 'rafamadriz/neon'
+Plug 'EdenEast/nightfox.nvim'
 call plug#end()
 "}}}

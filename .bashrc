@@ -23,6 +23,8 @@ export W='/mnt/d/workspace'
 alias ~='cd $HOME'
 alias w='cd $W'
 alias s='cd $W/surala'
+alias s2='cd /data/home/'
+alias dbsc='cd /mnt/d/メモ/すらら/DBスクリプト/db_script'
 
 
 alias ll='ls -l'
@@ -61,7 +63,8 @@ PERL_MM_OPT="INSTALL_BASE=/home/yuta/perl5"; export PERL_MM_OPT;
 
 mdtoh () {
     f=$1
-    pandoc -s --self-contained -t html5 -c "$HOME/.config/pandoc/markdown-css-themes/markdown$2.css" --metadata title=' ' --highlight-style=tango $1 -o ${f::-3}.html
+    # pandoc -s --self-contained -t html5 -c "$HOME/.config/pandoc/markdown-css-themes/markdown$2.css" --metadata title=' ' --highlight-style=tango $1 -o ${f::-3}.html
+    pandoc -s --self-contained -t html5 -c "/mnt/d/markdown-css/markdown$2.css" --toc --metadata title=' ' --highlight-style=tango $1 -o ${f::-3}.html
 }
 
 # export DISPLAY=localhost:0.0
@@ -71,7 +74,7 @@ export GTAGSLABEL=pygments
 
 # VcXsrv
 umask 022
-# export DISPLAY=localhost:0.0
+export DISPLAY=localhost:0.0
 
 alias fullls="ls -d -1 "$PWD/"*"
 
@@ -86,4 +89,26 @@ fi
 
 grep_php_comm() {
   grep -rn --include \*.php 'pre\|print_r\|echo\|var_dump\|var_export' .
+}
+
+# convert .png to .ico with imagemagick
+png2ico () {
+    local i="${1}" o="${2:-${1:r}.ico}" s="${png2ico_size:-256}"
+    convert -resize x${s} -gravity center -crop ${s}x${s}+0+0 "$i" -flatten -colors 256 -background transparent "$o"
+}
+
+alias srlsync="rsync -av --exclude '.svn' /mnt/d/workspace/surala/ /data/home/"
+alias srlsyncr="rsync -a --exclude='.svn' /data/home/ /mnt/d/workspace/surala/"
+
+# compreses jpeg with imagemagick
+jpgc () {
+  local out=compressed.$1
+  convert $1 -sampling-factor 4:2:0 -strip -quality 50 -interlace JPEG -colorspace sRGB $out
+  mogrify -resize 50% $out
+}
+
+heic2jpg () {
+  for file in `\find . -maxdepth 1 -type f`; do
+    heif-convert $file $file.jpg
+  done
 }

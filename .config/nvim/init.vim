@@ -56,7 +56,8 @@ set gdefault "global substitute by default /g option
 set ignorecase
 set smartcase
 set list
-set ambiwidth=double
+" set ambiwidth=double
+set ambiwidth=single
 set listchars=tab:»\ ,precedes:«,extends:»,eol:↲
 "
 " ファイルが変更されたら自動で再読み込み
@@ -82,6 +83,7 @@ set noundofile
 set nowrap
 set number
 set regexpengine=1
+set regexpengine=0
 set shiftwidth=2
 set showcmd
 set showmatch
@@ -207,7 +209,8 @@ imap <F1> <C-o>:echo<CR>
 "compile c and run the bin
 nnoremap <F9> :call RunC()<CR>
 "prepare grep command
-nnoremap ff :Rg<space>
+" nnoremap ff :Rg<space>
+nnoremap ff :RgPhp<space>
 "+ buffer size vertically
 nnoremap <S-h> :vert resize +15<CR>
 "- buffer vertically
@@ -225,8 +228,9 @@ nnoremap <F10> :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> 
 "fzf
 nnoremap <c-p> :Files<CR>
 nnoremap <c-space> :Buffers<CR>
-nnoremap <c-h> :Hist<CR>
-"pass cursor word as fzf query
+nnoremap <c-b> :Hist<CR>
+" nnoremap <c-h> :Hist<CR>
+"pass cursor word s fzf query
 nnoremap <c-q> :call fzf#vim#files('.', {'options':'--query '.expand('<cword>')})<CR>
 nnoremap <c-z> :call fzf#vim#files('.', {'options':'--query '.expand('%:t')})<CR>
 " Use K to show documentation in preview window
@@ -280,6 +284,8 @@ nnoremap <leader>gv :GraphvizCompile png<CR>:Graphviz png<CR>
 nnoremap <leader>gv :GraphvizCompile png<CR>:Graphviz png<CR>
 
 nnoremap <leader>ws :StripWhitespace<CR><CR>
+
+" nnoremap /  /\v
 "}}}
 
 "plugin settings{{{
@@ -317,17 +323,17 @@ let g:pdv_cfg_php4guess  = 0
 "----------------------------------------
 " php.vim
 "----------------------------------------
-let g:php_html_load = 0
-let g:php_html_in_heredoc = 0
-let g:php_html_in_nowdoc = 0
-let g:php_var_selector_is_identifier= 1
-let g:php_baselib = 1
-let g:php_parent_error_close = 0
-let g:php_parent_error_open = 0
-let g:php_sql_query = 0
-let g:php_folding = 0
-let g:php_sql_heredoc = 0
-let g:php_sql_nowdoc = 0
+" let g:php_html_load = 0
+" let g:php_html_in_heredoc = 0
+" let g:php_html_in_nowdoc = 0
+" let g:php_var_selector_is_identifier= 1
+" let g:php_baselib = 1
+" let g:php_parent_error_close = 0
+" let g:php_parent_error_open = 0
+" let g:php_sql_query = 0
+" let g:php_folding = 0
+" let g:php_sql_heredoc = 0
+" let g:php_sql_nowdoc = 0
 "----------------------------------------
 " commentary
 "----------------------------------------
@@ -351,13 +357,15 @@ let g:UltiSnipsSnippetDirectories=[$HOME . '/.vim/config/snippets']
 "-----------------------------------------
 " Vista
 "-----------------------------------------
-let g:vista_default_executive = "ctags"
+" let g:vista_default_executive = "ctags"
+let g:vista_default_executive = "coc"
 let g:vista_ignore_kinds = ['Variable', 'variable']
 let g:vista_cursor_delay = 100
 let g:vista_sidebar_width = 55
 let g:vista#renderer#enable_icon = 1
 let g:vista_icon_indent = ["╰─▸ ", "├─▸ "]
 let g:vista_icon_indent = ['└ ', '│ ']
+let g:vista#renderer#ctags = 'default'
 
 "fzf symbol
 nnoremap <C-s> :Vista finder<CR>
@@ -381,7 +389,47 @@ let g:phpcomplete_enhance_jump_to_definition = 1
 " let g:fzf_preview_window = 'right:40%'
 let g:fzf_preview_window = []
 let g:fzf_prefer_tmux = 0
-let g:fzf_layout = { 'down' : '~14%' }
+" let g:fzf_layout = { 'down' : '~14%' }
+" let g:fzf_layout = {'up':'~70%', 'window': { 'width': 0.8, 'height': 0.8,'yoffset':0.5,'xoffset': 0.5, 'highlight': 'Todo', 'border': 'sharp' } }
+
+" https://github.com/junegunn/fzf.vim/issues/664#issuecomment-476438294
+let g:fzf_layout = { 'window': 'call FloatingFZF()' }
+
+function! FloatingFZF()
+  let buf = nvim_create_buf(v:false, v:true)
+  call setbufvar(buf, '&signcolumn', 'no')
+
+  let height = &lines - 3
+  let width = float2nr(&columns - (&columns * 2 / 10))
+  let col = float2nr((&columns - width) / 2)
+
+  let opts = {
+        \ 'relative': 'editor',
+        \ 'row': 1,
+        \ 'col': col,
+        \ 'width': width,
+        \ 'height': height
+        \ }
+
+  call nvim_open_win(buf, v:true, opts)
+endfunction
+
+" let g:fzf_colors =
+" \ { 'fg':      ['fg', 'Normal'],
+"   \ 'bg':      ['bg', 'Normal'],
+"   \ 'hl':      ['fg', 'Comment'],
+"   \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
+"   \ 'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
+"   \ 'hl+':     ['fg', 'Statement'],
+"   \ 'info':    ['fg', 'PreProc'],
+"   \ 'border':  ['fg', 'Ignore'],
+"   \ 'prompt':  ['fg', 'Conditional'],
+"   \ 'pointer': ['fg', 'Exception'],
+"   \ 'marker':  ['fg', 'Keyword'],
+"   \ 'spinner': ['fg', 'Label'],
+"   \ 'header':  ['fg', 'Comment'] }
+
+
 " -----------------------------------------
 "  gen_tags
 " -----------------------------------------
@@ -425,6 +473,12 @@ function! RunScript()
  "python
  elseif expand('%:e') == "py"
   let l:bin = "python3"
+ "bash
+ elseif expand('%:e') == "sh"
+  let l:bin = "bash"
+ "powershell
+ elseif expand('%:e') == "ps1"
+  let l:bin = "powershell.exe"
  else
   "それ以外なら拡張子そのままをコマンド
   let l:bin = expand('%:e')
@@ -639,7 +693,7 @@ command! Ecp932 :call Ecp932()
 "phpシンタックス上書き
 augroup phpSyntaxOverride
  autocmd!
- autocmd FileType php call PhpSyntaxOverride()
+ " autocmd FileType php call PhpSyntaxOverride()
 augroup END
 
 "リサイズ時に画面幅をそろえる
@@ -674,11 +728,18 @@ endif
 
 augroup autoConvertHtml
  autocmd!
- autocmd BufWritePost suralanote.md | silent! call system("pandochtml ".expand("%")." > /dev/null")
+ autocmd BufWritePost suralanote.md | silent! call system("mdtoh ".expand("%")." 7 > /dev/null")
+augroup END
+
+augroup readAsSjis
+ autocmd!
+ autocmd BufReadPost *.ps1 | silent! call Ecp932()
 augroup END
 "}}}
 
-colorscheme quantum
+" colorscheme quantum
+" colorscheme neon
+colorscheme nightfox
 
 set foldmethod=marker
 
@@ -711,14 +772,34 @@ let g:graphviz_output_format = 'png'
 
 let g:jsdoc_lehre_path = "/home/yuta/.yarn/bin/lehre"
 
+"ripgrep php
+command! -bang -nargs=* RgPhp
+  \ call fzf#vim#grep(
+  \   'rg -g *.php --vimgrep --column --line-number --color=always --ignore-file '.$IGNOREFILE.' '.shellescape(<q-args>), 1, 0)
+
+"ripgrep js
+command! -bang -nargs=* RgJs
+  \ call fzf#vim#grep(
+  \   'rg -g *.js --vimgrep --column --line-number --color=always --ignore-file '.$IGNOREFILE.' '.shellescape(<q-args>), 1, 0)
+
+"ripgrep all
 command! -bang -nargs=* Rg
   \ call fzf#vim#grep(
-  \   'rg -j 4 --vimgrep --column --line-number --ignore-case --color=always --ignore-file '.$IGNOREFILE.' -- '.shellescape(<q-args>), 1,)
+  \   'rg --vimgrep --column --line-number --color=always --ignore-file '.$IGNOREFILE.' '.shellescape(<q-args>), 1, 0)
 
-" ripgrep case sensitive
+" ripgrep case sensitive (-S)
 command! -bang -nargs=* Rgc
   \ call fzf#vim#grep(
-  \   'rg -j 4 --vimgrep --column --line-number -S --color=always --ignore-file '.$IGNOREFILE.' -- '.shellescape(<q-args>), 1,)
+  \   'rg --vimgrep --column --line-number -S --color=always --ignore-file '.$IGNOREFILE.' '.shellescape(<q-args>), 1, 0)
+
+" ripgrep with filetype
+command! -bang -nargs=* Rgf
+  \ call RgSpecificFileType(<q-args>)
+
+function! RgSpecificFileType(query)
+  let l:ft = input('File Type?: ')
+  call fzf#vim#grep('rg -g *.'.l:ft.' --vimgrep --column --line-number --color=always --ignore-file '.$IGNOREFILE.' '.shellescape(a:query), 1, 0)
+endfunction
 
 " CTRL-A CTRL-Q to select all and build quickfix list
 
@@ -767,3 +848,110 @@ let g:previm_wsl_mode = 1
 
 " let g:previm_open_cmd="/mnt/c/Program\ Files\ \(x86\)/Google/Chrome/Application/chrome.exe"
 " let g:previm_wsl_mode = 1
+"
+" nnoremap <silent> <Leader>g :<C-u>silent call <SID>find_rip_grep()<CR>
+
+" function! s:find_rip_grep() abort
+"     call fzf#vim#grep(
+"                 \   'rg --hidden --column --line-number --no-heading --ignore-file '.$IGNOREFILE.' --smart-case .+',
+"                 \   1,
+"                 \   0,
+"                 \ )
+" endfunction
+
+"https://gist.github.com/iagox86/f96965fb2c6fa5b98077fb25a1bdb1ee
+" Re-map ctrl-h/j/k/l to move around in normal mode
+nnoremap <C-h> <C-w>h
+nnoremap <C-j> <C-w>j
+nnoremap <C-k> <C-w>k
+nnoremap <C-l> <C-w>l
+
+" 有効にしちゃうとFZFの検索結果を移動できなくなる
+" Re-map ctrl-h/j/k/l to move around in terminal mode
+" tnoremap <C-h> <C-\><C-n><C-w>h
+" tnoremap <C-j> <C-\><C-n><C-w>j
+" tnoremap <C-k> <C-\><C-n><C-w>k
+" tnoremap <C-l> <C-\><C-n><C-w>l
+
+" Make ctrl-w escape insert mode
+tnoremap <C-w> <C-\><C-n><C-w>
+inoremap <C-w> <esc><C-w>
+
+" Let <enter> enter insert mode (helpful for terminals)
+nnoremap <return> i
+
+" SuralaLocal
+augroup FileWatcher
+ autocmd!
+ autocmd BufWritePost /mnt/d/workspace/surala/**  silent! call WslSync()
+augroup END
+
+function! WslSync()
+ let l:fp = WinPath(expand("%:p"))
+ let l:dp = WinPath(getcwd())
+ let l:cmd = "php.exe \"D:\\scripts\\wsl_tools\\win\\wsl_sync.php\" \"".l:fp."\" \"".l:dp."\""
+ echo l:cmd
+ call system(l:cmd)
+endfunction
+
+function! WinPath(path)
+ let l:path = system("wslpath -w " . a:path)
+ return strcharpart(l:path, 0, strlen(l:path)-1)
+endfunction
+
+function! WorkspaceRoot()
+ return expand("%:p:h")
+endfunction
+
+let g:vdebug_options= {
+\    "port" : 9000,
+\    "server" : '',
+\    "timeout" : 10,
+\    "on_close" : 'detach',
+\    "break_on_open" : 1,
+\    "ide_key" : 'VSCODE',
+\    "path_maps" : {},
+\    "debug_window_level" : 0,
+\    "debug_file_level" : 2,
+\    "debug_file" : "/home/yuta/vdebug.log",
+\    "watch_window_style" : 'expanded',
+\    "marker_default" : '⬦',
+\    "marker_closed_tree" : '▸',
+\    "marker_open_tree" : '▾'
+\}
+
+let g:vdebug_options['path_maps'] = {"/data/home": getcwd()}
+
+let g:vdebug_keymap = {
+   \    "run" : "<leader>v",
+   \    "run_to_cursor" : "<F9>",
+   \    "step_over" : "<F2>",
+   \    "step_into" : "<F3>",
+   \    "step_out" : "<F4>",
+   \    "close" : "<F6>",
+   \    "detach" : "<F7>",
+   \    "set_breakpoint" : "<F10>",
+   \    "get_context" : "<F11>",
+   \    "eval_under_cursor" : "<F12>",
+   \    "eval_visual" : "<Leader>e",
+   \}
+
+
+function! OutputSplitWindow(...)
+  " this function output the result of the Ex command into a split scratch buffer
+  let cmd = join(a:000, ' ')
+  let temp_reg = @"
+  redir @"
+  silent! execute cmd
+  redir END
+  let output = copy(@")
+  let @" = temp_reg
+  if empty(output)
+    echoerr "no output"
+  else
+    new
+    setlocal buftype=nofile bufhidden=wipe noswapfile nobuflisted
+    put! =output
+  endif
+endfunction
+command! -nargs=+ -complete=command Output call OutputSplitWindow(<f-args>)
