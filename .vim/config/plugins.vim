@@ -4,12 +4,12 @@ call plug#begin('~/.local/share/nvim/plugged')
 Plug 'junegunn/vim-easy-align'
 Plug 'mattn/emmet-vim'
 Plug 'tpope/vim-commentary'
-Plug 'tpope/vim-repeat'
+" Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-surround'
 Plug 'vim-scripts/httplog' "usage: setf httplog
 Plug 'will133/vim-dirdiff'
-Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
-Plug 'junegunn/fzf.vim'
+" Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+" Plug 'junegunn/fzf.vim'
 Plug 'triglav/vim-visual-increment'
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
@@ -22,9 +22,8 @@ Plug 'blueyed/smarty.vim'
 Plug 'justinmk/vim-dirvish'
 " Plug 'jsfaint/gen_tags.vim'
 Plug 'liuchengxu/graphviz.vim'
-"Plug 'ntpeters/vim-better-whitespace'
 Plug 'norcalli/nvim-colorizer.lua'
-Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}  " We recommend updating the parsers on update
+" Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}  " We recommend updating the parsers on update
 Plug 'neovim/nvim-lspconfig'
 " Plug 'wellle/context.vim'
 
@@ -32,10 +31,9 @@ Plug 'neovim/nvim-lspconfig'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
 "markdown
-Plug 'godlygeek/tabular'
+" Plug 'godlygeek/tabular'
 Plug 'plasticboy/vim-markdown'
-Plug 'kannokanno/previm'
-
+" Plug 'kannokanno/previm'
 
 "php
 Plug 'shawncplus/phpcomplete.vim'
@@ -52,17 +50,32 @@ Plug 'heavenshell/vim-jsdoc'
 Plug 'pangloss/vim-javascript'
 
 "colorscheme
-Plug 'drewtempelmeyer/palenight.vim'
-Plug 'kjssad/quantum.vim'
+" Plug 'drewtempelmeyer/palenight.vim'
+" Plug 'kjssad/quantum.vim'
 Plug 'kshenoy/vim-sol'
-Plug 'mhartington/oceanic-next'
-Plug 'sainnhe/sonokai'
-Plug 'franbach/miramare'
+" Plug 'mhartington/oceanic-next'
+" Plug 'sainnhe/sonokai'
+" Plug 'franbach/miramare'
 
-Plug 'RishabhRD/popfix'
-Plug 'RishabhRD/nvim-lsputils'
-Plug 'folke/lsp-colors.nvim'
-Plug 'rafamadriz/neon'
+" Plug 'RishabhRD/popfix'
+" Plug 'RishabhRD/nvim-lsputils'
+" Plug 'folke/lsp-colors.nvim'
+" Plug 'rafamadriz/neon'
 Plug 'EdenEast/nightfox.nvim'
+
+" =========================================
+" 各プラグインのlua版 いれてみる
+"
+" nerdtree→nvim-tree.lua
+" fzf.vim→fzf-lua
+" coc.nvim→nvim-lspconfig
+" indentLine→indent-blankline
+
+Plug 'kyazdani42/nvim-web-devicons' " for file icons
+Plug 'kyazdani42/nvim-tree.lua'
+
+Plug 'ibhagwan/fzf-lua'
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+" =========================================
 call plug#end()
 "}}}

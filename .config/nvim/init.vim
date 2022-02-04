@@ -3,13 +3,13 @@ function! OnEntryDir()
 endfunction
 
 "run auto-intall script {{{
-if filereadable($HOME."/scripts/vim-setup.sh")
- let g:install_script_ret = system($HOME . "/scripts/vim-setup.sh")
- if g:install_script_ret != ""
-  echo g:install_script_ret
-  sleep 2
- endif
-endif
+" if filereadable($HOME."/scripts/vim-setup.sh")
+"  let g:install_script_ret = system($HOME . "/scripts/vim-setup.sh")
+"  if g:install_script_ret != ""
+"   echo g:install_script_ret
+"   sleep 2
+"  endif
+" endif
 "}}}
 "global variable {{{
 let $PRJCONF        = "$HOME/.vim/config/prj.vim"
@@ -214,7 +214,8 @@ imap <F1> <C-o>:echo<CR>
 nnoremap <F9> :call RunC()<CR>
 "prepare grep command
 " nnoremap ff :Rg<space>
-nnoremap ff :RgPhp<space>
+" nnoremap ff :RgPhp<space>
+nnoremap ff :FzfLua grep<CR>
 "+ buffer size vertically
 nnoremap <S-h> :vert resize +15<CR>
 "- buffer vertically
@@ -230,13 +231,15 @@ nnoremap <F10> :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> 
    \ . synIDattr(synID(line("."),col("."),0),"name") . "> lo<"
    \ . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">"<CR>
 "fzf
-nnoremap <c-p> :Files<CR>
+" nnoremap <c-p> :Files<CR>
+nnoremap <c-p> :FzfLua files<CR>
 nnoremap <c-space> :Buffers<CR>
-nnoremap <c-b> :Hist<CR>
+" nnoremap <c-b> :Hist<CR>
+nnoremap <c-b> :FzfLua oldfiles<CR>
 " nnoremap <c-h> :Hist<CR>
 "pass cursor word s fzf query
-nnoremap <c-q> :call fzf#vim#files('.', {'options':'--query '.expand('<cword>')})<CR>
-nnoremap <c-z> :call fzf#vim#files('.', {'options':'--query '.expand('%:t')})<CR>
+" nnoremap <c-q> :call fzf#vim#files('.', {'options':'--query '.expand('<cword>')})<CR>
+" nnoremap <c-z> :call fzf#vim#files('.', {'options':'--query '.expand('%:t')})<CR>
 " Use K to show documentation in preview window
 nnoremap <silent> K :call <SID>show_documentation()<CR>
 nnoremap <leader>gct :!/usr/local/bin/ctags -R --options=$HOME/.ctags<CR>
@@ -246,7 +249,8 @@ nnoremap <leader>am :call AddtoModFileList()<CR>
 
 "grep
 nnoremap gF :call GrepByFileName()<CR>
-nnoremap gR :call GrepByCword()<CR>
+" nnoremap gR :call GrepByCword()<CR>
+nnoremap gR :FzfLua grep_cword<CR>
 
 nnoremap <leader>bk :call CopyToDesktop()<CR>
 "ダブルクリックでワードコピー
@@ -372,7 +376,7 @@ let g:vista_icon_indent = ['└ ', '│ ']
 let g:vista#renderer#ctags = 'default'
 
 "fzf symbol
-nnoremap <C-s> :Vista finder<CR>
+" nnoremap <C-s> :Vista finder<CR>
 " -----------------------------------------
 " vim-colorscheme-switcher
 " -----------------------------------------
@@ -391,8 +395,8 @@ let g:phpcomplete_enhance_jump_to_definition = 1
 "  fzf
 " -----------------------------------------
 " let g:fzf_preview_window = 'right:40%'
-let g:fzf_preview_window = []
-let g:fzf_prefer_tmux = 0
+" let g:fzf_preview_window = []
+" let g:fzf_prefer_tmux = 0
 " let g:fzf_layout = { 'down' : '~14%' }
 " let g:fzf_layout = {'up':'~70%', 'window': { 'width': 0.8, 'height': 0.8,'yoffset':0.5,'xoffset': 0.5, 'highlight': 'Todo', 'border': 'sharp' } }
 
@@ -708,7 +712,7 @@ augroup END
 
 " push quickfix window always to the bottom
 " autocmd FileType qf wincmd J
-autocmd FileType qf if (getwininfo(win_getid())[0].loclist != 1) | wincmd J | endif
+" autocmd FileType qf if (getwininfo(win_getid())[0].loclist != 1) | wincmd J | endif
 
 "tab or space
 autocmd FileType haskell set tabstop=4|set shiftwidth=4|set expandtab
@@ -813,11 +817,11 @@ function! s:build_quickfix_list(lines)
   cc
 endfunction
 
-let g:fzf_action = {
-  \ 'ctrl-q': function('s:build_quickfix_list'),
-  \ 'ctrl-t': 'tab split',
-  \ 'ctrl-x': 'split',
-  \ 'ctrl-v': 'vsplit' }
+" let g:fzf_action = {
+"   \ 'ctrl-q': function('s:build_quickfix_list'),
+"   \ 'ctrl-t': 'tab split',
+"   \ 'ctrl-x': 'split',
+"   \ 'ctrl-v': 'vsplit' }
 
 let $FZF_DEFAULT_OPTS = '--bind ctrl-a:select-all'
 
@@ -882,7 +886,8 @@ tnoremap <C-w> <C-\><C-n><C-w>
 inoremap <C-w> <esc><C-w>
 
 " Let <enter> enter insert mode (helpful for terminals)
-nnoremap <return> i
+" quickfix, floating windowの中でenterを使う機能が使えなくなるので廃止！
+" tnoremap <return> i
 
 " SuralaLocal
 augroup FileWatcher
@@ -894,7 +899,9 @@ function! WslSync()
  let l:fp = WinPath(expand("%:p"))
  let l:dp = WinPath(getcwd())
  let l:cmd = "php.exe \"D:\\scripts\\wsl_tools\\win\\wsl_sync.php\" \"".l:fp."\" \"".l:dp."\""
- echo l:cmd
+ " redir @a
+ " echo l:cmd
+ " redir END
  call system(l:cmd)
 endfunction
 
@@ -959,3 +966,23 @@ function! OutputSplitWindow(...)
   endif
 endfunction
 command! -nargs=+ -complete=command Output call OutputSplitWindow(<f-args>)
+
+
+lua << EOF
+require'fzf-lua'.setup {
+  winopts = {
+    height = 0.50,
+    width = 0.90,
+    preview = {
+      horizontal = 'right:30%',
+    }
+  },
+  keymap = {
+    fzf = {
+      ["ctrl-q"] = "select-all+accept",
+    }
+  }
+}
+EOF
+
+
