@@ -5,8 +5,9 @@ sudo apt update
 
 # neovim
 mkdir -p /home/yuta/nvim/
-curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim.appimage > /home/yuta/nvim/
+curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim.appimage --output /home/yuta/nvim/
 sudo chmod u+x nvim.appimage
+sudo rm -rf /usr/local/bin/nvim
 sudo ln -s /home/yuta/nvim/nvim.appimage /usr/local/bin/nvim
 
 # python3 provider
@@ -20,6 +21,9 @@ sh -c 'curl -fLo "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.
 
 # ripgrep
 sudo apt install ripgrep
+
+# fzf
+sudo apt install fzf
 
 # fd
 sudo apt install fd-find
