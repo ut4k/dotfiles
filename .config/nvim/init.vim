@@ -2,28 +2,24 @@ function! OnEntryDir()
  return 0
 endfunction
 
-"run auto-intall script {{{
-" if filereadable($HOME."/scripts/vim-setup.sh")
-"  let g:install_script_ret = system($HOME . "/scripts/vim-setup.sh")
-"  if g:install_script_ret != ""
-"   echo g:install_script_ret
-"   sleep 2
-"  endif
-" endif
-"}}}
+
 "global variable {{{
-let $PRJCONF        = "$HOME/.vim/config/prj.vim"
-let $PLUGCONF       = "$HOME/.vim/config/plugins.vim"
-let $TMUXCONF       = "$HOME/.tmux.conf"
-let $SNIPPETDIR     = "$HOME/.vim/config/snippets/"
-let $IGNOREFILE     = "$HOME/ignore/ignore"
+let $PRJCONF = "$HOME/.vim/config/prj.vim"
+let $PLUGCONF = "$HOME/.vim/config/plugins.vim"
+let $TMUXCONF = "$HOME/.tmux.conf"
+let $SNIPPETDIR = "$HOME/.vim/config/snippets/"
+let $IGNOREFILE = "$HOME/ignore/ignore"
 let $IGNOREFILE_ENT = "$HOME/ignore/ignore_ent"
 "}}}
+
+let g:worker = "kimura"
+let g:current_project = ""
+
 "read external files {{{
-if filereadable(expand($PRJCONF)) | source $PRJCONF | endif
+if filereadable(expand($PRJCONF))  | source $PRJCONF  | endif
 if filereadable(expand($PLUGCONF)) | source $PLUGCONF | endif
 "}}}
-"
+
 if OnEntryDir() == 1
    let $IGNOREFILE = $IGNOREFILE_ENT
 endif
@@ -478,6 +474,9 @@ function! RunScript()
  "haskell
  if expand('%:e') == "hs"
   let l:bin = "runghc"
+ "go
+ elseif expand('%:e') == "go"
+  let l:bin = "go run"
  "python
  elseif expand('%:e') == "py"
   let l:bin = "python3"
@@ -721,6 +720,7 @@ autocmd FileType sql set tabstop=4|set shiftwidth=2|set noexpandtab|set smarttab
 autocmd FileType text set tabstop=2|set shiftwidth=2|set expandtab
 autocmd FileType vim set tabstop=1|set shiftwidth=1|set expandtab
 autocmd FileType dot set tabstop=2|set shiftwidth=2|set expandtab
+autocmd FileType python set tabstop=2|set shiftwidth=2|set expandtab
 
 "phpは$をキーワードとしてあつかう wで $variable 全体がとれるように
 autocmd FileType php :setlocal iskeyword+=$
@@ -985,4 +985,30 @@ require'fzf-lua'.setup {
 }
 EOF
 
+lua << EOF
+local dap = require"dap"
 
+dap.configurations.lua = { 
+  { 
+    type = 'nlua', 
+    request = 'attach',
+    name = "Attach to running Neovim instance",
+    host = function()
+      local value = vim.fn.input('Host [127.0.0.1]: ')
+      if value ~= "" then
+        return value
+      end
+      return '127.0.0.1'
+    end,
+    port = function()
+      local val = tonumber(vim.fn.input('Port: '))
+      assert(val, "Please provide a port number")
+      return val
+    end,
+  }
+}
+
+dap.adapters.nlua = function(callback, config)
+  callback({ type = 'server', host = config.host, port = config.port })
+end
+EOF

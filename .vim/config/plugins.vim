@@ -76,6 +76,12 @@ Plug 'kyazdani42/nvim-tree.lua'
 
 Plug 'ibhagwan/fzf-lua'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+
+
+Plug 'jbyuki/one-small-step-for-vimkind'
+" You will also need a comptabile DAP client
+Plug 'mfussenegger/nvim-dap'
+" Plug 'brookhong/DBGPavim'
 " =========================================
 call plug#end()
 "}}}
