@@ -74,8 +74,11 @@ Plug 'EdenEast/nightfox.nvim'
 Plug 'kyazdani42/nvim-web-devicons' " for file icons
 Plug 'kyazdani42/nvim-tree.lua'
 
-Plug 'ibhagwan/fzf-lua'
-Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+" Plug 'ibhagwan/fzf-lua'
+" Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+
+Plug 'nvim-lua/plenary.nvim'
+Plug 'nvim-telescope/telescope.nvim'
 
 
 Plug 'jbyuki/one-small-step-for-vimkind'

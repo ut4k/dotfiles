@@ -2,9 +2,7 @@ function! OnEntryDir()
  return 0
 endfunction
 
-
 "global variable {{{
-let $PRJCONF = "$HOME/.vim/config/prj.vim"
 let $PLUGCONF = "$HOME/.vim/config/plugins.vim"
 let $TMUXCONF = "$HOME/.tmux.conf"
 let $SNIPPETDIR = "$HOME/.vim/config/snippets/"
@@ -46,7 +44,7 @@ set encoding=utf-8
 set cmdheight=1
 set termguicolors
 set background=dark
-set t_Co=256
+" set t_Co=256
 set ttyfast
 set updatetime=300
 set shortmess+=c
@@ -83,7 +81,7 @@ set noundofile
 set nowrap
 set number
 set regexpengine=1
-set regexpengine=0
+" set regexpengine=0
 set shiftwidth=2
 set showcmd
 set showmatch
@@ -96,15 +94,15 @@ set tags=tags
 let $BASH_ENV = expand("$HOME/.bashrc") "load bash config
 
 "todo
-syntax sync minlines=20000
-set redrawtime=10000
+" syntax sync minlines=20000
+" set redrawtime=10000
 
 "ワイルドカードで検索除外
-set wildignore+=*\\.git\\*,*\\.hg\\*,*\\.svn\\*
-set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*.jpg,*.png,*.gif,*.jpeg,*.swf
-set wildignore+=*/.git/*,*/tmp/*,*.swp
+" set wildignore+=*\\.git\\*,*\\.hg\\*,*\\.svn\\*
+" set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*.jpg,*.png,*.gif,*.jpeg,*.swf
+" set wildignore+=*/.git/*,*/tmp/*,*.swp
 
-set cscopequickfix=s+,c+,d+,i+,t+,e+,a+
+" set cscopequickfix=s+,c+,d+,i+,t+,e+,a+
 
 "html output
 let g:html_number_lines = 0
@@ -112,8 +110,8 @@ let g:html_ignore_folding = 1
 let g:html_font = "Consolas"
 
 "to enable termiguicolors in tmux
-let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
-let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+" let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+" let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
 
 "}}}
 
@@ -134,7 +132,7 @@ set statusline+=%0*
 set statusline+=%=
 set statusline+=%2*
 set statusline+=%1*
-set statusline+=%{NearestMethodOrFunction()}\
+set statusline+=%{NearestMethodOrFunction()}
 set statusline+=%0*
 set statusline+=[%{&fileencoding}]
 set statusline+=[%{&ff=='mac'?'CR':&ff=='unix'?'LF':'CRLF'}]
@@ -150,7 +148,7 @@ nnoremap <leader>s :w<CR>
 "delete without yanking
 nnoremap x "_x
 " replace currently selected text with default register without yanking it
-vnoremap p "_dP
+" vnoremap p "_dP
 "次のバッファ
 nnoremap <silent> ]b :bnext<CR>
 "前のバッファ
@@ -206,12 +204,8 @@ nnoremap cv :call ClogVar()<CR>
 nmap <F1> :echo<CR>
 imap <F1> <C-o>:echo<CR>
 "}}}
-"compile c and run the bin
-nnoremap <F9> :call RunC()<CR>
-"prepare grep command
-" nnoremap ff :Rg<space>
-" nnoremap ff :RgPhp<space>
-nnoremap ff :FzfLua grep<CR>
+nnoremap ff :Telescope live_grep<CR>
+
 "+ buffer size vertically
 nnoremap <S-h> :vert resize +15<CR>
 "- buffer vertically
@@ -227,16 +221,9 @@ nnoremap <F10> :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> 
    \ . synIDattr(synID(line("."),col("."),0),"name") . "> lo<"
    \ . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">"<CR>
 "fzf
-" nnoremap <c-p> :Files<CR>
-nnoremap <c-p> :FzfLua files<CR>
-nnoremap <c-space> :Buffers<CR>
-" nnoremap <c-b> :Hist<CR>
-nnoremap <c-b> :FzfLua oldfiles<CR>
-" nnoremap <c-h> :Hist<CR>
-"pass cursor word s fzf query
-" nnoremap <c-q> :call fzf#vim#files('.', {'options':'--query '.expand('<cword>')})<CR>
-" nnoremap <c-z> :call fzf#vim#files('.', {'options':'--query '.expand('%:t')})<CR>
-" Use K to show documentation in preview window
+nnoremap <c-p> :Telescope find_files<CR>
+nnoremap <c-b> :Telescope oldfiles<CR>
+"
 nnoremap <silent> K :call <SID>show_documentation()<CR>
 nnoremap <leader>gct :!/usr/local/bin/ctags -R --options=$HOME/.ctags<CR>
 nnoremap <leader>fn :call FileNameToReg()<CR>
@@ -244,52 +231,14 @@ nnoremap <leader>fl :call FileNameLineToReg()<CR>
 nnoremap <leader>am :call AddtoModFileList()<CR>
 
 "grep
-nnoremap gF :call GrepByFileName()<CR>
-" nnoremap gR :call GrepByCword()<CR>
-nnoremap gR :FzfLua grep_cword<CR>
-
-nnoremap <leader>bk :call CopyToDesktop()<CR>
+nnoremap gR :Telescope grep_string<CR>
 "ダブルクリックでワードコピー
 nnoremap <silent> <2-LeftMouse> :call system('clip.exe', expand('<cword>'))<CR>:let @/=expand('<cword>')<CR>:set hls<CR>
-
-" nnoremap <leader>ph :call PhpSyntaxOverride()<CR>
-" nnoremap <F8> :NextColorScheme<CR>:call PhpSyntaxOverride()<CR>
-
-"type javascript
-nnoremap <leader>tj :set filetype=javascript<CR>
-"type html
-nnoremap <leader>th :set filetype=html<CR>
-"Meta-e カレントバッファのphpコードを実行してvsplitで開く
-nnoremap <M-e> :call EvalVnew('php')<CR>
-"Tortoise SVNコミット guiポップアップ
-nnoremap cm :call SvnCommitSrl()<CR>
-"Tortoise SVNログ guiポップアップ
-nnoremap <leader>sl :call SvnLogPop()<CR>
-"Tortoise SVNリバート guiポップアップ
-nnoremap <leader>rv :call SvnRevertSrl()<CR>
-"ライブラリを開く openlib
-nnoremap <leader>ol :call OpenLibSrl()<CR>
-"入り口プログラムを開く openentry
-nnoremap <leader>oe :call OpenEntrySrl()<CR>
-"TODOをgrep
-nnoremap <leader>gtd :Rg (debug\|TODO).*kimura<CR>
-"fin debug comments
-nnoremap <leader>fd /debug\\|TODO\s*\(start\\|end\)*\s*kimura<CR>
-"find my comments
-nnoremap <leader>fm /\(add\\|update\\|del\\|debug\\|TODO\)\s*\(start\\|end\)*\s*kimura<CR>
-"et edited today 今日の編集コメントを検索
-nnoremap <leader>et :let @t = strftime("%Y\\/%m\\/%d")<CR>/<C-R>t<CR>
-"et edited yesterday 昨日の編集コメントを検索
-nnoremap <leader>ey :let @t = strftime("%Y\\/%m\\/%d", localtime() - (60*60*24))<CR>/<C-R>t<CR>
 "F11でターミナルモードを終了
 tnoremap <F11> <C-\><C-n>
 "ビジュアル選択をフォーマット
 nnoremap <leader>gv :GraphvizCompile png<CR>:Graphviz png<CR>
-nnoremap <leader>gv :GraphvizCompile png<CR>:Graphviz png<CR>
-
 nnoremap <leader>ws :StripWhitespace<CR><CR>
-
-" nnoremap /  /\v
 "}}}
 
 "plugin settings{{{
@@ -381,66 +330,7 @@ let g:colorscheme_switcher_exclude_builtins=1
 " phpcomplete
 " -----------------------------------------
 let g:phpcomplete_enhance_jump_to_definition = 1
-" let g:phpcomplete_mappings = {
-"    \ 'jump_to_def': '<C-]>',
-"    \ 'jump_to_def_split': '<C-W><C-]>',
-"    \ 'jump_to_def_vsplit': '<C-W><C-\>',
-"    \ 'jump_to_def_tabnew': '<C-W><C-[>',
-"    \}
-" -----------------------------------------
-"  fzf
-" -----------------------------------------
-" let g:fzf_preview_window = 'right:40%'
-" let g:fzf_preview_window = []
-" let g:fzf_prefer_tmux = 0
-" let g:fzf_layout = { 'down' : '~14%' }
-" let g:fzf_layout = {'up':'~70%', 'window': { 'width': 0.8, 'height': 0.8,'yoffset':0.5,'xoffset': 0.5, 'highlight': 'Todo', 'border': 'sharp' } }
 
-" https://github.com/junegunn/fzf.vim/issues/664#issuecomment-476438294
-let g:fzf_layout = { 'window': 'call FloatingFZF()' }
-
-function! FloatingFZF()
-  let buf = nvim_create_buf(v:false, v:true)
-  call setbufvar(buf, '&signcolumn', 'no')
-
-  let height = &lines - 3
-  let width = float2nr(&columns - (&columns * 2 / 10))
-  let col = float2nr((&columns - width) / 2)
-
-  let opts = {
-        \ 'relative': 'editor',
-        \ 'row': 1,
-        \ 'col': col,
-        \ 'width': width,
-        \ 'height': height
-        \ }
-
-  call nvim_open_win(buf, v:true, opts)
-endfunction
-
-" let g:fzf_colors =
-" \ { 'fg':      ['fg', 'Normal'],
-"   \ 'bg':      ['bg', 'Normal'],
-"   \ 'hl':      ['fg', 'Comment'],
-"   \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
-"   \ 'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
-"   \ 'hl+':     ['fg', 'Statement'],
-"   \ 'info':    ['fg', 'PreProc'],
-"   \ 'border':  ['fg', 'Ignore'],
-"   \ 'prompt':  ['fg', 'Conditional'],
-"   \ 'pointer': ['fg', 'Exception'],
-"   \ 'marker':  ['fg', 'Keyword'],
-"   \ 'spinner': ['fg', 'Label'],
-"   \ 'header':  ['fg', 'Comment'] }
-
-
-" -----------------------------------------
-"  gen_tags
-" -----------------------------------------
-" let g:gen_tags#ctags_auto_gen = 0
-" let g:gen_tags#statusline = 0
-" let g:gen_tags#gtags_default_map = 0
-" let g:loaded_gentags#ctags = 1
 " -----------------------------------------
 "  vim-javascript
 " -----------------------------------------
@@ -486,6 +376,8 @@ function! RunScript()
  "powershell
  elseif expand('%:e') == "ps1"
   let l:bin = "powershell.exe"
+ elseif expand('%:e') == "c"
+  let l:bin = 'gcc '.expand('%').' && ./a.out'
  else
   "それ以外なら拡張子そのままをコマンド
   let l:bin = expand('%:e')
@@ -582,14 +474,6 @@ function! QFixToggle()
  endif
 endfunction
 
-function! RunC()
- if (&filetype == "c")
-  execute '!gcc '.expand('%').' && ./a.out'
- else
-  echohl WarningMsg | echo 'cannot run. not a c file.'
- endif
-endfunction
-
 function! CopyIntoOrgDir(newName)
  let l:cmd = 'cp ' . expand('%') . ' ' . expand('%:h') . '/'. a:newName
  echo l:cmd
@@ -673,11 +557,6 @@ function! FileNameLineToReg()
  :call system('clip.exe', @+)
 endfunction
 
-function! GrepByFileName()
- let l:current_file_name = expand("%:t") "tail modifier
- execute ":Rg " . l:current_file_name
-endfunction
-
 function! GrepByCword()
  let l:cword = expand("<cword>")
  execute ":Rg " . l:cword
@@ -730,7 +609,6 @@ if system("uname -a | grep [m|M]icrosoft") != ''
  augroup myYank
   autocmd!
   autocmd TextYankPost * :call system('clip.exe', @")
-  " autocmd TextYankPost * :call system('win32yank.exe -i', @")
  augroup END
 endif
 
@@ -969,20 +847,20 @@ command! -nargs=+ -complete=command Output call OutputSplitWindow(<f-args>)
 
 
 lua << EOF
-require'fzf-lua'.setup {
-  winopts = {
-    height = 0.50,
-    width = 0.90,
-    preview = {
-      horizontal = 'right:30%',
-    }
-  },
-  keymap = {
-    fzf = {
-      ["ctrl-q"] = "select-all+accept",
-    }
-  }
-}
+-- require'fzf-lua'.setup {
+--   winopts = {
+--     height = 0.50,
+--     width = 0.90,
+--     preview = {
+--       horizontal = 'right:30%',
+--     }
+--   },
+--   keymap = {
+--     fzf = {
+--       ["ctrl-q"] = "select-all+accept",
+--     }
+--   }
+-- }
 EOF
 
 lua << EOF
@@ -1011,4 +889,24 @@ dap.configurations.lua = {
 dap.adapters.nlua = function(callback, config)
   callback({ type = 'server', host = config.host, port = config.port })
 end
+EOF
+
+lua << EOF
+-- vim.ui.input({prompt = ' Grep > '}, function(value)
+--   require('telescope.builtin').grep_string({search = value})
+-- end)
+EOF
+
+lua << EOF
+local actions = require('telescope.actions')
+require('telescope').setup{
+ defaults = {
+    mappings = {
+      i = {
+        ['<C-q>'] = actions.smart_add_to_qflist + actions.open_qflist,
+      },
+    },
+    preview = false,
+ }
+}
 EOF
