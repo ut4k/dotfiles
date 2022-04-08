@@ -2,33 +2,46 @@ vim.cmd[[packadd packer.nvim]]
 
 packer = require 'packer'
 packer.init {
-	opt_default = true,
+	opt_default = false,
 	display  = {
 		open_fn = require('packer.util').float,
 	}
 }
 
 local use = packer.use
-packer.reset()
-
+-- packer.reset()
 packer.startup(function()
-
-	use {
-		'wbthomason/packer.nvim',
-		opt = false
-	}
-
-	-- vim
+	use {'wbthomason/packer.nvim', opt = false}
 	use 'junegunn/vim-easy-align'
-	use 'mattn/emmet-vim'
 	use 'tpope/vim-commentary'
 	use 'tpope/vim-surround'
-	use 'vim-scripts/httplog'
+	use {'mattn/emmet-vim', ft = {'html', 'html', 'tpl'}}
+	use {'vim-scripts/httplog', opt = true, ft = {'log'}}
 	use 'will133/vim-dirdiff'
 	use 'triglav/vim-visual-increment'
+	use 'honza/vim-snippets'
+	use 'SirVer/ultisnips'
+	use 'sheerun/vim-polyglot' -- language pack
+	use 'markonm/traces.vim' -- substitute
+	use 'liuchengxu/vista.vim' -- structure view
+	use 'xolox/vim-misc' -- vim-colorscheme-switcher dependency
+	use 'xolox/vim-colorscheme-switcher'
+	use 'blueyed/smarty.vim'
+	use 'justinmk/vim-dirvish'
+	use 'norcalli/nvim-colorizer.lua'
+	use {'nvim-treesitter/nvim-treesitter', run = [[:TSUpdate]]} -- We recommend updating the parsers on update
+	use 'neovim/nvim-lspconfig'
+	-- Plug 'neoclide/coc.nvim', {'branch': 'release'}
+	use 'plasticboy/vim-markdown'
+	use 'shawncplus/phpcomplete.vim'
+	use 'vim-scripts/PDV--phpDocumentor-for-Vim'
+	-- use 'heavenshell/vim-jsdoc'
+	-- use 'pangloss/vim-javascript'
+	-- colorscheme
 	use 'drewtempelmeyer/palenight.vim'
+	use 'EdenEast/nightfox.nvim'
 	use 'kshenoy/vim-sol'
-	use 'mhartington/oceanic-next'
-	use 'sainnhe/sonokai'
-	use 'franbach/miramare'
+	use 'kyazdani42/nvim-web-devicons' -- for file icons
+	use 'nvim-telescope/telescope.nvim'
+	use 'mfussenegger/nvim-dap'
 end)
