@@ -85,6 +85,8 @@ Plug 'jbyuki/one-small-step-for-vimkind'
 " You will also need a comptabile DAP client
 Plug 'mfussenegger/nvim-dap'
 " Plug 'brookhong/DBGPavim'
+"
+Plug 'ZSaberLv0/ZFVimDirDiff'
 " =========================================
 call plug#end()
 "}}}

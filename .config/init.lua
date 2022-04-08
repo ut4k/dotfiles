@@ -19,8 +19,12 @@ local wo = vim.wo
 -- window-local options -- vim.api.nvim_win_set_option()
 local bo = vim.bo
 
+local map = vim.api.nvim_set_keymap
+
 -- require 'project.lua'
 -- require 'plugins.lua'
+require('plugins')
+require('plugin_settings')
 
 -- basic
 vim.cmd('autocmd ColorScheme * highlight User1 guifg=#ffcb6b guibg=0 gui=bold')
@@ -118,154 +122,75 @@ local stl = {
 }
 o.statusline = table.concat(stl)
 
--- "mappings{{{
--- let mapleader = ';' "Leader
--- "save
--- nnoremap <leader>s :w<CR>
--- "delete without yanking
--- nnoremap x "_x
--- " replace currently selected text with default register without yanking it
--- vnoremap p "_dP
--- "次のバッファ
--- nnoremap <silent> ]b :bnext<CR>
--- "前のバッファ
--- nnoremap <silent> [b :bprevious<CR>
--- "次のタブ
--- nnoremap <silent> ]t :tabnext<CR>
--- "前のタブ
--- nnoremap <silent> [t :tabprevious<CR>
--- "Quickfixlist
--- nnoremap <leader>ee :call QFixToggle()<CR>:wincmd=<CR><CR>
--- "no higlight
--- nnoremap <F3> :noh<CR><CR>
--- "vimrcを縦スプリットで開く
--- nnoremap <leader>ev :vs $MYVIMRC<CR><CR>
--- nnoremap <leader>ep :vs $PRJCONF<CR><CR>
--- nnoremap <leader>ex :vs $PLUGCONF<CR><CR>
--- "~/.tmux.confを縦スプリットで開く
--- nnoremap <leader>tc :vs $TMUXCONF<CR><CR>
--- "vimrcを再読み込みする
--- nnoremap <silent> <F12> :source $MYVIMRC<CR>
--- " nnoremap <silent> <F12> :source $MYVIMRC<CR>:call PhpSyntaxOverride()<CR><CR>
--- "tag list pop
--- nnoremap tp :Vista!!<CR>
--- "ファイル名をクリップボードにコピー
--- nnoremap <leader>cn :let @+ = expand('%')<CR>
--- "ファンクション名をクリップボードにコピー
--- nnoremap <leader>ccf :call CopyCurrentFunctionName()<CR>
--- "gs : gf縦分割バージョン
--- " nnoremap gs :vertical wincmd f<CR>
--- "sort u
--- vnoremap <leader>s :sort u<CR>
--- "run script
--- nnoremap <leader>rs :call RunScript()<CR><CR>
--- nnoremap <leader>ts :call RunInTmux()<CR><CR>
--- "align docs
--- vnoremap ad :!column -t -s " " \| sed 's/^/ /'<CR><CR>
--- "phpdoc
--- nnoremap <leader>dc :call PhpDocSingle()<CR>
--- "add / on top of line on VisualMode
--- vnoremap <leader>p !sed 's/^/\//'<CR>
+-- leader
+vim.g.mapleader = ';'
+-- no remap option
+local mapopts = { noremap = true }
+local mapopts2 = { noremap = true, silent = true }
+-- save
+map('n', '<leader>s', ':w<cr>', mapopts)
+-- delete without yanking
+map('n', 'x', '_x', mapopts)
+-- replace currently selected text with default register without yanking it
+map('v', 'p', '_dP', mapopts)
+-- バッファ履歴使うので使わない...
+-- 次のバッファ
+map('n', ']b', ':bnext<cr>', mapopts)
+-- 前のバッファ
+map('n', '[b', ':bprevious<cr>', mapopts)
+-- 次のタブ
+map('n', ']t', ':tabnext<cr>', mapopts)
+-- 前のタブ
+map('n', '[t', ':tabprevious<cr>', mapopts)
+-- no higlight
+map('n', '<f3>', ':noh<cr><cr>', mapopts)
+-- vimrcを縦スプリットで開く
+map('n', '<leader>ev', ':vs $MYVIMRC<cr><cr>', mapopts)
+-- vimrcを再読み込みする
+map('n', '<f12>', ':source $MYVIMRC<cr>:call PhpSyntaxOverride()<cr><cr>', mapopts2)
+-- tag list pop
+map('n', 'tp', ':Vista!!<cr>', mapopts)
+-- gs : gf縦分割バージョン
+map('n', 'gs', ':vertical wincmd f<cr>', mapopts)
+-- sort u
+map('v', '<leader>s', ':sort u<cr>', mapopts)
+-- run script
+map('n', '<leader>rs', ':call RunScript()<cr><cr>', mapopts)
+-- align docs
+map('v', 'ad', ":!column -t -s \" \" \\| sed 's/^/ /'<cr><cr>", mapopts)
+-- generate phpdoc
+map('n', '<leader>dc', ':call PhpDocSingle()<cr>', mapopts)
 -- "change word by register0 word
--- nnoremap <leader>x cw<c-r>0
--- "go to abs path file
--- nnoremap gaf :<C-u>call GotoFileFromDocRoot()<CR>
--- nnoremap gef :<C-u>call GotoEntFile()<CR>
--- "var_dump($phpvariable);
--- nnoremap vr :call VarDumpPhpVariable()<CR>
--- "pre($phpvariable);
--- nnoremap vp :call PrePhpVariable()<CR>
--- "console log js variable
--- nnoremap cv :call ClogVar()<CR>
--- "disable built-in help(hacky){{{
--- nmap <F1> :echo<CR>
--- imap <F1> <C-o>:echo<CR>
--- "}}}
--- "compile c and run the bin
--- nnoremap <F9> :call RunC()<CR>
--- "prepare grep command
--- " nnoremap ff :Rg<space>
--- " nnoremap ff :RgPhp<space>
--- nnoremap ff :FzfLua grep<CR>
--- "+ buffer size vertically
--- nnoremap <S-h> :vert resize +15<CR>
--- "- buffer vertically
--- nnoremap <S-l> :vert resize -15<CR>
--- nnoremap <F5> :cnext<CR>
--- nnoremap <F6> :cprevious<CR>
--- "search by register "
--- nnoremap <leader>w /<c-r>"<CR>
+map('n', '<leader>x', 'cw<c-r>0', mapopts)
+-- go to abs path file
+map('n', '<leader>gaf', ':<C-u>call GotoFileFromDocRoot()<cr>', mapopts)
+-- disable built-in help
+map('n', '<f1>', ':echo<cr>', {})
+map('i', '<f1>', '<c-o>:echo<cr>', {})
+-- + buffer size vertically
+map('n', '<s-h>', ':vert resize +15<cr>', mapopts)
+-- - buffer vertically
+map('n', '<s-l>', ':vert resize -15<cr>', mapopts)
+-- next error (quickfix)
+map('n', '<f5>', ':cnext<cr>', mapopts)
+-- previous error (quickfix)
+map('n', '<f6>', ':cprevious<cr>', mapopts)
 -- "open in windows explorer
--- nnoremap <leader>ow :call WinExplorer()<CR>
--- "identify hilight under cursor
--- nnoremap <F10> :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<'
---    \ . synIDattr(synID(line("."),col("."),0),"name") . "> lo<"
---    \ . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">"<CR>
--- "fzf
--- " nnoremap <c-p> :Files<CR>
--- nnoremap <c-p> :FzfLua files<CR>
--- nnoremap <c-space> :Buffers<CR>
--- " nnoremap <c-b> :Hist<CR>
--- nnoremap <c-b> :FzfLua oldfiles<CR>
--- " nnoremap <c-h> :Hist<CR>
--- "pass cursor word s fzf query
--- " nnoremap <c-q> :call fzf#vim#files('.', {'options':'--query '.expand('<cword>')})<CR>
--- " nnoremap <c-z> :call fzf#vim#files('.', {'options':'--query '.expand('%:t')})<CR>
+map('n', '<leader>ow', ':call WinExplorer()<cr>', mapopts) -- leader -> open in win
 -- " Use K to show documentation in preview window
--- nnoremap <silent> K :call <SID>show_documentation()<CR>
--- nnoremap <leader>gct :!/usr/local/bin/ctags -R --options=$HOME/.ctags<CR>
--- nnoremap <leader>fn :call FileNameToReg()<CR>
--- nnoremap <leader>fl :call FileNameLineToReg()<CR>
--- nnoremap <leader>am :call AddtoModFileList()<CR>
-
--- "grep
--- nnoremap gF :call GrepByFileName()<CR>
--- " nnoremap gR :call GrepByCword()<CR>
--- nnoremap gR :FzfLua grep_cword<CR>
-
--- nnoremap <leader>bk :call CopyToDesktop()<CR>
+map('n', 'K', ':call <SID>show_documentation()<cr>', mapopts)
+-- copy file name to clipboard
+map('n', '<leader>fn', ':call FileNameToReg()<cr>', mapopts)
+-- copy file name with line number to clipboard
+map('n', '<leader>fn', ':call FileNameLineToReg()<cr>', mapopts)
 -- "ダブルクリックでワードコピー
--- nnoremap <silent> <2-LeftMouse> :call system('clip.exe', expand('<cword>'))<CR>:let @/=expand('<cword>')<CR>:set hls<CR>
-
--- " nnoremap <leader>ph :call PhpSyntaxOverride()<CR>
--- " nnoremap <F8> :NextColorScheme<CR>:call PhpSyntaxOverride()<CR>
-
--- "type javascript
--- nnoremap <leader>tj :set filetype=javascript<CR>
--- "type html
--- nnoremap <leader>th :set filetype=html<CR>
--- "Meta-e カレントバッファのphpコードを実行してvsplitで開く
--- nnoremap <M-e> :call EvalVnew('php')<CR>
--- "Tortoise SVNコミット guiポップアップ
--- nnoremap cm :call SvnCommitSrl()<CR>
--- "Tortoise SVNログ guiポップアップ
--- nnoremap <leader>sl :call SvnLogPop()<CR>
--- "Tortoise SVNリバート guiポップアップ
--- nnoremap <leader>rv :call SvnRevertSrl()<CR>
--- "ライブラリを開く openlib
--- nnoremap <leader>ol :call OpenLibSrl()<CR>
--- "入り口プログラムを開く openentry
--- nnoremap <leader>oe :call OpenEntrySrl()<CR>
--- "TODOをgrep
--- nnoremap <leader>gtd :Rg (debug\|TODO).*kimura<CR>
--- "fin debug comments
--- nnoremap <leader>fd /debug\\|TODO\s*\(start\\|end\)*\s*kimura<CR>
--- "find my comments
--- nnoremap <leader>fm /\(add\\|update\\|del\\|debug\\|TODO\)\s*\(start\\|end\)*\s*kimura<CR>
--- "et edited today 今日の編集コメントを検索
--- nnoremap <leader>et :let @t = strftime("%Y\\/%m\\/%d")<CR>/<C-R>t<CR>
--- "et edited yesterday 昨日の編集コメントを検索
--- nnoremap <leader>ey :let @t = strftime("%Y\\/%m\\/%d", localtime() - (60*60*24))<CR>/<C-R>t<CR>
--- "F11でターミナルモードを終了
--- tnoremap <F11> <C-\><C-n>
--- "ビジュアル選択をフォーマット
--- nnoremap <leader>gv :GraphvizCompile png<CR>:Graphviz png<CR>
--- nnoremap <leader>gv :GraphvizCompile png<CR>:Graphviz png<CR>
-
--- nnoremap <leader>ws :StripWhitespace<CR><CR>
-
--- " nnoremap /  /\v
--- "}}}
+map('n', '<2-LeftMouse>', ":call system('clip.exe', expand('<cword>'))<cr>:let @/=expand('<cword>')<CR>:set hls<cr>", mapopts2)
+-- next colorscheme
+map('n', '<f8>', ':call NextColorScheme()<cr>:call PhpSyntaxOverride()<cr>', mapopts)
+-- F11でターミナルモードを終了
+map('t', '<f11>', '<c-\\><c-n>', mapopts)
+-- strip trailing white spaces
+map('n', '<leader>ws', ':StripWhitespace<cr><cr>', mapopts)
 
 -- "plugin settings{{{
 -- "----------------------------------------

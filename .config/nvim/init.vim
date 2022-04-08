@@ -594,7 +594,12 @@ augroup END
 
 "tab or space
 autocmd FileType haskell set tabstop=4|set shiftwidth=4|set expandtab
-autocmd FileType html,smarty,css,php,json,javascript set tabstop=2|set shiftwidth=2|set noexpandtab
+autocmd FileType html set tabstop=2|set shiftwidth=2|set noexpandtab
+autocmd FileType smarty set tabstop=2|set shiftwidth=2|set noexpandtab
+autocmd FileType css set tabstop=2|set shiftwidth=2|set noexpandtab
+autocmd FileType json set tabstop=2|set shiftwidth=2|set noexpandtab
+autocmd FileType javascript set tabstop=2|set shiftwidth=2|set noexpandtab
+autocmd FileType php set tabstop=2|set shiftwidth=2|set noexpandtab
 autocmd FileType sql set tabstop=4|set shiftwidth=2|set noexpandtab|set smarttab
 autocmd FileType text set tabstop=2|set shiftwidth=2|set expandtab
 autocmd FileType vim set tabstop=1|set shiftwidth=1|set expandtab
@@ -621,6 +626,9 @@ augroup readAsSjis
  autocmd!
  autocmd BufReadPost *.ps1 | silent! call Ecp932()
 augroup END
+
+" insertモードをぬけたら強制で半角に
+autocmd InsertLeave * call system("zenhan.exe 0")
 "}}}
 
 " colorscheme quantum
@@ -632,7 +640,7 @@ set foldmethod=marker
 "auto open folds
 autocmd FileType php normal zR
 
-autocmd VimEnter * call vista#RunForNearestMethodOrFunction()
+" autocmd VimEnter * call vista#RunForNearestMethodOrFunction()
 
 "diff setting
 if &diff                             " only for diff mode/vimdiff
@@ -744,6 +752,7 @@ let g:previm_wsl_mode = 1
 "                 \   0,
 "                 \ )
 " endfunction
+nnoremap <C-q> :quit<cr>
 
 "https://gist.github.com/iagox86/f96965fb2c6fa5b98077fb25a1bdb1ee
 " Re-map ctrl-h/j/k/l to move around in normal mode
@@ -910,3 +919,5 @@ require('telescope').setup{
  }
 }
 EOF
+
+let g:ZFDirDiffSortFunc = 'ZF_DirDiffSortFunc'

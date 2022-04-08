@@ -11,6 +11,7 @@ export PATH=$PATH:~/.composer/vendor/bin
 export PATH=$PATH:~/.emacs.d/bin
 export PATH=$PATH:~/.yarn/bin
 export PATH=$HOME/.nodebrew/current/bin:$PATH
+export PATH=$PATH:/usr/local/go/bin
 export PS1="\[\033[38;5;38m\]\u\[\]\[\033[38;5;15m\]@\[\]\[\033[38;5;172m\]\h\[\]\[\033[38;5;15m\] \[\]\w\[\]\n\[\]\[\033[38;5;41m\]$(moon_emoji)\[\]\[\033[38;5;15m\] \[\]"
 export TMUX_TMPDIR=/tmp/tmp.tmux
 # if [ -f /usr/bin/fd ]; then
@@ -38,6 +39,7 @@ alias v="nvim"
 alias vi="nvim"
 alias vim="nvim"
 alias sv='cd $W/surala && nvim'
+alias vimdiff='nvim -d'
 
 # alias e="emacs -nw"
 # alias emacs="emacs -nw"
