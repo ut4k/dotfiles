@@ -22,20 +22,15 @@ packer.startup(function()
 	use 'sheerun/vim-polyglot' -- language pack
 	use 'markonm/traces.vim' -- substitute
 	use 'liuchengxu/vista.vim' -- structure view
-	use 'xolox/vim-misc' -- vim-colorscheme-switcher dependency
-	use 'xolox/vim-colorscheme-switcher'
 	use 'blueyed/smarty.vim'
 	use 'norcalli/nvim-colorizer.lua'
 	use {'nvim-treesitter/nvim-treesitter', run = [[:TSUpdate]]} -- We recommend updating the parsers on update
 	use 'neovim/nvim-lspconfig'
-	-- Plug 'neoclide/coc.nvim', {'branch': 'release'}
 	use 'plasticboy/vim-markdown'
 	use 'shawncplus/phpcomplete.vim'
 	use 'vim-scripts/PDV--phpDocumentor-for-Vim'
-	-- use 'heavenshell/vim-jsdoc'
-	-- use 'pangloss/vim-javascript'
 	use 'liuchengxu/vim-clap'
-
+	use { 'nvim-lualine/lualine.nvim', requires = { 'kyazdani42/nvim-web-devicons', opt = true } }
 	-- colorscheme
 	use 'drewtempelmeyer/palenight.vim'
 	use 'EdenEast/nightfox.nvim'

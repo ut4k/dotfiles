@@ -88,6 +88,11 @@ _G.packer_plugins = {
     path = "/home/yuta/.local/share/nvim/site/pack/packer/opt/httplog",
     url = "https://github.com/vim-scripts/httplog"
   },
+  ["lualine.nvim"] = {
+    loaded = true,
+    path = "/home/yuta/.local/share/nvim/site/pack/packer/start/lualine.nvim",
+    url = "https://github.com/nvim-lualine/lualine.nvim"
+  },
   ["nightfox.nvim"] = {
     loaded = true,
     path = "/home/yuta/.local/share/nvim/site/pack/packer/start/nightfox.nvim",
@@ -138,25 +143,15 @@ _G.packer_plugins = {
     path = "/home/yuta/.local/share/nvim/site/pack/packer/start/smarty.vim",
     url = "https://github.com/blueyed/smarty.vim"
   },
-  ["telescope.nvim"] = {
-    loaded = true,
-    path = "/home/yuta/.local/share/nvim/site/pack/packer/start/telescope.nvim",
-    url = "https://github.com/nvim-telescope/telescope.nvim"
-  },
   ["traces.vim"] = {
     loaded = true,
     path = "/home/yuta/.local/share/nvim/site/pack/packer/start/traces.vim",
     url = "https://github.com/markonm/traces.vim"
   },
-  ultisnips = {
+  ["vim-clap"] = {
     loaded = true,
-    path = "/home/yuta/.local/share/nvim/site/pack/packer/start/ultisnips",
-    url = "https://github.com/SirVer/ultisnips"
-  },
-  ["vim-colorscheme-switcher"] = {
-    loaded = true,
-    path = "/home/yuta/.local/share/nvim/site/pack/packer/start/vim-colorscheme-switcher",
-    url = "https://github.com/xolox/vim-colorscheme-switcher"
+    path = "/home/yuta/.local/share/nvim/site/pack/packer/start/vim-clap",
+    url = "https://github.com/liuchengxu/vim-clap"
   },
   ["vim-commentary"] = {
     loaded = true,
@@ -168,11 +163,6 @@ _G.packer_plugins = {
     path = "/home/yuta/.local/share/nvim/site/pack/packer/start/vim-dirdiff",
     url = "https://github.com/will133/vim-dirdiff"
   },
-  ["vim-dirvish"] = {
-    loaded = true,
-    path = "/home/yuta/.local/share/nvim/site/pack/packer/start/vim-dirvish",
-    url = "https://github.com/justinmk/vim-dirvish"
-  },
   ["vim-easy-align"] = {
     loaded = true,
     path = "/home/yuta/.local/share/nvim/site/pack/packer/start/vim-easy-align",
@@ -183,20 +173,10 @@ _G.packer_plugins = {
     path = "/home/yuta/.local/share/nvim/site/pack/packer/start/vim-markdown",
     url = "https://github.com/plasticboy/vim-markdown"
   },
-  ["vim-misc"] = {
-    loaded = true,
-    path = "/home/yuta/.local/share/nvim/site/pack/packer/start/vim-misc",
-    url = "https://github.com/xolox/vim-misc"
-  },
   ["vim-polyglot"] = {
     loaded = true,
     path = "/home/yuta/.local/share/nvim/site/pack/packer/start/vim-polyglot",
     url = "https://github.com/sheerun/vim-polyglot"
-  },
-  ["vim-snippets"] = {
-    loaded = true,
-    path = "/home/yuta/.local/share/nvim/site/pack/packer/start/vim-snippets",
-    url = "https://github.com/honza/vim-snippets"
   },
   ["vim-sol"] = {
     loaded = true,
@@ -225,9 +205,9 @@ vim.cmd [[augroup packer_load_aucmds]]
 vim.cmd [[au!]]
   -- Filetype lazy-loads
 time([[Defining lazy-load filetype autocommands]], true)
+vim.cmd [[au FileType log ++once lua require("packer.load")({'httplog'}, { ft = "log" }, _G.packer_plugins)]]
 vim.cmd [[au FileType html ++once lua require("packer.load")({'emmet-vim', 'emmet-vim'}, { ft = "html" }, _G.packer_plugins)]]
 vim.cmd [[au FileType tpl ++once lua require("packer.load")({'emmet-vim'}, { ft = "tpl" }, _G.packer_plugins)]]
-vim.cmd [[au FileType log ++once lua require("packer.load")({'httplog'}, { ft = "log" }, _G.packer_plugins)]]
 time([[Defining lazy-load filetype autocommands]], false)
 vim.cmd("augroup END")
 if should_profile then save_profiles() end

@@ -87,32 +87,32 @@ end
 -- ---------------------------------------
 -- statusline
 -- ---------------------------------------
-local function currentFileFullPath()
-	return vim.fn.expand('%:.')
-end
+-- local function currentFileFullPath()
+-- 	return vim.fn.expand('%:.')
+-- end
 
-local stl = {
-	"%2*",
-	currentFileFullPath(),
-	"%0*",
-	"%r%w",
-	"%1*",
-	"%m",
-	"%r",
-	"%h",
-	"%0*",
-	"%=",
-	"%2*",
-	"%1*",
-	-- vim.fn.NearestMethodOrFunction(),
-	"%0*",
-	"[%{&fileencoding}]",
-	"[%{&ff=='mac'?'CR':&ff=='unix'?'LF':'CRLF'}]",
-	"%1*",
-	"%0*",
-	"%5.l/%L",
-}
-o.statusline = table.concat(stl)
+-- local stl = {
+-- 	"%2*",
+-- 	currentFileFullPath(),
+-- 	"%0*",
+-- 	"%r%w",
+-- 	"%1*",
+-- 	"%m",
+-- 	"%r",
+-- 	"%h",
+-- 	"%0*",
+-- 	"%=",
+-- 	"%2*",
+-- 	"%1*",
+-- 	-- vim.fn.NearestMethodOrFunction(),
+-- 	"%0*",
+-- 	"[%{&fileencoding}]",
+-- 	"[%{&ff=='mac'?'CR':&ff=='unix'?'LF':'CRLF'}]",
+-- 	"%1*",
+-- 	"%0*",
+-- 	"%5.l/%L",
+-- }
+-- o.statusline = table.concat(stl)
 
 -- ---------------------------------------
 -- autocmd

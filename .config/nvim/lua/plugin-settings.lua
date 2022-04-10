@@ -44,11 +44,6 @@ g['vista#renderer#enable_icon'] = 1
 g.vista_icon_indent = { "╰─▸ ", "├─▸ " }
 g.vista_icon_indent = { '└ ', '│ ' }
 g['vista#renderer#ctags'] = 'default'
------------------------------------------
--- vim-colorscheme-switcher
--- -----------------------------------------
-g.colorscheme_switcher_exclude_builtins = 1
-
 g.vista_blink = {0, 0}
 
 -- let g:vdebug_options= {
@@ -91,3 +86,31 @@ g.vista_blink = {0, 0}
 -- dap.adapters.nlua = function(callback, config)
 --   callback({ type = 'server', host = config.host, port = config.port })
 -- end
+
+-- -----------------------------------------
+-- vim-clap
+-- -----------------------------------------
+g.clap_theme = 'nord'
+g.clap_layout = { relative = 'editor' }
+g.clap_open_preview = 'never'
+g.clap_enable_icon = 1
+g.clap_popup_border = 'double'
+-- フォーカスアウトでfloating windowをとじる
+vim.cmd[[
+function! MyClapOnEnter() abort
+  augroup ClapEnsureAllClosed
+    autocmd!
+    autocmd BufEnter,WinEnter,WinLeave * ++once call clap#floating_win#close() |:stopinsert
+  augroup END
+endfunction
+
+autocmd User ClapOnEnter call MyClapOnEnter()
+]]
+
+-- clap上のみでのマッピング escで即終了させる。(いったんnormalモード戻る挙動を回避)
+vim.cmd('autocmd FileType clap_input inoremap <silent> <buffer> <Esc> <Esc>:call clap#handler#exit()<CR>')
+
+-- -----------------------------------------
+-- lualine
+-- -----------------------------------------
+require('lualine').setup()

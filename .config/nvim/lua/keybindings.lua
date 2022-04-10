@@ -27,7 +27,7 @@ map('n', '<f3>', ':noh<cr><cr>', options)
 -- vimrcを縦スプリットで開く
 map('n', '<leader>ev', ':vs $MYVIMRC<cr><cr>', options)
 map('n', '<leader>ep', ':vs '..PLUGFILE..'<cr><cr>', options)
-map('n', '<leader>el', ':Ex '..LUADIR..'<cr><cr>', options)
+map('n', '<leader>el', ':Vex! '..LUADIR..'<cr><cr>', options)
 -- vimrcを再読み込みする
 -- map('n', '<f12>', ':source $MYVIMRC<cr>:call PhpSyntaxOverride()<cr><cr>', options)
 map('n', '<f12>', ':source $MYVIMRC<cr>', options)
@@ -66,17 +66,21 @@ map('n', '<leader>fn', ':call FileNameToReg()<cr>', options)
 map('n', '<leader>fn', ':call FileNameLineToReg()<cr>', options)
 -- "ダブルクリックでワードコピー
 map('n', '<2-LeftMouse>', ":call system('clip.exe', expand('<cword>'))<cr>:let @/=expand('<cword>')<CR>:set hls<cr>", options)
--- next colorscheme
--- map('n', '<f8>', ':call NextColorScheme()<cr>:call PhpSyntaxOverride()<cr>', options)
-map('n', '<f8>', ':call NextColorScheme()<cr><cr>', options)
 -- F11でターミナルモードを終了
 map('t', '<f11>', '<c-\\><c-n>', options)
--- strip trailing white spaces
-map('n', '<leader>ws', ':StripWhitespace<cr><cr>', options)
-
+-- バッファを閉じる
+map('n', '<c-q>', ':quit<cr>', options)
 -- "https://gist.github.com/iagox86/f96965fb2c6fa5b98077fb25a1bdb1ee
 -- " Re-map ctrl-h/j/k/l to move around in normal mode
 map('n', '<C-h>', '<C-w>h', options)
 map('n', '<C-j>', '<C-w>j', options)
 map('n', '<C-k>', '<C-w>k', options)
 map('n', '<C-l>', '<C-w>l', options)
+-- grep
+map('n', 'ff', ':Clap grep2<cr>', options)
+-- grep by cursor word
+map('n', 'gR', ':Clap grep2 ++query=<cword><cr>', options)
+-- find files
+map('n', '<c-p>', ':Clap files<cr>', options)
+-- colorscheme switching
+map('n', '<f8>', ':Clap colors<cr>', options)
