@@ -58,8 +58,6 @@ map('n', '<f5>', ':cnext<cr>', options)
 map('n', '<f6>', ':cprevious<cr>', options)
 -- "open in windows explorer
 map('n', '<leader>ow', ':call WinExplorer()<cr>', options) -- leader -> open in win
--- " Use K to show documentation in preview window
-map('n', 'K', ':call <SID>show_documentation()<cr>', options)
 -- copy file name to clipboard
 map('n', '<leader>fn', ':call FileNameToReg()<cr>', options)
 -- copy file name with line number to clipboard

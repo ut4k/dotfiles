@@ -31,10 +31,13 @@ packer.startup(function()
 	use 'vim-scripts/PDV--phpDocumentor-for-Vim'
 	use 'liuchengxu/vim-clap'
 	use { 'nvim-lualine/lualine.nvim', requires = { 'kyazdani42/nvim-web-devicons', opt = true } }
+  use "williamboman/nvim-lsp-installer"
+	use 'mfussenegger/nvim-dap'
+	use { "rcarriga/nvim-dap-ui", requires = {"mfussenegger/nvim-dap"} }
+	use 'glepnir/lspsaga.nvim'
 	-- colorscheme
 	use 'drewtempelmeyer/palenight.vim'
 	use 'EdenEast/nightfox.nvim'
 	use 'kshenoy/vim-sol'
 	use 'kyazdani42/nvim-web-devicons' -- for file icons
-	use 'mfussenegger/nvim-dap'
 end)
