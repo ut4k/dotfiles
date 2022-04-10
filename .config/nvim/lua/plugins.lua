@@ -19,15 +19,12 @@ packer.startup(function()
 	use {'vim-scripts/httplog', opt = true, ft = {'log'}}
 	use 'will133/vim-dirdiff'
 	use 'triglav/vim-visual-increment'
-	use 'honza/vim-snippets'
-	use 'SirVer/ultisnips'
 	use 'sheerun/vim-polyglot' -- language pack
 	use 'markonm/traces.vim' -- substitute
 	use 'liuchengxu/vista.vim' -- structure view
 	use 'xolox/vim-misc' -- vim-colorscheme-switcher dependency
 	use 'xolox/vim-colorscheme-switcher'
 	use 'blueyed/smarty.vim'
-	use 'justinmk/vim-dirvish'
 	use 'norcalli/nvim-colorizer.lua'
 	use {'nvim-treesitter/nvim-treesitter', run = [[:TSUpdate]]} -- We recommend updating the parsers on update
 	use 'neovim/nvim-lspconfig'
@@ -37,11 +34,12 @@ packer.startup(function()
 	use 'vim-scripts/PDV--phpDocumentor-for-Vim'
 	-- use 'heavenshell/vim-jsdoc'
 	-- use 'pangloss/vim-javascript'
+	use 'liuchengxu/vim-clap'
+
 	-- colorscheme
 	use 'drewtempelmeyer/palenight.vim'
 	use 'EdenEast/nightfox.nvim'
 	use 'kshenoy/vim-sol'
 	use 'kyazdani42/nvim-web-devicons' -- for file icons
-	use 'nvim-telescope/telescope.nvim'
 	use 'mfussenegger/nvim-dap'
 end)
