@@ -53,11 +53,11 @@ map('n', '<s-h>', ':vert resize +15<cr>', options)
 -- - buffer vertically
 map('n', '<s-l>', ':vert resize -15<cr>', options)
 -- next error (quickfix)
-map('n', '<f5>', ':cnext<cr>', options)
+-- map('n', '<f5>', ':cnext<cr>', options)
 -- previous error (quickfix)
-map('n', '<f6>', ':cprevious<cr>', options)
+-- map('n', '<f6>', ':cprevious<cr>', options)
 -- "open in windows explorer
-map('n', '<leader>ow', ':call WinExplorer()<cr>', options) -- leader -> open in win
+map('n', '<leader>ow', ':call v:lua.WinExplorer()<cr>', options) -- leader -> open in win
 -- copy file name to clipboard
 map('n', '<leader>fn', ':call v:lua.FileNameToReg()<cr>', options)
 -- "ダブルクリックでワードコピー

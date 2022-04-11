@@ -126,6 +126,7 @@ function WslSync()
  local fp = WinPath(vim.fn.expand("%:p"))
  local dp = WinPath(vim.fn.getcwd())
  local cmd = 'php.exe "D:\\scripts\\wsl_tools\\win\\wsl_sync.php" "'..fp..'" "'..dp..'"'
+ print(cmd)
 
  vim.fn.system(cmd)
 end
@@ -134,7 +135,8 @@ end
 vim.cmd[[
 augroup FileWatcher
  autocmd!
- autocmd BufWritePost /mnt/d/workspace/surala/**  silent! call WslSync()
+ autocmd BufWritePost /mnt/d/workspace/surala/**  silent! call v:lua.WslSync()
+ autocmd BufWritePost /mnt/d/workspace/surala_game/**  silent! call v:lua.WslSync()
 augroup END
 ]]
 
@@ -178,10 +180,19 @@ vim.cmd[[
 		autocmd VimResized * exe "normal! \<c-w>="
 	augroup END
 ]]
+
 -- push quickfix window always to the bottom
 vim.cmd[[
 	autocmd FileType qf wincmd J
 	autocmd FileType qf if (getwininfo(win_getid())[0].loclist != 1) | wincmd J | endif
+]]
+
+-- インサートモードを抜けたら半角にもどす
+vim.cmd[[
+	augroup Zenhan
+		autocmd!
+		autocmd InsertLeave * call system("zenhan.exe 0")
+	augroup END
 ]]
 
 -- ---------------------------------------
@@ -196,23 +207,14 @@ vim.cmd[[
 --  return get(b:, 'vista_nearest_method_or_function', '')
 -- endfunction
 
--- function! WinExplorer()
---  let l:wpath = trim(system("wslpath -w " .expand("%:p")))
---  let l:cmd = "/mnt/c/Windows/explorer.exe /select,\"" . l:wpath . "\""
---  echo "opening ".l:wpath." ..."
---  call system(l:cmd)
--- endfunction
-
--- function! FileNameToReg()
---  let l:path = expand("%")
---  if OnEntryDir() == 1
---   let l:path = "/ent/" . l:path
---  endif
---  let @+=l:path
---  let @"=l:path
---  let @*=l:path
---  :call system('clip.exe', @+)
--- endfunction
+function WinExplorer()
+ local wpath = vim.fn.system("wslpath -w " .. vim.fn.expand('%:p'))
+ wpath = string.gsub(wpath, "\n", "") -- remove newline
+ -- print(wpath)
+ -- TODO: \\wsl$は開けない...
+ local cmd = "/mnt/c/Windows/explorer.exe /select,\"" .. wpath .. "\""
+ vim.fn.system(cmd)
+end
 
 function FileNameToReg()
  local path = vim.fn.expand('%')
@@ -222,7 +224,6 @@ function FileNameToReg()
  --  let l:path = "/ent/" . l:path
  -- endif
  vim.fn.system('clip.exe', path)
- -- vim.fn.system(cmd)
 end
 
 -- "auto command {{{
