@@ -49,7 +49,7 @@ require("lualine").setup({
   sections = {
     lualine_a = { "mode" },
     lualine_b = {
-      { "branch", icon = "" },
+      -- { "branch", icon = "" },
       { "diff", source = diff_source, color_added = "#a7c080", color_modified = "#ffdf1b", color_removed = "#ff6666" },
     },
     --lualine_c = {

@@ -34,7 +34,9 @@ packer.startup(function()
   use "williamboman/nvim-lsp-installer"
 	use 'mfussenegger/nvim-dap'
 	use { "rcarriga/nvim-dap-ui", requires = {"mfussenegger/nvim-dap"} }
-	use 'glepnir/lspsaga.nvim'
+	-- use 'glepnir/lspsaga.nvim' -- CursorHoldで変なエラーあり
+	use 'tami5/lspsaga.nvim'
+	use 'puremourning/vimspector'
 	-- colorscheme
 	use 'drewtempelmeyer/palenight.vim'
 	use 'EdenEast/nightfox.nvim'

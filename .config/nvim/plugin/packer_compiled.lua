@@ -69,11 +69,6 @@ end
 time([[try_loadstring definition]], false)
 time([[Defining packer_plugins]], true)
 _G.packer_plugins = {
-  ["DAPInstall.nvim"] = {
-    loaded = true,
-    path = "/home/yuta/.local/share/nvim/site/pack/packer/start/DAPInstall.nvim",
-    url = "https://github.com/Pocco81/DAPInstall.nvim"
-  },
   ["PDV--phpDocumentor-for-Vim"] = {
     loaded = true,
     path = "/home/yuta/.local/share/nvim/site/pack/packer/start/PDV--phpDocumentor-for-Vim",
@@ -92,6 +87,11 @@ _G.packer_plugins = {
     only_cond = false,
     path = "/home/yuta/.local/share/nvim/site/pack/packer/opt/httplog",
     url = "https://github.com/vim-scripts/httplog"
+  },
+  ["lspsaga.nvim"] = {
+    loaded = true,
+    path = "/home/yuta/.local/share/nvim/site/pack/packer/start/lspsaga.nvim",
+    url = "https://github.com/glepnir/lspsaga.nvim"
   },
   ["lualine.nvim"] = {
     loaded = true,

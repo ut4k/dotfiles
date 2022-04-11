@@ -114,3 +114,22 @@ vim.cmd('autocmd FileType clap_input inoremap <silent> <buffer> <Esc> <Esc>:call
 -- lualine
 -- -----------------------------------------
 require('lualine').setup()
+
+-- -----------------------------------------
+-- lspsaga
+-- -----------------------------------------
+local saga = require 'lspsaga'
+saga.init_lsp_saga {
+  finder_action_keys = {
+    open = '<CR>', vsplit = 's',split = 'i',quit = 'q',scroll_down = '<C-f>', scroll_up = '<C-b>' -- quit can be a table
+  },
+  code_action_prompt = {
+    enable = false,
+    -- sign = true,
+    -- sign_priority = 20,
+    -- virtual_text = false,
+  },
+}
+vim.api.nvim_set_keymap('n', 'K', ':Lspsaga hover_doc<CR>', {noremap = true, silent = true})
+vim.api.nvim_set_keymap('n', 'gh', ':Lspsaga preview_definition<CR>', {noremap = true})
+vim.api.nvim_set_keymap('n', 'gd', ':Lspsaga lsp_finder<CR>', {noremap = true})

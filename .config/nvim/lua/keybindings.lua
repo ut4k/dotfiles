@@ -59,9 +59,7 @@ map('n', '<f6>', ':cprevious<cr>', options)
 -- "open in windows explorer
 map('n', '<leader>ow', ':call WinExplorer()<cr>', options) -- leader -> open in win
 -- copy file name to clipboard
-map('n', '<leader>fn', ':call FileNameToReg()<cr>', options)
--- copy file name with line number to clipboard
-map('n', '<leader>fn', ':call FileNameLineToReg()<cr>', options)
+map('n', '<leader>fn', ':call v:lua.FileNameToReg()<cr>', options)
 -- "ダブルクリックでワードコピー
 map('n', '<2-LeftMouse>', ":call system('clip.exe', expand('<cword>'))<cr>:let @/=expand('<cword>')<CR>:set hls<cr>", options)
 -- F11でターミナルモードを終了
@@ -75,10 +73,27 @@ map('n', '<C-j>', '<C-w>j', options)
 map('n', '<C-k>', '<C-w>k', options)
 map('n', '<C-l>', '<C-w>l', options)
 -- grep
-map('n', 'ff', ':Clap grep2<cr>', options)
+map('n', 'ff', ':Clap grep2 .<cr>', options)
 -- grep by cursor word
 map('n', 'gR', ':Clap grep2 ++query=<cword><cr>', options)
+
+-- local clap_files_exclude = {
+-- 	'material',
+-- 	'ent'
+-- }
+-- clap_files_exclude_glob = table.concat(clap_files_exclude, ' ')
+-- print(clap_files_exclude_glob)
+
+local clap_files_opt = '++finder=fd --type f -H --ignore-file ~/.config/fd/ignore'
 -- find files
-map('n', '<c-p>', ':Clap files<cr>', options)
+map('n', '<c-p>', ':Clap files ' .. clap_files_opt .. ' .<cr>', options)
+-- map('n', '<c-p>', ':Clap files .<cr>', options)
 -- colorscheme switching
 map('n', '<f8>', ':Clap colors<cr>', options)
+map('n', '<c-b>', ':Clap recent_files<cr>', options)
+
+-- すべてのfloating windowsを閉じる
+function killfwin()
+  for _, win in ipairs(vim.api.nvim_list_wins()) do local config = vim.api.nvim_win_get_config(win); if config.relative ~= "" then vim.api.nvim_win_close(win, false); end end
+end
+vim.api.nvim_set_keymap('n', '<leader>kf', ':lua killfwin()<cr>', {noremap = true})

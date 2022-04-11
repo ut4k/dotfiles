@@ -1,6 +1,4 @@
-HOME = '/home/yuta/'
-IGNOREFILE = HOME .. 'ignore/ignore'
-IGNOREFILE_ENT = HOME .. 'ignore/ignore_ent'
+HOME = os.getenv('HOME') .. '/'
 
 -- lspのエラーを強調
 vim.cmd('autocmd ColorScheme * highlight LspDiagnosticsSignError guibg=red')
@@ -40,9 +38,11 @@ o.ambiwidth = 'single'
 -- vim.api.nvim_set_option('t_Co', 256) -- 端末がxterm-256colorになっていれば不要
 -- o.scriptencoding = 'utf-8'
 -- vim.api.nvim_set_option('listchars', 'tab:»,precedes:«,extends:»,eol:↲')
--- vim.opt.listchars = { tab = '»', precedes = '«', extends = '»', eol = '↲' }
+-- o.listchars = { tab = '»', precedes = '«', extends = '»', eol = '↲' }
+-- o.listchars = 'tab:»precedes:«extends:»eol:↲'
 -- o.listchars = { tab = '»', precedes = '«', extends = '»', eol = '↲' }
 -- o.listchars = 'tab:»,precedes:«,extends:»,eol:↲'
+
 
 o.autoread = true
 o.mouse = 'a'
@@ -127,7 +127,6 @@ function WslSync()
  local dp = WinPath(vim.fn.getcwd())
  local cmd = 'php.exe "D:\\scripts\\wsl_tools\\win\\wsl_sync.php" "'..fp..'" "'..dp..'"'
 
- print(cmd)
  vim.fn.system(cmd)
 end
 
@@ -215,13 +214,16 @@ vim.cmd[[
 --  :call system('clip.exe', @+)
 -- endfunction
 
--- function! FileNameLineToReg()
---  let l:ret = expand("%") . " line:" . line(".")
---  let @+=l:ret
---  let @"=l:ret
---  let @*=l:ret
---  :call system('clip.exe', @+)
--- endfunction
+function FileNameToReg()
+ local path = vim.fn.expand('%')
+ path = path .. ' L:' .. vim.fn.line('.')
+
+ -- if OnEntryDir() == 1
+ --  let l:path = "/ent/" . l:path
+ -- endif
+ vim.fn.system('clip.exe', path)
+ -- vim.fn.system(cmd)
+end
 
 -- "auto command {{{
 -- "phpシンタックス上書き
