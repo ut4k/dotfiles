@@ -1,3 +1,5 @@
+local gps = require("nvim-gps")
+
 local function getWords()
   if vim.bo.filetype == "md" or vim.bo.filetype == "txt" or vim.bo.filetype == "markdown" then
     if vim.fn.wordcount().visual_words == 1 then
@@ -51,6 +53,7 @@ require("lualine").setup({
     lualine_b = {
       -- { "branch", icon = "" },
       { "diff", source = diff_source, color_added = "#a7c080", color_modified = "#ffdf1b", color_removed = "#ff6666" },
+      -- { gps.get_location, cond = gps.is_available },
     },
     --lualine_c = {
     --  { "diagnostics", sources = { "nvim_diagnostic" } },
@@ -75,7 +78,7 @@ require("lualine").setup({
   inactive_sections = {
     lualine_a = {},
     lualine_b = {},
-    lualine_c = { "filename" },
+    -- lualine_c = { "filename" },
     lualine_x = { "location" },
     lualine_y = {},
     lualine_z = {},

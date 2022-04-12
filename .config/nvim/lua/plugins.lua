@@ -22,6 +22,7 @@ packer.startup(function()
 	use 'sheerun/vim-polyglot' -- language pack
 	use 'markonm/traces.vim' -- substitute
 	use 'liuchengxu/vista.vim' -- structure view
+	use 'simrat39/symbols-outline.nvim'
 	use 'blueyed/smarty.vim'
 	use 'norcalli/nvim-colorizer.lua'
 	use {'nvim-treesitter/nvim-treesitter', run = [[:TSUpdate]]} -- We recommend updating the parsers on update
@@ -32,8 +33,7 @@ packer.startup(function()
 	use 'liuchengxu/vim-clap'
 	use { 'nvim-lualine/lualine.nvim', requires = { 'kyazdani42/nvim-web-devicons', opt = true } }
   use "williamboman/nvim-lsp-installer"
-	use 'mfussenegger/nvim-dap'
-	use { "rcarriga/nvim-dap-ui", requires = {"mfussenegger/nvim-dap"} }
+	use { "SmiteshP/nvim-gps"}
 	-- use 'glepnir/lspsaga.nvim' -- CursorHoldで変なエラーあり
 	use 'tami5/lspsaga.nvim'
 	use 'puremourning/vimspector'

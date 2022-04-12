@@ -32,7 +32,8 @@ map('n', '<leader>el', ':Vex! '..LUADIR..'<cr><cr>', options)
 -- map('n', '<f12>', ':source $MYVIMRC<cr>:call PhpSyntaxOverride()<cr><cr>', options)
 map('n', '<f12>', ':source $MYVIMRC<cr>', options)
 -- tag list pop
-map('n', 'tp', ':Vista!!<cr>', options)
+-- map('n', 'tp', ':Vista!!<cr>', options)
+map('n', 'tp', ':SymbolsOutline<cr>', options)
 -- gs : gf縦分割バージョン
 map('n', 'gs', ':vertical wincmd f<cr>', options)
 -- sort u
