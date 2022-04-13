@@ -10,6 +10,8 @@ vim.g.mapleader = ';'
 
 -- save
 map('n', '<leader>s', ':w<cr>', options)
+-- vertical split
+map('n', '<leader>v', ':vs<cr>', options)
 -- delete without yanking
 -- map('n', 'x', '_x', options)
 -- replace currently selected text with default register without yanking it
