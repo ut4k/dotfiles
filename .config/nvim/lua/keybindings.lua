@@ -69,6 +69,7 @@ map('n', '<2-LeftMouse>', ":call system('clip.exe', expand('<cword>'))<cr>:let @
 map('t', '<f11>', '<c-\\><c-n>', options)
 -- バッファを閉じる
 map('n', '<c-q>', ':quit<cr>', options)
+map('n', '<leader>q', ':quit<cr>', options)
 -- "https://gist.github.com/iagox86/f96965fb2c6fa5b98077fb25a1bdb1ee
 -- " Re-map ctrl-h/j/k/l to move around in normal mode
 map('n', '<C-h>', '<C-w>h', options)

@@ -158,7 +158,7 @@ vim.g.symbols_outline = {
 -- vimspector
 -- -----------------------------------------
 vim.cmd[[
-nnoremap <Leader>dd :call vimspector#Launch()<CR>
+nnoremap <f5> :call vimspector#Launch()<CR>
 nnoremap <Leader>de :call vimspector#Reset()<CR>
 nnoremap <Leader>dn :call vimspector#Continue()<CR>
 

@@ -49,6 +49,10 @@ o.mouse = 'a'
 o.ttimeoutlen = 10
 o.backspace = 'indent,eol,start'
 -- o.clipboard = 'unnamed'
+vim.cmd[[
+set clipboard&
+set clipboard^=unnamedplus
+]]
 o.autoread = true
 o.cursorline = true
 o.foldmethod = 'marker'
