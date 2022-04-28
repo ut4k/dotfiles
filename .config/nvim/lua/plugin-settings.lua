@@ -26,7 +26,7 @@ g.pdv_cfg_php4guess  = 0
 -- ----------------------------------------
 -- commentary
 -- ----------------------------------------
--- vim.cmd('autocmd FileType php setlocal commentstring=// %s')
+vim.cmd('autocmd FileType php setlocal commentstring=//%s')
 -- vim.cmd('autocmd FileType smarty setlocal commentstring={* %s *}')
 -- vim.cmd('autocmd FileType sql setlocal commentstring=-- %s')
 -- ----------------------------------------

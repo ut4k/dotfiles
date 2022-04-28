@@ -60,6 +60,10 @@ o.foldlevel = 99
 o.hlsearch = true
 o.laststatus = 2
 o.lazyredraw = true
+o.redrawtime = 10000
+vim.cmd[[
+syntax sync minlines=20000
+]]
 o.backup = false
 o.ruler = false
 o.swapfile = false
