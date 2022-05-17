@@ -42,4 +42,5 @@ packer.startup(function()
 	use 'EdenEast/nightfox.nvim'
 	use 'kshenoy/vim-sol'
 	use 'kyazdani42/nvim-web-devicons' -- for file icons
+	use 'kyoh86/vim-ripgrep'
 end)

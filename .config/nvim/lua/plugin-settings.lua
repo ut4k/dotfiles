@@ -53,7 +53,11 @@ g.clap_layout = { relative = 'editor' }
 g.clap_open_preview = 'never'
 g.clap_enable_icon = 1
 g.clap_popup_border = 'double'
+-- g.clap_provider_grep_opts = '-H --no-heading --vimgrep --smart-case --ignore-file ' .. HOME .. '.config/ignore/ignore'
+g.clap_provider_rg_opts = '-H --no-heading --vimgrep --smart-case --ignore-file ' .. HOME .. '.config/ignore/ignore'
+-- Default: '-H --no-heading --vimgrep --smart-case'
 -- フォーカスアウトでfloating windowをとじる
+
 vim.cmd[[
 function! MyClapOnEnter() abort
   augroup ClapEnsureAllClosed
@@ -165,3 +169,48 @@ nnoremap <Leader>dn :call vimspector#Continue()<CR>
 nnoremap <Leader>dt :call vimspector#ToggleBreakpoint()<CR>
 nnoremap <Leader>dT :call vimspector#ClearBreakpoints()<CR>
 ]]
+
+-- -----------------------------------------
+-- kyoh86/vim-ripgrep
+-- -----------------------------------------
+vim.cmd[[
+command! -nargs=+ -complete=file Ripgrep :call ripgrep#search(<q-args>)
+]]
+
+
+-- -----------------------------------------
+-- lspconfig
+-- -----------------------------------------
+require('lspconfig').intelephense.setup({
+    on_attach = function(client, bufnr)
+      -- Enable (omnifunc) completion triggered by <c-x><c-o>
+      vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
+      vim.api.nvim_buf_set_keymap(bufnr, "n", "K", "<cmd>lua vim.lsp.buf.hover()<CR>", {noremap = true})
+      -- Here we should add additional keymaps and configuration options.
+    end,
+    flags = {
+      debounce_text_changes = 150,
+    }
+})
+--
+require("nvim-treesitter.configs").setup({
+ ensure_installed = { "php" },
+ sync_installed = true,
+ highlight = {
+  enable = true, -- This is a MUST
+  additional_vim_regex_highlighting = { "php" },
+ },
+ indent = {
+  enable = false, -- Really breaks stuff if true
+ },
+ incremental_selection = {
+  enable = true,
+  keymaps = {
+   init_selection = "gnn",
+   node_incremental = "grn",
+   scope_incremental = "grc",
+   node_decremental = "grm",
+  },
+ },
+})
+

@@ -64,7 +64,7 @@ map('n', '<leader>ow', ':call v:lua.WinExplorer()<cr>', options) -- leader -> op
 -- copy file name to clipboard
 map('n', '<leader>fn', ':call v:lua.FileNameToReg()<cr>', options)
 -- "ダブルクリックでワードコピー
-map('n', '<2-LeftMouse>', ":call system('clip.exe', expand('<cword>'))<cr>:let @/=expand('<cword>')<CR>:set hls<cr>", options)
+map('n', '<2-LeftMouse>', ":call system('clip.exe', expand('<cword>'))<cr>:let @/=expand('<cword>')<cr>:set hls<cr>", options)
 -- F11でターミナルモードを終了
 map('t', '<f11>', '<c-\\><c-n>', options)
 -- バッファを閉じる

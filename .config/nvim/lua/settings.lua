@@ -8,7 +8,8 @@ vim.cmd('autocmd ColorScheme * highlight ZenkakuSpace guibg=magenta')
 vim.cmd('autocmd VimEnter,WinEnter * match ZenkakuSpace /　/')
 vim.cmd('autocmd FocusGained * silent! checktime')
 
-vim.cmd 'colorscheme palenight'
+-- vim.cmd 'colorscheme palenight'
+vim.cmd 'colorscheme duskfox'
 
 WORKER = 'kimura'
 CURRENT_PROJECT = ''
@@ -112,7 +113,6 @@ end
 -- 	"%=",
 -- 	"%2*",
 -- 	"%1*",
--- 	-- vim.fn.NearestMethodOrFunction(),
 -- 	"%0*",
 -- 	"[%{&fileencoding}]",
 -- 	"[%{&ff=='mac'?'CR':&ff=='unix'?'LF':'CRLF'}]",
@@ -134,9 +134,8 @@ function WslSync()
  local fp = WinPath(vim.fn.expand("%:p"))
  local dp = WinPath(vim.fn.getcwd())
  local cmd = 'php.exe "D:\\scripts\\wsl_tools\\win\\wsl_sync.php" "'..fp..'" "'..dp..'"'
- print(cmd)
-
  vim.fn.system(cmd)
+ print("wsl sync done.")
 end
 
 -- SuralaLocal
@@ -150,6 +149,13 @@ augroup END
 
 -- phpは$をwordとしてあつかう wで $variable 全体がとれるように
 vim.cmd('autocmd FileType php :setlocal iskeyword+=$')
+
+vim.cmd[[
+augroup CgiAsPhp
+ autocmd!
+ autocmd BufEnter,BufNew *.cgi :set ft=php
+augroup END
+]]
 
 -- tab or space
 vim.cmd[[
@@ -177,8 +183,6 @@ augroup readAsSjis
 augroup END
 
 autocmd FileType php normal zR
-
-autocmd VimEnter * call vista#RunForNearestMethodOrFunction()
 ]]
 
 -- リサイズ時に画面幅をそろえる
@@ -202,18 +206,6 @@ vim.cmd[[
 		autocmd InsertLeave * call system("zenhan.exe 0")
 	augroup END
 ]]
-
--- ---------------------------------------
--- TODO luaで実装しないと...
--- ---------------------------------------
--- function CopyCurrentFunctionName()
---  let @* = NearestMethodOrFunction()
---  :call system('clip.exe', @*)
--- end
-
--- function! NearestMethodOrFunction() abort
---  return get(b:, 'vista_nearest_method_or_function', '')
--- endfunction
 
 function WinExplorer()
  local wpath = vim.fn.system("wslpath -w " .. vim.fn.expand('%:p'))
@@ -240,16 +232,6 @@ end
 --  autocmd!
 --  " autocmd FileType php call PhpSyntaxOverride()
 -- augroup END
-
-
--- " WSL ヤンクでクリップボードにコピー
--- if system("uname -a | grep [m|M]icrosoft") != ''
---  augroup myYank
---   autocmd!
---   autocmd TextYankPost * :call system('clip.exe', @")
---   " autocmd TextYankPost * :call system('win32yank.exe -i', @")
---  augroup END
--- endif
 
 -- ファイル拡張子を取得
 local function currentFileExtension()
@@ -282,3 +264,14 @@ function RunScript()
 	vim.cmd('set readonly')
 	vim.cmd('wincmd h')
 end
+
+vim.cmd[[
+augroup Yank
+  au!
+  autocmd TextYankPost * :call system('clip.exe', @")
+augroup END
+]]
+
+-- vim.cmd[[
+-- autocmd FileType php setlocal omnifunc=lsp#complete
+-- ]]
