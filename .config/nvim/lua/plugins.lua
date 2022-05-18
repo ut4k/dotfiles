@@ -26,6 +26,8 @@ packer.startup(function()
 	use 'blueyed/smarty.vim'
 	use 'norcalli/nvim-colorizer.lua'
 	use {'nvim-treesitter/nvim-treesitter', run = [[:TSUpdate]]} -- We recommend updating the parsers on update
+	use 'nvim-treesitter/nvim-treesitter-context' -- show context above code
+	use 'SmiteshP/nvim-gps'
 	use 'neovim/nvim-lspconfig'
 	use 'plasticboy/vim-markdown'
 	use 'shawncplus/phpcomplete.vim'
@@ -33,7 +35,6 @@ packer.startup(function()
 	use 'liuchengxu/vim-clap'
 	use { 'nvim-lualine/lualine.nvim', requires = { 'kyazdani42/nvim-web-devicons', opt = true } }
   use "williamboman/nvim-lsp-installer"
-	use { "SmiteshP/nvim-gps"}
 	-- use 'glepnir/lspsaga.nvim' -- CursorHoldで変なエラーあり
 	use 'tami5/lspsaga.nvim'
 	use 'puremourning/vimspector'
@@ -42,5 +43,5 @@ packer.startup(function()
 	use 'EdenEast/nightfox.nvim'
 	use 'kshenoy/vim-sol'
 	use 'kyazdani42/nvim-web-devicons' -- for file icons
-	use 'kyoh86/vim-ripgrep'
+	use 'folke/lsp-colors.nvim'
 end)

@@ -88,10 +88,15 @@ _G.packer_plugins = {
     path = "/home/yuta/.local/share/nvim/site/pack/packer/opt/httplog",
     url = "https://github.com/vim-scripts/httplog"
   },
+  ["lsp-colors.nvim"] = {
+    loaded = true,
+    path = "/home/yuta/.local/share/nvim/site/pack/packer/start/lsp-colors.nvim",
+    url = "https://github.com/folke/lsp-colors.nvim"
+  },
   ["lspsaga.nvim"] = {
     loaded = true,
     path = "/home/yuta/.local/share/nvim/site/pack/packer/start/lspsaga.nvim",
-    url = "https://github.com/glepnir/lspsaga.nvim"
+    url = "https://github.com/tami5/lspsaga.nvim"
   },
   ["lualine.nvim"] = {
     loaded = true,
@@ -108,15 +113,10 @@ _G.packer_plugins = {
     path = "/home/yuta/.local/share/nvim/site/pack/packer/start/nvim-colorizer.lua",
     url = "https://github.com/norcalli/nvim-colorizer.lua"
   },
-  ["nvim-dap"] = {
+  ["nvim-gps"] = {
     loaded = true,
-    path = "/home/yuta/.local/share/nvim/site/pack/packer/start/nvim-dap",
-    url = "https://github.com/mfussenegger/nvim-dap"
-  },
-  ["nvim-dap-ui"] = {
-    loaded = true,
-    path = "/home/yuta/.local/share/nvim/site/pack/packer/start/nvim-dap-ui",
-    url = "https://github.com/rcarriga/nvim-dap-ui"
+    path = "/home/yuta/.local/share/nvim/site/pack/packer/start/nvim-gps",
+    url = "https://github.com/SmiteshP/nvim-gps"
   },
   ["nvim-lsp-installer"] = {
     loaded = true,
@@ -132,6 +132,11 @@ _G.packer_plugins = {
     loaded = true,
     path = "/home/yuta/.local/share/nvim/site/pack/packer/start/nvim-treesitter",
     url = "https://github.com/nvim-treesitter/nvim-treesitter"
+  },
+  ["nvim-treesitter-context"] = {
+    loaded = true,
+    path = "/home/yuta/.local/share/nvim/site/pack/packer/start/nvim-treesitter-context",
+    url = "https://github.com/romgrk/nvim-treesitter-context"
   },
   ["nvim-web-devicons"] = {
     loaded = true,
@@ -157,6 +162,11 @@ _G.packer_plugins = {
     loaded = true,
     path = "/home/yuta/.local/share/nvim/site/pack/packer/start/smarty.vim",
     url = "https://github.com/blueyed/smarty.vim"
+  },
+  ["symbols-outline.nvim"] = {
+    loaded = true,
+    path = "/home/yuta/.local/share/nvim/site/pack/packer/start/symbols-outline.nvim",
+    url = "https://github.com/simrat39/symbols-outline.nvim"
   },
   ["traces.vim"] = {
     loaded = true,
@@ -207,6 +217,11 @@ _G.packer_plugins = {
     loaded = true,
     path = "/home/yuta/.local/share/nvim/site/pack/packer/start/vim-visual-increment",
     url = "https://github.com/triglav/vim-visual-increment"
+  },
+  vimspector = {
+    loaded = true,
+    path = "/home/yuta/.local/share/nvim/site/pack/packer/start/vimspector",
+    url = "https://github.com/puremourning/vimspector"
   },
   ["vista.vim"] = {
     loaded = true,

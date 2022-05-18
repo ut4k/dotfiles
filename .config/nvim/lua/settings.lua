@@ -187,10 +187,12 @@ autocmd FileType php normal zR
 
 -- リサイズ時に画面幅をそろえる
 vim.cmd[[
+if bufexists("vimspector.Variables") == 0
 	augroup Misc
 		autocmd!
 		autocmd VimResized * exe "normal! \<c-w>="
 	augroup END
+endif
 ]]
 
 -- push quickfix window always to the bottom

@@ -1,3 +1,21 @@
+require("nvim-gps").setup({
+	disable_icons = false,           -- Setting it to true will disable all icons
+	icons = {
+		["class-name"] = ' ',      -- Classes and class-like objects
+		-- ["function-name"] = ' ',   -- Functions
+		["function-name"] = ' ',   -- Functions
+		["method-name"] = ' ',     -- Methods (functions inside class-like objects)
+		-- ["container-name"] = '⛶ ',  -- Containers (example: lua tables)
+		["container-name"] = ' ',  -- Containers (example: lua tables)
+		["tag-name"] = '炙'         -- Tags (example: html tags)
+	},
+  separator = ' > ',
+	-- limit for amount of context shown
+	-- 0 means no limit
+	depth = 0,
+	-- indicator used when context hits depth limit
+	depth_limit_indicator = ".."
+})
 local gps = require("nvim-gps")
 
 local function getWords()
@@ -55,6 +73,10 @@ require("lualine").setup({
       { "diff", source = diff_source, color_added = "#a7c080", color_modified = "#ffdf1b", color_removed = "#ff6666" },
       -- { gps.get_location, cond = gps.is_available },
     },
+		lualine_c = {
+      "filename",
+			{ gps.get_location, cond = gps.is_available, color = { fg = '#ffaa88' }},
+		},
     --lualine_c = {
     --  { "diagnostics", sources = { "nvim_diagnostic" } },
     --  function()
