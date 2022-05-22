@@ -6,7 +6,13 @@ local PLUGFILE = HOME .. '.config/nvim/lua/plugins.lua'
 local LUADIR = HOME .. '.config/nvim/lua/'
 
 -- leader
-vim.g.mapleader = ';'
+-- vim.g.mapleader = '<Space>'
+vim.g.mapleader = ' '
+
+map('n', ';', ':', options)
+map('n', ':', ';', options)
+map('v', ';', ':', options)
+map('v', ':', ';', options)
 
 -- save
 map('n', '<leader>s', ':w<cr>', options)
