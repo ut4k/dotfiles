@@ -75,8 +75,12 @@ mdtoh () {
 export GTAGSLABEL=pygments
 
 # VcXsrv
-umask 022
-export DISPLAY=localhost:0.0
+# umask 022
+# export DISPLAY=localhost:0.0
+
+# クリップボード連携 (For WSL2)
+LOCAL_IP=$(cat /etc/resolv.conf | grep nameserver | awk '{print $2}')
+export DISPLAY=$LOCAL_IP:0
 
 alias fullls="ls -d -1 "$PWD/"*"
 
@@ -114,6 +118,8 @@ heic2jpg () {
     heif-convert $file $file.jpg
   done
 }
+
+alias r="rg --ignore-file=$HOME/.config/ignore/ignore "
 
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm

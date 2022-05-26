@@ -6,7 +6,13 @@ local PLUGFILE = HOME .. '.config/nvim/lua/plugins.lua'
 local LUADIR = HOME .. '.config/nvim/lua/'
 
 -- leader
-vim.g.mapleader = ';'
+-- vim.g.mapleader = '<Space>'
+vim.g.mapleader = ' '
+
+map('n', ';', ':', options)
+map('n', ':', ';', options)
+map('v', ';', ':', options)
+map('v', ':', ';', options)
 
 -- save
 map('n', '<leader>s', ':w<cr>', options)
@@ -55,16 +61,12 @@ map('i', '<f1>', '<c-o>:echo<cr>', {})
 map('n', '<s-h>', ':vert resize +15<cr>', options)
 -- - buffer vertically
 map('n', '<s-l>', ':vert resize -15<cr>', options)
--- next error (quickfix)
--- map('n', '<f5>', ':cnext<cr>', options)
--- previous error (quickfix)
--- map('n', '<f6>', ':cprevious<cr>', options)
 -- "open in windows explorer
 map('n', '<leader>ow', ':call v:lua.WinExplorer()<cr>', options) -- leader -> open in win
 -- copy file name to clipboard
 map('n', '<leader>fn', ':call v:lua.FileNameToReg()<cr>', options)
 -- "ダブルクリックでワードコピー
-map('n', '<2-LeftMouse>', ":call system('clip.exe', expand('<cword>'))<cr>:let @/=expand('<cword>')<CR>:set hls<cr>", options)
+map('n', '<2-LeftMouse>', ":call system('clip.exe', expand('<cword>'))<cr>:let @/=expand('<cword>')<cr>:set hls<cr>", options)
 -- F11でターミナルモードを終了
 map('t', '<f11>', '<c-\\><c-n>', options)
 -- バッファを閉じる
@@ -76,10 +78,12 @@ map('n', '<C-h>', '<C-w>h', options)
 map('n', '<C-j>', '<C-w>j', options)
 map('n', '<C-k>', '<C-w>k', options)
 map('n', '<C-l>', '<C-w>l', options)
--- grep
-map('n', 'ff', ':Clap grep2 .<cr>', options)
+-- grep async
+map('n', 'ff', ':Clap grep .<cr>', options)
+-- map('n', 'ff', ':Clap grep2 .<cr>', options)
 -- grep by cursor word
-map('n', 'gR', ':Clap grep2 ++query=<cword><cr>', options)
+map('n', 'gR', ':Clap grep ++query=<cword><cr>', options)
+-- map('n', 'gR', ':Clap grep2 ++query=<cword><cr>', options)
 
 -- local clap_files_exclude = {
 -- 	'material',
