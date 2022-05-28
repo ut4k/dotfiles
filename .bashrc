@@ -79,8 +79,8 @@ export GTAGSLABEL=pygments
 # export DISPLAY=localhost:0.0
 
 # クリップボード連携 (For WSL2)
-LOCAL_IP=$(cat /etc/resolv.conf | grep nameserver | awk '{print $2}')
-export DISPLAY=$LOCAL_IP:0
+# LOCAL_IP=$(cat /etc/resolv.conf | grep nameserver | awk '{print $2}')
+# export DISPLAY=$LOCAL_IP:0
 
 alias fullls="ls -d -1 "$PWD/"*"
 
@@ -124,3 +124,16 @@ alias r="rg --ignore-file=$HOME/.config/ignore/ignore "
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+export DISPLAY=$(cat /etc/resolv.conf | grep nameserver | awk '{print $2}'):0
+
+#Added by bash script from https://astherier.com/blog/2021/07/windows11-wsl2-wslg-japanese/
+export GTK_IM_MODULE=fcitx
+export QT_IM_MODULE=fcitx
+export XMODIFIERS=@im=fcitx
+export DefaultIMModule=fcitx
+if [ $SHLVL = 1 ] ; then
+  (fcitx-autostart > /dev/null 2>&1 &)
+  xset -r 49  > /dev/null 2>&1
+fi
+#Added by bash script: end
