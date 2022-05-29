@@ -186,3 +186,6 @@
 ;; ;; 以下のファイルを~/.emacs.d/site-lispにおいておくこと
 ;; ;; http://emacswiki.org/emacs/windows-path.el
 ;; ;; http://emacswiki.org/emacs/cygwin-mount.el
+
+(require 'org-bullets)
+(add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
