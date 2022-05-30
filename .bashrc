@@ -2,6 +2,8 @@ moon_emoji() {
  echo -e "\U1F319";
 }
 
+export MAINDRIVE='/mnt/c'
+
 export EDITOR='vim'
 export TERM="xterm-256color"
 export SCRIPTS=$HOME/scripts
@@ -17,15 +19,15 @@ export TMUX_TMPDIR=/tmp/tmp.tmux
 # if [ -f /usr/bin/fd ]; then
 # 	export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git --exclude google-api-php-client --exclude *.min.js --exclude tags --exclude .svn'
 # fi
-export DT='/mnt/c/Users/kimura.AZET/Desktop'
-export WO='/mnt/d/workspace'
-export W='/mnt/d/workspace'
+export DT="$MAINDRIVE/c/Users/kimura.AZET/Desktop"
+export WO="$MAINDRIVE/workspace"
+export W="$MAINDRIVE/workspace"
 
 alias ~='cd $HOME'
 alias w='cd $W'
 alias s='cd $W/surala'
 alias s2='cd /data/home/'
-alias dbsc='cd /mnt/d/メモ/すらら/DBスクリプト/db_script'
+alias dbsc='cd $MAINDRIVE/メモ/すらら/DBスクリプト/db_script'
 
 
 alias ll='ls -l'
@@ -51,8 +53,8 @@ alias ml="tmuxinator list"
 alias mnaz="sudo mount -t drvfs '//Azetserver/すらら資料' /mnt/azet-server/"
 
 #run weasel-pageant on WSL
-if [[ "`uname -r | grep Microsoft`"  ]]; then
-  eval $(/mnt/c/weasel-pageant/weasel-pageant -rqb -a $HOME/.weasel-pageant.sock);
+if [[ "`uname -r | grep -i Microsoft`"  ]]; then
+  eval $(/mnt/c/app/weasel-pageant/weasel-pageant -rqb -a $HOME/.weasel-pageant.sock);
 fi
 
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
@@ -66,7 +68,7 @@ PERL_MM_OPT="INSTALL_BASE=/home/yuta/perl5"; export PERL_MM_OPT;
 mdtoh () {
     f=$1
     # pandoc -s --self-contained -t html5 -c "$HOME/.config/pandoc/markdown-css-themes/markdown$2.css" --metadata title=' ' --highlight-style=tango $1 -o ${f::-3}.html
-    pandoc -s --self-contained -t html5 -c "/mnt/d/markdown-css/markdown$2.css" --toc --metadata title=' ' --highlight-style=tango $1 -o ${f::-3}.html
+    pandoc -s --self-contained -t html5 -c "$MAINDRIVE/markdown-css/markdown$2.css" --toc --metadata title=' ' --highlight-style=tango $1 -o ${f::-3}.html
 }
 
 # export DISPLAY=localhost:0.0
@@ -103,8 +105,8 @@ png2ico () {
     convert -resize x${s} -gravity center -crop ${s}x${s}+0+0 "$i" -flatten -colors 256 -background transparent "$o"
 }
 
-alias srlsync="rsync -av --exclude '.svn' /mnt/d/workspace/surala/ /data/home/"
-alias srlsyncr="rsync -a --exclude='.svn' /data/home/ /mnt/d/workspace/surala/"
+alias srlsync="rsync -av --exclude '.svn' $MAINDRIVE/workspace/surala/ /data/home/"
+alias srlsyncr="rsync -a --exclude='.svn' /data/home/ $MAINDRIVE/workspace/surala/"
 
 # compreses jpeg with imagemagick
 jpgc () {
