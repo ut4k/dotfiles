@@ -10,4 +10,5 @@
 tags
 !/.gitconfig
 !/.gitignore
+!/.doom.d
 !.gitkeep
