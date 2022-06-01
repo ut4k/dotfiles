@@ -22,7 +22,6 @@ packer.startup(function()
 	use 'sheerun/vim-polyglot' -- language pack
 	use 'markonm/traces.vim' -- substitute
 	use 'liuchengxu/vista.vim' -- structure view
-	use 'simrat39/symbols-outline.nvim'
 	use 'blueyed/smarty.vim'
 	use 'norcalli/nvim-colorizer.lua'
 	use {'nvim-treesitter/nvim-treesitter', run = [[:TSUpdate]]} -- We recommend updating the parsers on update
@@ -38,10 +37,11 @@ packer.startup(function()
 	-- use 'glepnir/lspsaga.nvim' -- CursorHoldで変なエラーあり
 	use 'tami5/lspsaga.nvim'
 	use 'puremourning/vimspector'
+	use 'kyazdani42/nvim-web-devicons' -- for file icons
+	use 'folke/lsp-colors.nvim'
+	use 'stevearc/aerial.nvim'
 	-- colorscheme
 	use 'drewtempelmeyer/palenight.vim'
 	use 'EdenEast/nightfox.nvim'
 	use 'kshenoy/vim-sol'
-	use 'kyazdani42/nvim-web-devicons' -- for file icons
-	use 'folke/lsp-colors.nvim'
 end)

@@ -133,7 +133,8 @@ end
 function WslSync()
  local fp = WinPath(vim.fn.expand("%:p"))
  local dp = WinPath(vim.fn.getcwd())
- local cmd = 'php.exe "D:\\scripts\\wsl_tools\\win\\wsl_sync.php" "'..fp..'" "'..dp..'"'
+ -- local cmd = 'php.exe "D:\\scripts\\wsl_tools\\win\\wsl_sync.php" "'..fp..'" "'..dp..'"'
+ local cmd = 'php.exe "C:\\Users\\kimura.AZET\\scripts\\wsl_tools\\win\\wsl_sync.php" "'..fp..'" "'..dp..'"'
  vim.fn.system(cmd)
  print("wsl sync done.")
 end
@@ -142,8 +143,8 @@ end
 vim.cmd[[
 augroup FileWatcher
  autocmd!
- autocmd BufWritePost /mnt/d/workspace/surala/**  silent! call v:lua.WslSync()
- autocmd BufWritePost /mnt/d/workspace/surala_game/**  silent! call v:lua.WslSync()
+ autocmd BufWritePost /mnt/c/workspace/surala/**  silent! call v:lua.WslSync()
+ autocmd BufWritePost /mnt/c/workspace/surala_game/**  silent! call v:lua.WslSync()
 augroup END
 ]]
 

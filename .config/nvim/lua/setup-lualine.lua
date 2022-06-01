@@ -74,7 +74,7 @@ require("lualine").setup({
       -- { gps.get_location, cond = gps.is_available },
     },
 		lualine_c = {
-      "filename",
+      { "filename", path = 1 },
 			{ gps.get_location, cond = gps.is_available, color = { fg = '#ffaa88' }},
 		},
     --lualine_c = {
