@@ -84,17 +84,10 @@ map('n', 'ff', ':Clap grep .<cr>', options)
 map('n', 'gR', ':Clap grep ++query=<cword><cr>', options)
 -- map('n', 'gR', ':Clap grep2 ++query=<cword><cr>', options)
 
--- local clap_files_exclude = {
--- 	'material',
--- 	'ent'
--- }
--- clap_files_exclude_glob = table.concat(clap_files_exclude, ' ')
--- print(clap_files_exclude_glob)
-
-local clap_files_opt = '++finder=fd --type f -H --ignore-file ~/.config/fd/ignore'
+local clap_files_opt = '++finder=fd --type f -H --ignore-file ~/.config/ignore/ignore'
 -- find files
 map('n', '<c-p>', ':Clap files ' .. clap_files_opt .. ' .<cr>', options)
--- map('n', '<c-p>', ':Clap files .<cr>', options)
+
 -- colorscheme switching
 map('n', '<f8>', ':Clap colors<cr>', options)
 map('n', '<c-b>', ':Clap recent_files<cr>', options)

@@ -54,7 +54,8 @@ g.clap_open_preview = 'never'
 g.clap_enable_icon = 0
 g.clap_popup_border = 'double'
 g.clap_provider_grep_opts = '-H --no-heading --vimgrep --smart-case --ignore-file ' .. HOME .. '.config/ignore/ignore'
-g.clap_provider_maple = '-H --no-heading --vimgrep --smart-case --ignore-file ' .. HOME .. '.config/ignore/ignore'
+g.clap_provider_rg_opts = '-H --no-heading --vimgrep --smart-case --ignore-file ' .. HOME .. '.config/ignore/ignore'
+g.clap_provider_maple_opts = '-H --no-heading --vimgrep --smart-case --ignore-file ' .. HOME .. '.config/ignore/ignore'
 -- Default: '-H --no-heading --vimgrep --smart-case'
 -- フォーカスアウトでfloating windowをとじる
 
