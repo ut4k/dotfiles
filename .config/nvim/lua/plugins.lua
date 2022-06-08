@@ -14,6 +14,7 @@ packer.startup(function()
 	use {'wbthomason/packer.nvim', opt = false}
 	use 'junegunn/vim-easy-align'
 	use 'tpope/vim-commentary'
+	use 'tpope/vim-repeat' -- to repeat surround
 	use 'tpope/vim-surround'
 	use {'mattn/emmet-vim', ft = {'html', 'html', 'tpl'}}
 	use {'vim-scripts/httplog', opt = true, ft = {'log'}}

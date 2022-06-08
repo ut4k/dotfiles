@@ -88,7 +88,6 @@
 (load! "/usr/share/emacs/site-lisp/emacs-mozc/mozc.el")
 (setq default-input-method "japanese-mozc")
 
-
 (global-set-key (kbd "C-SPC") 'toggle-input-method)
 (define-key isearch-mode-map (kbd "C-SPC") 'isearch-toggle-input-method)
 
@@ -102,90 +101,17 @@
 ;; Content is not centered by default. To center, set
 (setq dashboard-center-content t)
 
-;;; ~/.emacs.d/site-lisp/mozc_windows10_ubuntu_conf_query1000.el
-;;; version 1.0 query1000@gmail.com
-;;; Google日本語変換（mozc）のみを括りだしました
-
-;;; www49.atwiki.jp/ntemacs/pages/48.html
-
-
-;; (require 'mozc-im)
-;; (require 'mozc-popup)
-;; (load! "lisp/mozc-cursor-color")
-;; 
-;; (setq default-input-method "japanese-mozc-im")
-;; 
-;; ;; popupスタイル を使用する
-;; (setq mozc-candidate-style 'popup)
-;; 
-;; ;; overlayスタイルを使用する
-;; ;;(setq mozc-candidate-style 'overlay)
-;; 
-;; ;; ミニバッファに表示する
-;; ;;(setq mozc-candidate-style 'echo-area)
-;; 
-;; ;; カーソルカラーを設定する
-;; (setq mozc-cursor-color-alist '((direct        . "red")
-;;                                 (read-only     . "yellow")
-;;                                 (hiragana      . "green")
-;;                                 (full-katakana . "goldenrod")
-;;                                 (half-ascii    . "dark orchid")
-;;                                 (full-ascii    . "orchid")
-;;                                 (half-katakana . "dark goldenrod")))
-;; 
-;; ;; カーソルの点滅を OFF にする
-;; (blink-cursor-mode 0)
-;; 
-;; ;; C-o で IME をトグルする
-;; (global-set-key (kbd "C-o") 'toggle-input-method)
-;; (define-key isearch-mode-map (kbd "C-o") 'isearch-toggle-input-method)
-;; 
-;; ;; mozc-cursor-color を利用するための対策
-;; ;; 変更 2019-12-30
-;; ;(make-variable-buffer-local 'mozc-im-mode)
-;; (defvar mozc-im-mode nil)
-;; (add-hook 'mozc-im-activate-hook (lambda () (setq mozc-im-mode t)))
-;; (add-hook 'mozc-im-deactivate-hook (lambda () (setq mozc-im-mode nil)))
-;; 
-;; (advice-add 'mozc-cursor-color-update
-;;             :around (lambda (orig-fun &rest args)
-;;                       (let ((mozc-mode mozc-im-mode))
-;;                         (apply orig-fun args))))
-;; 
-;; ;; isearch を利用する前後で IME の状態を維持するための対策
-;; (defvar im-state nil) ;;; 追加 2019-12-30 https://qiita.com/tadsan/items/9d287a57c26711387043
-;; (add-hook 'isearch-mode-hook
-;;           (lambda ()
-;;             (setq im-state mozc-im-mode)))
-;; (add-hook 'isearch-mode-end-hook
-;;           (lambda ()
-;;             (unless (eq im-state mozc-im-mode)
-;;               (if im-state
-;;                   (activate-input-method default-input-method)
-;;                 (deactivate-input-method)))))
-;; 
-;; ;; wdired 終了時に IME を OFF にする
-;; (require 'wdired)
-;; (advice-add 'wdired-finish-edit
-;;             :after (lambda (&rest args)
-;;                      (deactivate-input-method)))
-;; 
-;; ;; Windows の mozc では、セッション接続直後 directモード になるので hiraganaモード にする
-;; (advice-add 'mozc-session-execute-command
-;;             :after (lambda (&rest args)
-;;                      (when (eq (nth 0 args) 'CreateSession)
-;;                        ;; (mozc-session-sendkey '(hiragana)))))
-;;                        (mozc-session-sendkey '(Hankaku/Zenkaku)))))
-;; 
-;; ;;; https://www49.atwiki.jp/ntemacs/sp/pages/61.html
-;; (setq mozc-helper-program-name "/home/yuta/scripts/mozc_emacs_helper.sh")
-;; 
-;; ;; https://www49.atwiki.jp/ntemacs/pages/69.html
-;; ;; 21)
-;; ;; C-xC-fで「C:\」などと書けるようにする設定
-;; ;; 以下のファイルを~/.emacs.d/site-lispにおいておくこと
-;; ;; http://emacswiki.org/emacs/windows-path.el
-;; ;; http://emacswiki.org/emacs/cygwin-mount.el
-
 (require 'org-bullets)
 (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
+
+(require 'unicode-fonts)
+(unicode-fonts-setup)
+
+; ステータスラインのフォントが正しく出ない場合は以下を実行すると解消するかも
+; https://github.com/syl20bnr/spacemacs/issues/11264#issuecomment-819650817
+;
+; M-x all-the-fonts-install-fonts
+
+(cua-mode 1)
+
+(setq confirm-kill-emacs nil)

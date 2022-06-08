@@ -251,7 +251,7 @@ function RunScript()
 		go = 'go run',
 		py = 'python3',
 		sh = 'bash',
-		ps1 = 'powershell.exe',
+		ps1 = 'powershell.exe -File',
 	}
 
 	local bin = binMap[ext]
