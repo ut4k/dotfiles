@@ -78,18 +78,18 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defun wsl-paste ()
-  (interactive)
-  (insert (shell-command-to-string "powershell.exe -command 'Get-Clipboard'")))
-(global-set-key (kbd "C-c C-v") 'wsl-paste)
+;; (defun wsl-paste ()
+;;   (interactive)
+;;   (insert (shell-command-to-string "powershell.exe -command 'Get-Clipboard'")))
+;; (global-set-key (kbd "C-c C-v") 'wsl-paste)
 
 (set-language-environment "Japanese")
 (prefer-coding-system 'utf-8)
 (load! "/usr/share/emacs/site-lisp/emacs-mozc/mozc.el")
 (setq default-input-method "japanese-mozc")
 
-(global-set-key (kbd "C-SPC") 'toggle-input-method)
-(define-key isearch-mode-map (kbd "C-SPC") 'isearch-toggle-input-method)
+(global-set-key (kbd "C-j") 'toggle-input-method)
+;; (define-key isearch-mode-map (kbd "C-SPC") 'isearch-toggle-input-method)
 
 (setq mozc-candidate-style 'echo-area)
 
@@ -115,3 +115,32 @@
 (cua-mode 1)
 
 (setq confirm-kill-emacs nil)
+
+
+;; ---------------------------------
+;; Function
+;; ---------------------------------
+;; 本日の報告ファイル作成
+(defun create-today-report-file()
+  (interactive)
+  (write-region "" nil (concat "/mnt/c/reports/" (format-time-string "%Y%m%d") ".org") t)
+  (find-file (concat (format-time-string "%Y%m%d") ".org"))
+  )
+
+(defun lat-work-day()
+  (format-time-string "%Y%m%d" (time-subtract (current-time) (days-to-time 1)))
+)
+
+;; 本日と昨日の報告ファイルを開く
+(defun open-report-files()
+  (interactive)
+  (setq default-directory "/mnt/c/reports/")
+  (create-today-report-file)
+
+  ;; 別枠で昨日の報告ファイルを開く
+  (split-window-horizontally)
+  (let ((yesterday-date (format-time-string "%Y%m%d" (time-subtract (current-time) (days-to-time 1)))))
+    (find-file (concat "/mnt/c/reports/" yesterday-date ".org"))
+  )
+  (other-window 1)
+)
