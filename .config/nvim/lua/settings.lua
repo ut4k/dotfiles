@@ -81,6 +81,7 @@ o.splitright = true
 o.tabstop = 2
 o.title = true
 o.tags = 'tags'
+o.completeopt='menu,menuone,noselect'
 
 -- html output
 vim.g.html_number_lines = 0
@@ -252,6 +253,7 @@ function RunScript()
 		py = 'python3',
 		sh = 'bash',
 		ps1 = 'powershell.exe -File',
+		js = 'node',
 	}
 
 	local bin = binMap[ext]
