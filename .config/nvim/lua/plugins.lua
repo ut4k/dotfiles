@@ -48,6 +48,7 @@ packer.startup(function()
 	use 'kyazdani42/nvim-web-devicons' -- for file icons
 	use 'folke/lsp-colors.nvim'
 	use 'stevearc/aerial.nvim'
+	use { 'camspiers/snap' }
 	-- colorscheme
 	use 'drewtempelmeyer/palenight.vim'
 	use 'EdenEast/nightfox.nvim'

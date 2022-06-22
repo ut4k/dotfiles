@@ -78,19 +78,19 @@ map('n', '<C-j>', '<C-w>j', options)
 map('n', '<C-k>', '<C-w>k', options)
 map('n', '<C-l>', '<C-w>l', options)
 -- grep async
-map('n', 'ff', ':Clap grep .<cr>', options)
+-- map('n', 'ff', ':Clap grep .<cr>', options)
 -- map('n', 'ff', ':Clap grep2 .<cr>', options)
 -- grep by cursor word
-map('n', 'gR', ':Clap grep ++query=<cword><cr>', options)
+-- map('n', 'gR', ':Clap grep ++query=<cword><cr>', options)
 -- map('n', 'gR', ':Clap grep2 ++query=<cword><cr>', options)
 
 local clap_files_opt = '++finder=fd --type f -H --ignore-file ~/.config/ignore/ignore'
 -- find files
-map('n', '<c-p>', ':Clap files ' .. clap_files_opt .. ' .<cr>', options)
+-- map('n', '<c-p>', ':Clap files ' .. clap_files_opt .. ' .<cr>', options)
 
 -- colorscheme switching
-map('n', '<f8>', ':Clap colors<cr>', options)
-map('n', '<c-b>', ':Clap recent_files<cr>', options)
+-- map('n', '<f8>', ':Clap colors<cr>', options)
+-- map('n', '<c-b>', ':Clap recent_files<cr>', options)
 
 -- すべてのfloating windowsを閉じる
 function killfwin()

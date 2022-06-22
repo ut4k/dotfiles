@@ -113,24 +113,27 @@ nnoremap <Leader>dt :call vimspector#ToggleBreakpoint()<CR>
 nnoremap <Leader>dT :call vimspector#ClearBreakpoints()<CR>
 ]]
 
-function Foo()
-  local conf = {
-    Php = {
-      adapter = "vscode-php-debug",
-      filetypes = { "php" },
-      default = true,
-      configuration = {
-        request = "launch",
-        protocol = "auto",
-        stopOnEntry = true,
-        -- cwd = "${workspaceRoot}"
-      }
-    }
-  }
+-- function Foo()
+  -- local conf = {
+  --   Php = {
+  --     adapter = "vscode-php-debug",
+  --     filetypes = { "php" },
+  --     default = true,
+  --     configuration = {
+  --       request = "launch",
+  --       protocol = "auto",
+  --       port = 9000,
+  --       stopOnEntry = true,
+  --       pathMappings = {
+  --           "/data/home" = "${workspaceRoot}",
+  --       }
+  --     }
+  --   }
+  -- }
   -- vim.fn['vimspector#LaunchWithConfigurations'](conf)
-  vim.fn['vimspector#LaunchWithConfigurations']({})
-end
-vim.api.nvim_set_keymap('n', '<f7>', ':call v:lua.Foo()<cr>', {noremap = true})
+  -- vim.fn['vimspector#LaunchWithConfigurations']({})
+-- end
+-- vim.api.nvim_set_keymap('n', '<f7>', ':call v:lua.Foo()<cr>', {noremap = true})
 vim.g.vimspector_code_minwidth = 80
 vim.g.vimspector_terminal_maxwidth = 75
 vim.g.vimspector_terminal_minwidth = 20
