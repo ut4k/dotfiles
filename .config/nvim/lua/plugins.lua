@@ -45,6 +45,25 @@ packer.startup(function()
 	-- use 'glepnir/lspsaga.nvim' -- CursorHoldで変なエラーあり
 	use 'tami5/lspsaga.nvim'
 	use 'puremourning/vimspector'
+
+	-- dap
+	use {
+		"mfussenegger/nvim-dap",
+		opt = true,
+		event = "BufReadPre",
+		module = { "dap" },
+		wants = { "nvim-dap-virtual-text", "DAPInstall.nvim", "nvim-dap-ui"},
+		requires = {
+			"Pocco81/DAPInstall.nvim",
+			"theHamsta/nvim-dap-virtual-text",
+			"rcarriga/nvim-dap-ui",
+			{ "jbyuki/one-small-step-for-vimkind", module = "osv" },
+		},
+		config = function()
+			require("config.dap").setup()
+		end,
+	}
+
 	use 'kyazdani42/nvim-web-devicons' -- for file icons
 	use 'folke/lsp-colors.nvim'
 	use 'stevearc/aerial.nvim'
