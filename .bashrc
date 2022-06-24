@@ -32,6 +32,8 @@ alias emacs="emacs -nw"
 alias ctags="/usr/local/bin/ctags -R --options=$HOME/.ctags"
 alias rg="rg --ignore-file=$HOME/.config/ignore/ignore "
 
+alias fl="find . -type f -printf '/%P\n' | sort"
+
 #run weasel-pageant on WSL
 if [[ "`uname -r | grep -i Microsoft`"  ]]; then
   eval $(/mnt/c/app/weasel-pageant/weasel-pageant -rqb -a $HOME/.weasel-pageant.sock);
