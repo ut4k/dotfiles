@@ -221,12 +221,20 @@ function WinExplorer()
 end
 
 function FileNameToReg()
- local path = vim.fn.expand('%')
- path = path .. ' L:' .. vim.fn.line('.')
+ -- local path = vim.fn.expand('%')
+ local path = vim.fn.expand("%:.")
 
  -- if OnEntryDir() == 1
  --  let l:path = "/ent/" . l:path
  -- endif
+ vim.fn.system('clip.exe', path)
+end
+
+function FileNameToReg2()
+ -- local path = vim.fn.expand('%')
+ local path = vim.fn.expand("%:.")
+ path = path .. ' L:' .. vim.fn.line('.')
+
  vim.fn.system('clip.exe', path)
 end
 
