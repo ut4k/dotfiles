@@ -27,7 +27,8 @@ local rgopts = {'--ignore-file ' .. HOME .. '.config/ignore/ignore'}
 
 snap.get'producer.ripgrep.file'.args = {'--ignore-file ' .. HOME .. '.config/ignore/ignore'}
 snap.maps {
-  {"<c-p>", snap.config.file {producer = "ripgrep.file", preview = false}},
+  -- {"<c-p>", snap.config.file {producer = "ripgrep.file", preview = false}},
+  {"<c-p>", snap.config.file {producer = "fd.file", preview = false}},
   {"<c-b>", snap.config.file {producer = "vim.oldfile", preview = false}},
   {"ff", snap.config.vimgrep {preview = false}},
 }

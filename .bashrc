@@ -17,7 +17,7 @@ export W="$MAINDRIVE/workspace"
 
 alias w="cd $W"
 alias s="cd $W/surala"
-alias dbsc="cd $MAINDRIVE/メモ/すらら/DBスクリプト/db_script"
+alias dbsc="cd $MAINDRIVE/Users/kimura.AZET/scripts/surala/db_script"
 alias ll="ls -l"
 alias rc="source $HOME/.bashrc"
 alias vrc="vim $HOME/.bashrc"
