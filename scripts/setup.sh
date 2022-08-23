@@ -9,7 +9,6 @@ curl -L https://github.com/neovim/neovim/releases/latest/download/nvim.appimage 
 sudo chmod u+x /home/yuta/nvim/nvim.appimage
 sudo rm -rf /usr/local/bin/nvim
 sudo ln -s /home/yuta/nvim/nvim.appimage /usr/local/bin/nvim
-exit
 
 # python3 provider
 sudo add-apt-repository universe

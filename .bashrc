@@ -34,6 +34,11 @@ alias rg="rg --ignore-file=$HOME/.config/ignore/ignore "
 
 alias fl="find . -type f -printf '/%P\n' | sort"
 
+
+movmp4 () {
+	ffmpeg -i "$1" -c:v libx264 -crf 23 -preset medium -c:a aac -b:a 128k -movflags +faststart -vf scale=-2:720,format=yuv420p "${1::-3}mp4"
+}
+
 #run weasel-pageant on WSL
 if [[ "`uname -r | grep -i Microsoft`"  ]]; then
   if [[ -f /mnt/c/app/weasel-pageant/weasel-pageant ]]; then
