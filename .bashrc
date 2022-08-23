@@ -39,6 +39,11 @@ movmp4 () {
 	ffmpeg -i "$1" -c:v libx264 -crf 23 -preset medium -c:a aac -b:a 128k -movflags +faststart -vf scale=-2:720,format=yuv420p "${1::-3}mp4"
 }
 
+raftojpg() {
+	read -p "ok?"
+	find . -type f \( -iname "*.raf" \) -exec sh -c 'darktable-cli {} ${0%.*}.jpg' {} \; -delete
+}
+
 #run weasel-pageant on WSL
 if [[ "`uname -r | grep -i Microsoft`"  ]]; then
   if [[ -f /mnt/c/app/weasel-pageant/weasel-pageant ]]; then
