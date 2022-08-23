@@ -36,7 +36,9 @@ alias fl="find . -type f -printf '/%P\n' | sort"
 
 #run weasel-pageant on WSL
 if [[ "`uname -r | grep -i Microsoft`"  ]]; then
-  eval $(/mnt/c/app/weasel-pageant/weasel-pageant -rqb -a $HOME/.weasel-pageant.sock);
+  if [[ -f /mnt/c/app/weasel-pageant/weasel-pageant ]]; then
+  	eval $(/mnt/c/app/weasel-pageant/weasel-pageant -rqb -a $HOME/.weasel-pageant.sock);
+  fi
 fi
 
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
